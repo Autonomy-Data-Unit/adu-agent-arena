@@ -6,12 +6,16 @@ import sys
 
 from inspect_ai import eval, eval_set
 
-from adu_arena.tasks.ets_windfall import ets_windfall_calculation
-from adu_arena.tasks.medrxiv_scraper import medrxiv_scraper
+from adu_arena.tasks.staffing_analysis import staffing_analysis
+from adu_arena.tasks.culture_spending import culture_spending_analysis
+from adu_arena.tasks.gov_contracts import gov_contracts_scraper
+from adu_arena.tasks.csv_deduplicator import csv_deduplicator
 
 ALL_TASKS = [
-    ets_windfall_calculation,
-    medrxiv_scraper,
+    staffing_analysis,
+    culture_spending_analysis,
+    gov_contracts_scraper,
+    csv_deduplicator,
 ]
 
 

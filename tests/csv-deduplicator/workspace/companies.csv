@@ -1,0 +1,21 @@
+id,name,address,postcode,sic_code,status
+1,ACME INDUSTRIES LTD,10 Downing Street,SW1A 2AA,62020,Active
+2,Acme Industries Limited,10 Downing St,SW1A 2AA,62020,Active
+3,Beta Corp PLC,25 High Street,EC2V 8AE,70100,Active
+4,BETA CORP,25 High St.,EC2V 8AE,70100,Active
+5,Gamma Services Ltd,Unit 5 Business Park,M1 1AA,82990,Active
+6,Delta Holdings Group Ltd,100 Oxford Street,W1D 1LL,64999,Active
+7,DELTA HOLDINGS GROUP,100 Oxford St,W1D 1LL,64999,Dissolved
+8,Epsilon Trading Co,44 Baker Street,NW1 5NR,47190,Active
+9,Epsilon Trading Company Limited,44 Baker St,NW1 5NR,47190,Active
+10,Epsilon Trading Co,44 Baker Street,NW1 5NR,47190,Active
+11,Zeta Analytics LLP,1 Canada Square,E14 5AB,62011,Active
+12,Eta Manufacturing Ltd,Factory Road,B1 1BB,25990,Active
+13,ETA MANUFACTURING LIMITED,Factory Rd,B1 1BB,25990,Active
+14,Theta Consulting Ltd,55 Victoria Street,SW1H 0EU,70229,Active
+15,THETA CONSULTING LIMITED,55 Victoria St.,SW1H 0EU,70229,Active
+16,Theta Consulting Ltd,55 Victoria Street,SW1H 0EU,70229,Active
+17,Iota Logistics PLC,Warehouse Lane,LS1 4AP,52290,Active
+18,Kappa Digital Ltd,Tech Hub Floor 3,N1C 4AG,62012,Active
+19,kappa digital limited,Tech Hub Fl 3,N1C 4AG,62012,Active
+20,Lambda Property Services,22 Park Lane,W1K 1BE,68320,Active

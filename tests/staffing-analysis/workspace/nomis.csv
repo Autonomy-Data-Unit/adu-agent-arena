@@ -1,0 +1,362 @@
+lad,population
+Hartlepool,98180
+Middlesbrough,156161
+"Redcar and Cleveland",139228
+Stockton-on-Tees,206800
+Darlington,112489
+"County Durham",538011
+Northumberland,331420
+"Newcastle upon Tyne",320605
+"North Tyneside",215025
+"South Tyneside",151393
+Sunderland,288606
+Gateshead,202760
+Halton,131543
+Warrington,215391
+"Blackburn with Darwen",162540
+Blackpool,144191
+"Cheshire East",421298
+"Cheshire West and Chester",371652
+Cumberland,280495
+"Westmorland and Furness",230185
+Burnley,99233
+Chorley,120839
+Fylde,85447
+Hyndburn,86058
+Lancaster,145006
+Pendle,99777
+Preston,162864
+"Ribble Valley",65794
+Rossendale,73045
+"South Ribble",116113
+"West Lancashire",121995
+Wyre,118743
+Bolton,310085
+Bury,198921
+Manchester,589670
+Oldham,251560
+Rochdale,235561
+Salford,294348
+Stockport,303929
+Tameside,239643
+Trafford,241025
+Wigan,344922
+Knowsley,162565
+Liverpool,508961
+"St. Helens",188861
+Sefton,286281
+Wirral,328873
+"Kingston upon Hull, City of",275401
+"East Riding of Yorkshire",355884
+"North East Lincolnshire",159911
+"North Lincolnshire",171336
+York,209301
+"North Yorkshire",635270
+Barnsley,251770
+Doncaster,319765
+Rotherham,276595
+Sheffield,582493
+Bradford,563605
+Calderdale,210929
+Kirklees,447847
+Leeds,845189
+Wakefield,367666
+Derby,274149
+Leicester,388348
+Rutland,41443
+Nottingham,331077
+"North Northamptonshire",373871
+"West Northamptonshire",439811
+"Amber Valley",130451
+Bolsover,83773
+Chesterfield,106045
+"Derbyshire Dales",71757
+Erewash,114253
+"High Peak",91959
+"North East Derbyshire",106646
+"South Derbyshire",117493
+Blaby,108165
+Charnwood,188385
+Harborough,104713
+"Hinckley and Bosworth",116682
+Melton,54052
+"North West Leicestershire",111881
+"Oadby and Wigston",61695
+Boston,71080
+"East Lindsey",145183
+Lincoln,105114
+"North Kesteven",122468
+"South Holland",99298
+"South Kesteven",147151
+"West Lindsey",99208
+Ashfield,129572
+Bassetlaw,124937
+Broxtowe,114565
+Gedling,120179
+Mansfield,113138
+"Newark and Sherwood",127886
+Rushcliffe,126736
+"Herefordshire, County of",191047
+"Telford and Wrekin",195952
+Stoke-on-Trent,270425
+Shropshire,332455
+"Cannock Chase",104088
+"East Staffordshire",129659
+Lichfield,111932
+Newcastle-under-Lyme,127727
+"South Staffordshire",114423
+Stafford,141556
+"Staffordshire Moorlands",96651
+Tamworth,81117
+"North Warwickshire",67117
+"Nuneaton and Bedworth",141565
+Rugby,122378
+Stratford-on-Avon,146258
+Warwick,154889
+Bromsgrove,101685
+"Malvern Hills",83227
+Redditch,87847
+Worcester,106671
+Wychavon,138017
+"Wyre Forest",103913
+Birmingham,1183618
+Coventry,369026
+Dudley,331930
+Sandwell,353860
+Solihull,221242
+Walsall,295678
+Wolverhampton,281251
+Peterborough,223655
+Luton,239090
+Southend-on-Sea,185256
+Thurrock,180989
+Bedford,194976
+"Central Bedfordshire",315877
+Cambridge,149352
+"East Cambridgeshire",92906
+Fenland,104896
+Huntingdonshire,190619
+"South Cambridgeshire",172544
+Basildon,193632
+Braintree,164304
+Brentwood,79326
+"Castle Point",90581
+Chelmsford,188803
+Colchester,200222
+"Epping Forest",137451
+Harlow,98235
+Maldon,69131
+Rochford,89815
+Tendring,156759
+Uttlesford,95106
+Broxbourne,101900
+Dacorum,161420
+Hertsmere,110212
+"North Hertfordshire",137201
+"Three Rivers",95807
+Watford,107171
+Breckland,146620
+Broadland,138157
+"Great Yarmouth",100529
+"King's Lynn and West Norfolk",156206
+"North Norfolk",103217
+Norwich,147182
+"South Norfolk",148448
+Babergh,97033
+Ipswich,140274
+"Mid Suffolk",110775
+"St Albans",151012
+"Welwyn Hatfield",122819
+"East Hertfordshire",156875
+Stevenage,91774
+"East Suffolk",249664
+"West Suffolk",188485
+"City of London",15111
+"Barking and Dagenham",232747
+Barnet,405050
+Bexley,256434
+Brent,352976
+Bromley,335319
+Camden,216943
+Croydon,409342
+Ealing,385985
+Enfield,327434
+Greenwich,299528
+Hackney,266758
+"Hammersmith and Fulham",188687
+Haringey,263850
+Harrow,270724
+Havering,276274
+Hillingdon,329185
+Hounslow,299424
+Islington,223024
+"Kensington and Chelsea",144518
+"Kingston upon Thames",172692
+Lambeth,316920
+Lewisham,301255
+Merton,218539
+Newham,374523
+Redbridge,321231
+"Richmond upon Thames",196678
+Southwark,314786
+Sutton,214525
+"Tower Hamlets",331886
+"Waltham Forest",279737
+Wandsworth,337655
+Westminster,209996
+Medway,292655
+"Bracknell Forest",130806
+"West Berkshire",165112
+Reading,182907
+Slough,167359
+"Windsor and Maidenhead",158943
+Wokingham,187200
+"Milton Keynes",305884
+"Brighton and Hove",283870
+Portsmouth,214321
+Southampton,259424
+"Isle of Wight",141660
+Buckinghamshire,578772
+Eastbourne,104259
+Hastings,91219
+Lewes,102363
+Rother,96133
+Wealden,166908
+"Basingstoke and Deane",193110
+"East Hampshire",129975
+Eastleigh,142933
+Fareham,115428
+Gosport,82921
+Hart,103162
+Havant,126985
+"New Forest",176116
+Rushmoor,105751
+"Test Valley",135201
+Winchester,135632
+Ashford,140936
+Canterbury,162100
+Dartford,125011
+Dover,119768
+Gravesham,110671
+Maidstone,187767
+Sevenoaks,122748
+"Folkestone and Hythe",112411
+Swale,158379
+Thanet,142691
+"Tonbridge and Malling",136853
+"Tunbridge Wells",119694
+Cherwell,170426
+Oxford,166034
+"South Oxfordshire",156470
+"Vale of White Horse",149347
+"West Oxfordshire",120941
+Elmbridge,141926
+"Epsom and Ewell",83288
+Guildford,151359
+"Mole Valley",88709
+"Reigate and Banstead",159134
+Runnymede,92118
+Spelthorne,107074
+"Surrey Heath",94492
+Tandridge,90586
+Waverley,134284
+Woking,105679
+Adur,64889
+Arun,170064
+Chichester,128934
+Crawley,124008
+Horsham,151521
+"Mid Sussex",161755
+Worthing,113866
+"Bath and North East Somerset",200028
+"Bristol, City of",494399
+"North Somerset",224578
+"South Gloucestershire",306332
+Plymouth,272067
+Torbay,140126
+Swindon,243875
+Cornwall,583289
+"Isles of Scilly",2366
+Wiltshire,523700
+"Bournemouth, Christchurch and Poole",408967
+Dorset,389947
+"East Devon",158239
+Exeter,138399
+"Mid Devon",84993
+"North Devon",101222
+"South Hams",92148
+Teignbridge,138548
+Torridge,69841
+"West Devon",58923
+Cheltenham,121739
+Cotswold,91661
+"Forest of Dean",89753
+Gloucester,138598
+Stroud,125680
+Tewkesbury,101949
+Somerset,588328
+"Isle of Anglesey",69097
+Gwynedd,120813
+Conwy,114891
+Denbighshire,98202
+Flintshire,155867
+Wrexham,138245
+Ceredigion,72599
+Pembrokeshire,125761
+Carmarthenshire,190800
+Swansea,251304
+"Neath Port Talbot",143249
+Bridgend,147530
+"Vale of Glamorgan",135743
+Cardiff,383919
+"Rhondda Cynon Taf",242844
+Caerphilly,176865
+"Blaenau Gwent",67873
+Torfaen,94119
+Monmouthshire,94930
+Newport,167899
+Powys,135059
+"Merthyr Tydfil",58972
+Clackmannanshire,52110
+"Dumfries and Galloway",145860
+"East Ayrshire",121480
+"East Lothian",115180
+"East Renfrewshire",99830
+"Na h-Eileanan Siar",26020
+Falkirk,160020
+Highland,237290
+Inverclyde,78880
+Midlothian,99880
+Moray,95010
+"North Ayrshire",134010
+"Orkney Islands",22020
+"Scottish Borders",116980
+"Shetland Islands",23190
+"South Ayrshire",112260
+"South Lanarkshire",334030
+Stirling,94210
+"Aberdeen City",231780
+Aberdeenshire,265080
+"Argyll and Bute",87690
+"City of Edinburgh",530680
+Renfrewshire,189170
+"West Dunbartonshire",89120
+"West Lothian",186440
+Angus,114810
+"Dundee City",149880
+"East Dunbartonshire",109970
+Fife,374760
+"Perth and Kinross",154420
+"Glasgow City",650300
+"North Lanarkshire",344540
+"Antrim and Newtownabbey",148100
+"Armagh City, Banbridge and Craigavon",222511
+Belfast,352390
+"Causeway Coast and Glens",141954
+"Derry City and Strabane",152383
+"Fermanagh and Omagh",117687
+"Lisburn and Castlereagh",151669
+"Mid and East Antrim",139913
+"Mid Ulster",152718
+"Newry, Mourne and Down",183115
+"Ards and North Down",165415

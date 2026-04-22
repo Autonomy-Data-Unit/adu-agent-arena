@@ -1,0 +1,24 @@
+[
+  {
+    "input": "file://prompt.md",
+    "target": "output.csv with 8 parsed contracts sorted by award_date, plus summary.json",
+    "metadata": {
+      "archetype": "scrape-and-structure",
+      "checks": {
+        "expected_files": ["/workspace/output.csv", "/workspace/summary.json"],
+        "csv_schema": {
+          "file": "/workspace/output.csv",
+          "columns": ["award_date", "contract_id", "duration_days", "end_date", "organisation", "start_date", "supplier", "title", "value_gbp"]
+        },
+        "row_count": {
+          "file": "/workspace/output.csv",
+          "expected": 8
+        },
+        "content_present": {
+          "file": "/workspace/summary.json",
+          "strings": ["68490500", "Ministry of Justice", "Mitie Facilities Services"]
+        }
+      }
+    }
+  }
+]

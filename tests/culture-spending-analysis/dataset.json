@@ -1,0 +1,16 @@
+[
+  {
+    "input": "file://prompt.md",
+    "target": "answers.json with q1-q4 results from UK culture spending data",
+    "metadata": {
+      "archetype": "notebook-analysis",
+      "checks": {
+        "expected_files": ["/workspace/answers.json"],
+        "content_present": {
+          "file": "/workspace/answers.json",
+          "strings": ["q1_la_name", "City of London", "q2_count", "q3_total", "q4_count"]
+        }
+      }
+    }
+  }
+]
