@@ -108,8 +108,33 @@
 
 	let selectedRuns = $derived(selectedAgent ? getAgentRuns(selectedAgent) : []);
 
-	function isJudgeScore(key: string): boolean {
-		return key.includes('judge');
+	function scoreColor(val: number): string {
+		if (val >= 0.9) return '#3fb950';
+		if (val >= 0.5) return '#d29922';
+		return '#f85149';
+	}
+
+	function gradeColor(grade: string): string {
+		if (grade === 'C') return '#3fb950';
+		if (grade === 'P') return '#d29922';
+		return '#f85149';
+	}
+
+	function getRunOverallScore(run: Run): number | null {
+		const details = run.score_details || {};
+		let total = 0;
+		let count = 0;
+		for (const [name, detail] of Object.entries(details)) {
+			if (name.includes('judge')) {
+				if (detail.value === 'C') { total += 1; count++; }
+				else if (detail.value === 'P') { total += 0.5; count++; }
+				else if (detail.value === 'I') { total += 0; count++; }
+			} else if (typeof detail.value === 'object' && detail.value !== null) {
+				const vals = detail.value as Record<string, number>;
+				if ('overall' in vals) { total += vals.overall; count++; }
+			}
+		}
+		return count > 0 ? total / count : null;
 	}
 
 	function getScorersForRun(run: Run): { name: string; type: 'deterministic' | 'judge'; scores: Record<string, number | string>; detail: ScoreDetail }[] {
@@ -198,11 +223,14 @@
 							<td class="agent-name">{agent}</td>
 							{#each data.tests as test}
 								{@const agg = agentAggs?.get(test)}
-								<td class="score">
-									{formatScore(agg?.['score_overall_mean_mean'])}
+								{@const testScore = agg?.['score_overall_mean_mean']}
+								<td class="score" style:color={typeof testScore === 'number' ? scoreColor(testScore) : undefined}>
+									{formatScore(testScore)}
 								</td>
 							{/each}
-							<td class="score avg">{formatScore(getOverallScore(agentAggs))}</td>
+							<td class="score avg" style:color={getOverallScore(agentAggs) !== null ? scoreColor(getOverallScore(agentAggs)!) : undefined}>
+								{formatScore(getOverallScore(agentAggs))}
+							</td>
 							<td class="cost">{formatCost(getAgentTotalCost(agentAggs))}</td>
 							<td class="time">{formatTime(getAgentTotalTime(agentAggs))}</td>
 							<td class="runs">{getAgentRunCount(agentAggs)}</td>
@@ -223,6 +251,7 @@
 							<th>Test</th>
 							<th>Time</th>
 							<th>Status</th>
+							<th>Avg</th>
 							<th>Scores</th>
 							<th>Timestamp</th>
 						</tr>
@@ -233,6 +262,9 @@
 								<td>{run.test}</td>
 								<td class="time">{formatTime(run.total_time)}</td>
 								<td class="status" class:pass={run.status === 'success'}>{run.status}</td>
+								<td class="score avg" style:color={getRunOverallScore(run) !== null ? scoreColor(getRunOverallScore(run)!) : undefined}>
+									{getRunOverallScore(run) !== null ? formatScore(getRunOverallScore(run)) : '-'}
+								</td>
 								<td class="scores-cell">
 									{#each getScorersForRun(run) as scorer}
 										{#each Object.entries(scorer.scores) as [key, val]}
@@ -240,6 +272,7 @@
 												class="score-tag"
 												class:judge={scorer.type === 'judge'}
 												class:clickable={!!scorer.detail}
+												style:color={typeof val === 'number' ? scoreColor(val) : gradeColor(String(val))}
 												onclick={(e) => { e.stopPropagation(); if (scorer.detail) openDetail(run, scorer.name, scorer.detail); }}
 											>
 												<span class="score-type-label">{scorer.type === 'judge' ? 'J' : 'D'}</span>
@@ -389,7 +422,6 @@
 
 	.avg {
 		font-weight: 600;
-		color: #58a6ff;
 	}
 
 	.cost,
