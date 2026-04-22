@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22T17:36:57.098438",
+  "generated_at": "2026-04-22T17:39:50.855353",
   "agents": [
     "anthropic/claude-sonnet-4-20250514"
   ],
@@ -10,28 +10,6 @@
     "staffing_analysis"
   ],
   "runs": [
-    {
-      "id": "NjxQEQ2teBxpwUxDf2G63R",
-      "agent": "anthropic/claude-sonnet-4-20250514",
-      "test": "staffing_analysis",
-      "timestamp": "2026-04-22 16:34:00+00:00",
-      "status": "error",
-      "scores": {},
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 1.0,
-            "csv_schema": 1.0,
-            "row_count": 1.0,
-            "numeric": 1.0,
-            "content": 1.0,
-            "overall": 1.0
-          },
-          "explanation": "All checks passed"
-        }
-      },
-      "total_time": 60.0
-    },
     {
       "id": "Ga5YpGkpU6f4vRK96GXvWQ",
       "agent": "anthropic/claude-sonnet-4-20250514",
@@ -177,27 +155,6 @@
       "total_time": 92.0
     },
     {
-      "id": "K4vjsdAvTDZUaRdYZXziXi",
-      "agent": "anthropic/claude-sonnet-4-20250514",
-      "test": "csv_deduplicator",
-      "timestamp": "2026-04-22 16:34:00+00:00",
-      "status": "error",
-      "scores": {},
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 1.0,
-            "csv_schema": 1.0,
-            "row_count": 1.0,
-            "content": 1.0,
-            "overall": 1.0
-          },
-          "explanation": "All checks passed"
-        }
-      },
-      "total_time": 83.0
-    },
-    {
       "id": "YxmpWGURq5TTjouxvt4CUE",
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "staffing_analysis",
@@ -249,53 +206,13 @@
         }
       },
       "total_time": 95.0
-    },
-    {
-      "id": "YUMEko46WuC2cHxtFEzD8J",
-      "agent": "anthropic/claude-sonnet-4-20250514",
-      "test": "culture_spending_analysis",
-      "timestamp": "2026-04-22 16:34:00+00:00",
-      "status": "error",
-      "scores": {},
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 1.0,
-            "content": 1.0,
-            "overall": 1.0
-          },
-          "explanation": "All checks passed"
-        }
-      },
-      "total_time": 55.0
-    },
-    {
-      "id": "AtZyb5a6wgUSL3aSik4Szi",
-      "agent": "anthropic/claude-sonnet-4-20250514",
-      "test": "gov_contracts_scraper",
-      "timestamp": "2026-04-22 16:34:00+00:00",
-      "status": "error",
-      "scores": {},
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 1.0,
-            "csv_schema": 1.0,
-            "row_count": 1.0,
-            "content": 1.0,
-            "overall": 1.0
-          },
-          "explanation": "All checks passed"
-        }
-      },
-      "total_time": 65.0
     }
   ],
   "aggregates": [
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "csv_deduplicator",
-      "run_count": 2,
+      "run_count": 1,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
@@ -332,7 +249,7 @@
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "culture_spending_analysis",
-      "run_count": 2,
+      "run_count": 1,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
@@ -361,7 +278,7 @@
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "gov_contracts_scraper",
-      "run_count": 2,
+      "run_count": 1,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
@@ -398,7 +315,7 @@
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "staffing_analysis",
-      "run_count": 2,
+      "run_count": 1,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
