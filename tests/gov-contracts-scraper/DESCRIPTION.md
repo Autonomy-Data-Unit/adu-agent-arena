@@ -17,6 +17,15 @@ Parse a realistic HTML page containing 8 UK government contract awards and extra
 6. Handle HTML entities (`&amp;` in organisation names)
 7. Produce a sorted CSV and summary JSON with aggregate statistics
 
+## Key files
+
+- [prompt.md](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/gov-contracts-scraper/prompt.md) — the task given to the agent
+- [contracts.html](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/gov-contracts-scraper/workspace/contracts.html) — the HTML fixture
+- [dataset.json](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/gov-contracts-scraper/dataset.json) — scoring configuration
+- [task definition](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/tasks/gov_contracts.py) — Inspect AI task
+- [deterministic scorer](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/scorers/deterministic.py) — checks schema, row count, content
+- [judge scorer](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/scorers/judge.py) — per-dimension LLM evaluation
+
 ## Deterministic checks
 
 - Output CSV exists with correct schema (9 columns)

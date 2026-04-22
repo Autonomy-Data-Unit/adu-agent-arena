@@ -16,6 +16,14 @@ Merge QPSES staffing headcount data with NOMIS population estimates for English 
 5. Compute `employees_per_1000` and `temp_casual_pct`
 6. Produce a sorted CSV and a JSON summary with median/quartile statistics
 
+## Key files
+
+- [prompt.md](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/staffing-analysis/prompt.md) — the task given to the agent
+- [dataset.json](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/staffing-analysis/dataset.json) — scoring configuration
+- [task definition](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/tasks/staffing_analysis.py) — Inspect AI task
+- [deterministic scorer](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/scorers/deterministic.py) — checks file existence, schema, row count, numeric values
+- [judge scorer](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/scorers/judge.py) — per-dimension LLM evaluation
+
 ## Deterministic checks
 
 - Output CSV exists with correct schema (6 columns)

@@ -18,6 +18,15 @@ Build a Python module that identifies and merges duplicate company records using
 4. Write clean, modular code (function-based, not inline script)
 5. Produce a deduplicated CSV (11 rows) and summary JSON
 
+## Key files
+
+- [prompt.md](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/csv-deduplicator/prompt.md) — the task given to the agent
+- [companies.csv](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/csv-deduplicator/workspace/companies.csv) — the input data
+- [dataset.json](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/tests/csv-deduplicator/dataset.json) — scoring configuration
+- [task definition](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/tasks/csv_deduplicator.py) — Inspect AI task
+- [deterministic scorer](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/scorers/deterministic.py) — checks schema, row count, summary values
+- [judge scorer](https://github.com/Autonomy-Data-Unit/adu-agent-arena/blob/main/src/adu_arena/scorers/judge.py) — per-dimension LLM evaluation
+
 ## Deterministic checks
 
 - Output CSV exists with correct schema (7 columns)
