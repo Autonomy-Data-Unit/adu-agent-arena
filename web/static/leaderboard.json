@@ -1,7 +1,9 @@
 {
-  "generated_at": "2026-04-22T18:33:47.856690",
+  "generated_at": "2026-04-22T18:41:49.358748",
   "agents": [
     "anthropic/claude-opus-4-7",
+    "anthropic/claude-sonnet-4-20250514",
+    "openai/gpt-5.1-codex-mini",
     "openai/gpt-5.4",
     "openrouter/deepseek/deepseek-v3.2",
     "openrouter/meta-llama/llama-4-maverick",
@@ -15,6 +17,56 @@
     "staffing_analysis"
   ],
   "runs": [
+    {
+      "id": "jwmzmEmnerxSMymhjDtZGY",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.5,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.6,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.55,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.6,
+            "robustness": 0.5,
+            "structure": 0.6,
+            "code_quality": 0.5,
+            "overall": 0.55
+          },
+          "explanation": "The agent produced three separate scripts (scraper.py, contract_scraper.py, and an incomplete scrape_contracts.py) plus an unrelated test.py, which is messy and unclear which is canonical. scraper.py appears correct and complete, handling HTML entity decoding and producing proper output. However, contract_scraper.py casts avg_value_gbp to int (losing precision, likely spec violation since spec implies a mean), and scrape_contracts.py is truncated/broken. Robustness is limited: no handling of missing elements, and BeautifulSoup's get_text already decodes entities making html.unescape redundant but harmless. Overall functional via scraper.py but the duplicated/incomplete files hurt quality."
+        }
+      },
+      "total_time": 64.0
+    },
     {
       "id": "3cjpiotdBVWjqiKZQBMsbe",
       "agent": "openrouter/deepseek/deepseek-v3.2",
@@ -114,6 +166,56 @@
         }
       },
       "total_time": 68.0
+    },
+    {
+      "id": "63ybTPBGm96zZJ3jFsLehM",
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.4,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.4,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.45,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.4,
+            "architecture": 0.5,
+            "edge_cases": 0.5,
+            "code_quality": 0.4,
+            "overall": 0.45
+          },
+          "explanation": "The workspace contains multiple files in various states: a well-written backup (`company_deduplicator_backup.py`) that appears correct and complete, but the main `company_deduplicator.py` is truncated mid-function and would not run, and `deduplicator.py` is completely corrupted/malformed. The `check_columns.py` is a debug scratch file that shouldn't be in the deliverable. Since the primary entry point is broken/incomplete, the overall deliverable fails correctness, though the backup file shows good modularity, typing, and edge case handling (normalization, status tie-breaking, missing column validation)."
+        }
+      },
+      "total_time": 26.0
     },
     {
       "id": "cwRShT6msWUG3qyTZzm2tK",
@@ -466,6 +568,56 @@
       "total_time": 28.0
     },
     {
+      "id": "2FTJXfnETESUXq3SYDGsKb",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.4,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.4,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.475,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.4,
+            "architecture": 0.5,
+            "edge_cases": 0.6,
+            "code_quality": 0.4,
+            "overall": 0.475
+          },
+          "explanation": "The backup file (company_deduplicator_backup.py) contains a clean, correct implementation, but the main deduplicator.py file appears to be corrupted/garbled and non-functional. There are also extraneous files (test_deduplication.py, check_columns.py) cluttering the workspace that shouldn't be part of the deliverable. The main entry point being broken is a major correctness issue, though the backup logic itself is well-written with good separation of concerns, type hints, and proper handling of the merge rules."
+        }
+      },
+      "total_time": 108.0
+    },
+    {
       "id": "NUY27DVh3FEYbCFwsjU2ng",
       "agent": "openai/gpt-5.4",
       "test": "gov_contracts_scraper",
@@ -654,6 +806,94 @@
       "total_time": 10.0
     },
     {
+      "id": "5Lcfz68RNihYa7vWbnYpiy",
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.6,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.9,
+        "score_correctness_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.85,
+        "score_overall_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.9,
+            "methodology": 0.9,
+            "completeness": 1.0,
+            "code_quality": 0.6,
+            "overall": 0.85
+          },
+          "explanation": "The solution scripts correctly address all four questions using sound methodology: filtering by year/country, using idxmax for Q1, equality check for Q2, sum for Q3, and inner merge/intersection for Q4 to only count LAs present in both years. Numerical results should be correct. Code quality is reduced because the workspace contains multiple redundant scripts (solution.py, analyse_spending.py, solve.py, compute_answers.py) plus a broken analyze_data.py file that appears to be a malformed string literal, indicating messy iteration rather than a clean final deliverable."
+        }
+      },
+      "total_time": 20.0
+    },
+    {
+      "id": "d2ARPLTrpk2xPtUEDHwPnR",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.6,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.8,
+        "score_correctness_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.8,
+        "score_overall_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.8,
+            "methodology": 0.9,
+            "completeness": 0.9,
+            "code_quality": 0.6,
+            "overall": 0.8
+          },
+          "explanation": "The main solution files (solution.py, solve.py) correctly implement all four questions with sound methodology: idxmax for Q1, equality check for Q2, sum with rounding for Q3, and proper intersection/merge for Q4 to handle LAs present in both years. However, the workspace contains multiple redundant files (analyze_culture_spending.py, solution.py, solve.py, analyze_data.py, verify.py, analyse_spending.py), one of which (analyze_data.py) appears broken/corrupted as a string literal, and analyse_spending.py appears truncated. This clutter hurts code quality though the core logic is correct. Q1 value is returned as numpy float rather than native Python float in some versions, which may or may not serialize cleanly."
+        }
+      },
+      "total_time": 52.0
+    },
+    {
       "id": "6wTPKGLf5odeywPn4JUUik",
       "agent": "anthropic/claude-opus-4-7",
       "test": "gov_contracts_scraper",
@@ -752,6 +992,59 @@
         }
       },
       "total_time": 12.0
+    },
+    {
+      "id": "NWKWPKwkKAoYBGM7zgt3C7",
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "staffing_analysis",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.5,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.7,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_numeric_mean": 1.0,
+        "score_numeric_stderr": 0.0,
+        "score_overall_mean": 0.6499999999999999,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "numeric": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.7,
+            "methodology": 0.7,
+            "completeness": 0.7,
+            "code_quality": 0.5,
+            "overall": 0.6499999999999999
+          },
+          "explanation": "The agent produced multiple redundant scripts (analyze_staffing.py, staffing_analysis.py, local_authority_staffing_analysis.py), with the last one appearing truncated/incomplete. The first two complete scripts correctly implement filtering, renaming Shepway, merging, computing metrics, and generating summary.json. However, the median_temp_casual_pct uses .median() which pandas handles NaN by default (skipna=True), so that's fine. Code quality suffers from duplication and the garbled verify scripts suggesting messy workspace; the main logic is sound but not cleanly delivered."
+        }
+      },
+      "total_time": 32.0
     },
     {
       "id": "5GuDCt4SJXpC2yyLvgKFRP",
@@ -1101,6 +1394,109 @@
       "total_time": 48.0
     },
     {
+      "id": "o4LAev9MpzNAmNJ5P5EEaJ",
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.5,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.6,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.55,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.6,
+            "robustness": 0.5,
+            "structure": 0.6,
+            "code_quality": 0.5,
+            "overall": 0.55
+          },
+          "explanation": "The agent produced three separate scripts (scraper.py, contract_scraper.py, scrape_contracts.py), with the third one being truncated/incomplete. This creates ambiguity about which is the 'real' solution. The first two scripts appear functionally correct and handle the basic extraction, sorting, CSV, and summary JSON, but contract_scraper.py casts avg_value_gbp to int (potentially losing precision \u2014 the spec doesn't specify rounding), while scraper.py keeps it as a float. Both handle HTML entity decoding and whitespace adequately, but neither has defensive handling for missing fields. The proliferation of scripts (including a stray test.py) and truncated file hurt structure and code quality."
+        }
+      },
+      "total_time": 32.0
+    },
+    {
+      "id": "b42EhBpHcXaRKwR8qPmLzN",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "staffing_analysis",
+      "timestamp": "2026-04-22 17:37:40+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.5,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.7,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_numeric_mean": 1.0,
+        "score_numeric_stderr": 0.0,
+        "score_overall_mean": 0.675,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "numeric": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.7,
+            "methodology": 0.7,
+            "completeness": 0.8,
+            "code_quality": 0.5,
+            "overall": 0.675
+          },
+          "explanation": "The primary script `analyze_staffing.py` appears correct: it filters Shire Districts, excludes Cumbrian districts, renames Shepway to Folkestone and Hythe before merging, computes both metrics, sorts, and writes outputs as specified. However, the workspace is cluttered with multiple redundant/broken scripts (verify_results.py and verify_output.py appear to be corrupted/garbled, and staffing_analysis.py renames in the wrong direction\u2014Folkestone to Shepway\u2014which is inconsistent with the spec though it still works via the inner merge). The truncated `local_authority_staffing_analysis.py` also indicates incomplete cleanup. Code quality suffers due to duplication and broken files, but the core deliverable is functional."
+        }
+      },
+      "total_time": 79.0
+    },
+    {
       "id": "CPSwmieBNmHwJLfrGQpmsN",
       "agent": "openrouter/qwen/qwen3-coder",
       "test": "culture_spending_analysis",
@@ -1335,6 +1731,294 @@
       "score_numeric_stderr_mean": 0.0,
       "score_numeric_stderr_std": 0.0,
       "score_overall_mean_mean": 0.775,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "csv_deduplicator",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.4,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.4,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.475,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "culture_spending_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.6,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.8,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.8,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0
+    },
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "gov_contracts_scraper",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.6,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.55,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "staffing_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.7,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_numeric_mean_mean": 1.0,
+      "score_numeric_mean_std": 0.0,
+      "score_numeric_stderr_mean": 0.0,
+      "score_numeric_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.675,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "csv_deduplicator",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.4,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.4,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.45,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "culture_spending_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.6,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.9,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.85,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0
+    },
+    {
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "gov_contracts_scraper",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.6,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.55,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "openai/gpt-5.1-codex-mini",
+      "test": "staffing_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.7,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_numeric_mean_mean": 1.0,
+      "score_numeric_mean_std": 0.0,
+      "score_numeric_stderr_mean": 0.0,
+      "score_numeric_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.65,
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
