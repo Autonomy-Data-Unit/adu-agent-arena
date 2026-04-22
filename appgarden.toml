@@ -4,4 +4,5 @@ method = "static"
 source = "web/build"
 
 [environments.production]
+server = "adu-apps-root"
 subdomain = "adu-agent-arena"
