@@ -8,6 +8,9 @@ dist/
 # Inspect AI logs
 logs/
 
+# Pi-coding-agent session recordings
+sessions/
+
 # Node
 node_modules/
 web/.svelte-kit/
