@@ -112,7 +112,8 @@ def pi_coding_agent(
         SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
         task_name = state.metadata.get("archetype", "unknown")
         sample_id = state.sample_id or "0"
-        session_file = SESSIONS_DIR / f"{provider}_{model}_{task_name}_{sample_id}.jsonl"
+        safe_model = model.replace("/", "_")
+        session_file = SESSIONS_DIR / f"{provider}_{safe_model}_{task_name}_{sample_id}.jsonl"
         with open(session_file, "w") as f:
             for event in session_events:
                 f.write(json.dumps(event) + "\n")
