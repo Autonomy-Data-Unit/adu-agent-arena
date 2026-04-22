@@ -10,9 +10,10 @@ from inspect_ai.analysis import evals_df
 from inspect_ai.log import read_eval_log
 
 
-def extract_score_details(log_path: str) -> dict[str, dict]:
-    """Read an eval log and extract per-scorer explanations and values."""
+def extract_log_details(log_path: str) -> tuple[dict[str, dict], float | None]:
+    """Read an eval log and extract per-scorer explanations and duration."""
     details: dict[str, dict] = {}
+    duration: float | None = None
     try:
         log = read_eval_log(log_path)
         for sample in log.samples or []:
@@ -21,9 +22,14 @@ def extract_score_details(log_path: str) -> dict[str, dict]:
                     "value": score.value if isinstance(score.value, (str, int, float, dict)) else str(score.value),
                     "explanation": score.explanation or "",
                 }
+        if log.stats and log.stats.started_at and log.stats.completed_at:
+            from datetime import datetime
+            start = datetime.fromisoformat(log.stats.started_at)
+            end = datetime.fromisoformat(log.stats.completed_at)
+            duration = (end - start).total_seconds()
     except Exception:
         pass
-    return details
+    return details, duration
 
 
 def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -> None:
@@ -82,10 +88,13 @@ def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -
             if pd.notna(val):
                 run[field] = float(val) if isinstance(val, (int, float)) else str(val)
 
-        # Read detailed explanations from the eval log
+        # Read detailed explanations and duration from the eval log
         log_file = row.get("log")
         if pd.notna(log_file):
-            run["score_details"] = extract_score_details(str(log_file))
+            score_details, duration = extract_log_details(str(log_file))
+            run["score_details"] = score_details
+            if duration is not None:
+                run["total_time"] = round(duration, 1)
 
         leaderboard["runs"].append(run)
 

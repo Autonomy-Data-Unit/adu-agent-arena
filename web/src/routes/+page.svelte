@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { marked } from 'marked';
 	import type { Leaderboard, Aggregate, Run, ScoreDetail } from '$lib/types';
 
 	let { data: pageData } = $props();
@@ -280,15 +281,41 @@
 				<span>{new Date(selectedDetail.run.timestamp).toLocaleString()}</span>
 			</div>
 
-			<div class="panel-section">
-				<h4>Result</h4>
-				<p class="panel-value">{formatDetailValue(selectedDetail.detail.value)}</p>
-			</div>
+			{#if typeof selectedDetail.detail.value === 'object' && selectedDetail.detail.value !== null}
+				<div class="panel-section">
+					<h4>Checks</h4>
+					<div class="checks-grid">
+						{#each Object.entries(selectedDetail.detail.value as Record<string, number>) as [check, val]}
+							<div class="check-row">
+								<span class="check-name">{check}</span>
+								<span class="check-val" class:pass={val >= 1} class:partial={val > 0 && val < 1} class:fail={val <= 0}>
+									{(val * 100).toFixed(1)}%
+								</span>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{:else}
+				<div class="panel-section">
+					<h4>Result</h4>
+					<p class="panel-value">{formatDetailValue(selectedDetail.detail.value)}</p>
+				</div>
+			{/if}
 
 			{#if selectedDetail.detail.explanation}
 				<div class="panel-section">
 					<h4>Explanation</h4>
-					<div class="panel-explanation">{selectedDetail.detail.explanation}</div>
+					{#if selectedDetail.scorer.includes('judge')}
+						<div class="panel-explanation markdown">
+							{@html marked(selectedDetail.detail.explanation)}
+						</div>
+					{:else}
+						<div class="panel-explanation">
+							{#each selectedDetail.detail.explanation.split('; ') as line}
+								<p class="det-line">{line}</p>
+							{/each}
+						</div>
+					{/if}
 				</div>
 			{/if}
 		</div>
@@ -547,16 +574,91 @@
 		font-weight: 600;
 	}
 
+	.checks-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+	}
+
+	.check-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.375rem 0.75rem;
+		background: #0d1117;
+		border-radius: 4px;
+		border: 1px solid #21262d;
+	}
+
+	.check-name {
+		font-size: 0.8125rem;
+		color: #c9d1d9;
+	}
+
+	.check-val {
+		font-size: 0.8125rem;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.check-val.pass {
+		color: #3fb950;
+	}
+
+	.check-val.partial {
+		color: #d29922;
+	}
+
+	.check-val.fail {
+		color: #f85149;
+	}
+
+	.det-line {
+		margin: 0.25rem 0;
+		font-size: 0.8125rem;
+		color: #c9d1d9;
+	}
+
 	.panel-explanation {
 		font-size: 0.8125rem;
 		line-height: 1.6;
 		color: #c9d1d9;
-		white-space: pre-wrap;
 		background: #0d1117;
 		padding: 1rem;
 		border-radius: 6px;
 		border: 1px solid #21262d;
 		max-height: 60vh;
 		overflow-y: auto;
+	}
+
+	.panel-explanation:not(.markdown) {
+		white-space: pre-wrap;
+	}
+
+	.panel-explanation.markdown :global(h1),
+	.panel-explanation.markdown :global(h2),
+	.panel-explanation.markdown :global(h3),
+	.panel-explanation.markdown :global(h4) {
+		color: #e6edf3;
+		margin: 1rem 0 0.5rem;
+		font-size: 0.875rem;
+	}
+
+	.panel-explanation.markdown :global(strong) {
+		color: #e6edf3;
+	}
+
+	.panel-explanation.markdown :global(ol),
+	.panel-explanation.markdown :global(ul) {
+		padding-left: 1.5rem;
+		margin: 0.5rem 0;
+	}
+
+	.panel-explanation.markdown :global(li) {
+		margin: 0.25rem 0;
+	}
+
+	.panel-explanation.markdown :global(p) {
+		margin: 0.5rem 0;
 	}
 </style>
