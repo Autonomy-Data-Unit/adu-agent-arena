@@ -1,0 +1,7 @@
+[app]
+name = "adu-agent-arena"
+method = "static"
+source = "web/build"
+
+[environments.production]
+subdomain = "adu-agent-arena"
