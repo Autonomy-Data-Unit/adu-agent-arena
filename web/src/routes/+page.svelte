@@ -198,10 +198,11 @@
 									>{run.status}</td
 								>
 								<td class="scores-cell">
-									{#each Object.entries(run.scores) as [key, val]}
-										<span class="score-tag"
-											>{key.replace('score_', '')}: {formatScore(val)}</span
-										>
+									{#each Object.entries(run.scores).filter(([k]) => !k.includes('stderr') && !k.includes('headline')) as [key, val]}
+										{@const isJudge = key.includes('model_graded') || key.includes('judge')}
+										<span class="score-tag" class:judge={isJudge}>
+											{key.replace('score_', '').replace('_accuracy', '').replace('_mean', '')}: {formatScore(val)}
+										</span>
 									{/each}
 								</td>
 								<td class="timestamp"
@@ -318,6 +319,11 @@
 		border-radius: 3px;
 		font-size: 0.75rem;
 		white-space: nowrap;
+		border-left: 2px solid #3fb950;
+	}
+
+	.score-tag.judge {
+		border-left-color: #d29922;
 	}
 
 	.timestamp {
