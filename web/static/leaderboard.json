@@ -1,7 +1,309 @@
 {
-  "generated_at": "2026-04-22T00:00:00",
-  "agents": [],
-  "tests": [],
-  "runs": [],
-  "aggregates": []
+  "generated_at": "2026-04-22T17:14:07.808348",
+  "agents": [
+    "anthropic/claude-sonnet-4-20250514"
+  ],
+  "tests": [
+    "csv_deduplicator",
+    "culture_spending_analysis",
+    "gov_contracts_scraper",
+    "staffing_analysis"
+  ],
+  "runs": [
+    {
+      "id": "9WpXJ8fLMGXsAU5cesmxpe",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-22 16:10:03+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_judge_scorer_accuracy": 1.0,
+        "score_judge_scorer_stderr": 0.0,
+        "score_overall_mean": 1.0,
+        "score_overall_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": "C",
+          "explanation": "Step-by-step analysis:\n\nQ1: Filters 2024, finds max of spend_total_real using idxmax. Correct approach.\n\nQ2: Filters 2024, counts rows where spend_total == 0. This counts exactly zero values. However, there could be concern about NaN vs 0 - the question asks for \"exactly zero\" so this should be fine.\n\nQ3: Filters England + 2023, sums spend_total_real, rounds to 2 decimals. Correct.\n\nQ4: Gets English LAs for 2010 and 2024, merges on la_name (inner join keeps only LAs in both years), counts where 2024 > 2010. Correct methodology.\n\nThe code is clean, addresses all four questions, uses sound methodology. One minor consideration for Q2: if spend_total has NaN values for some LAs in 2024, those would be excluded (correctly, since NaN != 0). The comparison `== 0` correctly identifies exact zeros.\n\nOverall the approach looks correct and complete.\n\nGRADE: C"
+        }
+      },
+      "total_time": 55.0
+    },
+    {
+      "id": "Ss7CXHNm6zjfQUhTGmF9wH",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-22 16:10:03+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_judge_scorer_accuracy": 1.0,
+        "score_judge_scorer_stderr": 0.0,
+        "score_overall_mean": 1.0,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": "C",
+          "explanation": "Step-by-step reasoning:\n\n1. **Correctness**: \n   - Extracts contract_id from data attribute \u2713\n   - Parses title, organisation, supplier with html.unescape for entities \u2713\n   - Parses value by stripping \u00a3 and commas \u2713\n   - Dates parsed from DD/MM/YYYY to YYYY-MM-DD \u2713\n   - Duration calculated correctly \u2713\n   - Sorted by award_date ascending \u2713\n   - Summary stats calculated correctly \u2713\n\n2. **Robustness**: Uses html.unescape for entities, .strip() for whitespace. Could be more defensive about missing fields but for this specific task it's adequate.\n\n3. **Structure**: Output CSV has proper fieldnames, JSON properly structured.\n\n4. **Code quality**: Clean, readable, well-organized with helper functions and docstrings.\n\nOne minor note: `avg_value_gbp` is not rounded, but the spec doesn't require rounding for it (only avg_duration_days needs rounding to 1 decimal, which is done). The code looks correct.\n\nGRADE: C"
+        }
+      },
+      "total_time": 78.0
+    },
+    {
+      "id": "2JQgXq2xSHsQEbqorAAGa9",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-22 16:10:03+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_judge_scorer_accuracy": 1.0,
+        "score_judge_scorer_stderr": 0.0,
+        "score_overall_mean": 1.0,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": "C",
+          "explanation": "Checking the implementation:\n\n1. **Correctness**: \n   - Reads CSV, groups by normalized postcode and sic_code \u2713\n   - Applies merge rules correctly: lowest id, longest name/address, Active-priority status \u2713\n   - duplicate_count added \u2713\n   - Sorted by id ascending \u2713\n   - Summary JSON has all required fields \u2713\n   - \"duplicates_found\": counts records that were part of a duplicate group (includes all records in groups of size >1). This matches the spec.\n\n2. **Architecture**: Modular with separate merge function, main deduplication function. Good.\n\n3. **Edge cases**: Handles single records, case-insensitive postcode matching, empty handling via groupby.\n\n4. **Code quality**: Clean, documented, readable.\n\nMinor concern: For singleton records, it uses the original postcode (good) and removes the normalized one (good). The record dict from `iloc[0].to_dict()` would preserve field order roughly, so columns should be consistent.\n\nLooks correct and well-structured.\n\nGRADE: C"
+        }
+      },
+      "total_time": 84.0
+    },
+    {
+      "id": "PN3knUd7KzhR8jGL9ihg3S",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "staffing_analysis",
+      "timestamp": "2026-04-22 16:10:03+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_judge_scorer_accuracy": 1.0,
+        "score_judge_scorer_stderr": 0.0,
+        "score_numeric_mean": 0.5,
+        "score_numeric_stderr": 0.0,
+        "score_overall_mean": 0.9,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "numeric": 0.5,
+            "content": 1.0,
+            "overall": 0.9
+          },
+          "explanation": "Numeric employees_per_1000.mean(): expected 3.7768 (+/-0.05), got 3.666776405227948"
+        },
+        "judge_scorer": {
+          "value": "C",
+          "explanation": "Steps:\n1. Reads QPSES and NOMIS - correct.\n2. Filters Shire District and excludes 6 Cumbrian districts - correct.\n3. Renames Shepway to Folkestone and Hythe before merge - correct.\n4. Merges on Auth Name = lad - correct.\n5. Computes employees_per_1000 - correct.\n6. Computes temp_casual_pct - division by zero when Total Headcount is 0 will give NaN (0/0) which is correct per spec.\n7. Selects output columns, sorts, saves - correct.\n8. Summary statistics: n_districts, south_cambs values, median, q1, q3, median_temp_casual_pct - all computed correctly and rounded to 4 decimals.\n\nOne minor concern: the spec says \"Rows where both values are 0 will produce NaN\". With pandas, 0/0 using numpy gives NaN with a warning but works. Non-zero/0 would give inf, but spec says both are 0. This is fine.\n\nThe code looks complete and correct.\n\nGRADE: C"
+        }
+      },
+      "total_time": 91.0
+    }
+  ],
+  "aggregates": [
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "csv_deduplicator",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_judge_scorer_accuracy_mean": 1.0,
+      "score_judge_scorer_accuracy_std": 0.0,
+      "score_judge_scorer_stderr_mean": 0.0,
+      "score_judge_scorer_stderr_std": 0.0,
+      "score_overall_mean_mean": 1.0,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "culture_spending_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_judge_scorer_accuracy_mean": 1.0,
+      "score_judge_scorer_accuracy_std": 0.0,
+      "score_judge_scorer_stderr_mean": 0.0,
+      "score_judge_scorer_stderr_std": 0.0,
+      "score_overall_mean_mean": 1.0,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0
+    },
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "gov_contracts_scraper",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_judge_scorer_accuracy_mean": 1.0,
+      "score_judge_scorer_accuracy_std": 0.0,
+      "score_judge_scorer_stderr_mean": 0.0,
+      "score_judge_scorer_stderr_std": 0.0,
+      "score_overall_mean_mean": 1.0,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "staffing_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_judge_scorer_accuracy_mean": 1.0,
+      "score_judge_scorer_accuracy_std": 0.0,
+      "score_judge_scorer_stderr_mean": 0.0,
+      "score_judge_scorer_stderr_std": 0.0,
+      "score_numeric_mean_mean": 0.5,
+      "score_numeric_mean_std": 0.0,
+      "score_numeric_stderr_mean": 0.0,
+      "score_numeric_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.9,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    }
+  ]
 }

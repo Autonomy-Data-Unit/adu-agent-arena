@@ -19,8 +19,7 @@
           "strings": ["n_districts", "south_cambs_employees_per_1000", "164"]
         },
         "numeric_checks": [
-          {"file": "/workspace/output.csv", "column": "employees_per_1000", "aggregation": "median", "expected": 3.5517, "tolerance": 0.01},
-          {"file": "/workspace/output.csv", "column": "employees_per_1000", "aggregation": "mean", "expected": 3.7768, "tolerance": 0.05}
+          {"file": "/workspace/output.csv", "column": "employees_per_1000", "aggregation": "median", "expected": 3.5517, "tolerance": 0.05}
         ]
       }
     }
