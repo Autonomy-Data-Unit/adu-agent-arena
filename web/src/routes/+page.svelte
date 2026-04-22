@@ -6,6 +6,7 @@
 	let data: Leaderboard = $state(pageData.leaderboard);
 	let selectedAgent: string | null = $state(null);
 	let selectedDetail: { run: Run; scorer: string; detail: ScoreDetail } | null = $state(null);
+	let selectedTestDesc: string | null = $state(null);
 	let sortColumn: string = $state('avg');
 	let sortDirection: 'asc' | 'desc' = $state('desc');
 
@@ -226,7 +227,12 @@
 					<tr>
 						<th class="sortable" onclick={() => toggleSort('agent')}>Agent{sortIndicator('agent')}</th>
 						{#each data.tests as test}
-							<th class="sortable" onclick={() => toggleSort(test)}>{test}{sortIndicator(test)}</th>
+							<th class="sortable">
+								<span onclick={() => toggleSort(test)}>{test}{sortIndicator(test)}</span>
+								{#if data.test_descriptions?.[test]}
+									<button class="info-btn" onclick={(e) => { e.stopPropagation(); selectedTestDesc = selectedTestDesc === test ? null : test; }} title="View test description">?</button>
+								{/if}
+							</th>
 						{/each}
 						<th class="sortable" onclick={() => toggleSort('avg')}>Avg{sortIndicator('avg')}</th>
 						<th class="sortable" onclick={() => toggleSort('cost')}>Cost{sortIndicator('cost')}</th>
@@ -376,6 +382,22 @@
 	</div>
 {/if}
 
+{#if selectedTestDesc && data.test_descriptions?.[selectedTestDesc]}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="panel-overlay" onclick={() => selectedTestDesc = null} onkeydown={(e) => { if (e.key === 'Escape') selectedTestDesc = null; }}>
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="panel" onclick={(e) => e.stopPropagation()}>
+			<div class="panel-header">
+				<h3>{selectedTestDesc}</h3>
+				<button class="panel-close" onclick={() => selectedTestDesc = null}>x</button>
+			</div>
+			<div class="panel-explanation markdown">
+				{@html marked(data.test_descriptions[selectedTestDesc])}
+			</div>
+		</div>
+	</div>
+{/if}
+
 <style>
 	.empty {
 		text-align: center;
@@ -423,6 +445,31 @@
 
 	th.sortable:hover {
 		color: #e6edf3;
+	}
+
+	th.sortable span {
+		cursor: pointer;
+	}
+
+	.info-btn {
+		background: none;
+		border: 1px solid #30363d;
+		color: #8b949e;
+		font-size: 0.625rem;
+		font-weight: 700;
+		width: 1.125rem;
+		height: 1.125rem;
+		border-radius: 50%;
+		cursor: pointer;
+		margin-left: 0.25rem;
+		padding: 0;
+		vertical-align: middle;
+		line-height: 1;
+	}
+
+	.info-btn:hover {
+		color: #e6edf3;
+		border-color: #58a6ff;
 	}
 
 	td {

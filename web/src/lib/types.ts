@@ -30,4 +30,5 @@ export interface Leaderboard {
 	tests: string[];
 	runs: Run[];
 	aggregates: Aggregate[];
+	test_descriptions: Record<string, string>;
 }

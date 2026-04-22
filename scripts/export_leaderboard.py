@@ -101,6 +101,19 @@ def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -
     leaderboard["agents"] = sorted(agents)
     leaderboard["tests"] = sorted(tests)
 
+    # Load test descriptions from DESCRIPTION.md files
+    tests_dir = Path("tests")
+    test_descriptions: dict[str, str] = {}
+    # Map task_name (e.g. "staffing_analysis") to dir name (e.g. "staffing-analysis")
+    if tests_dir.exists():
+        for test_dir in tests_dir.iterdir():
+            desc_file = test_dir / "DESCRIPTION.md"
+            if desc_file.exists():
+                # Convert dir name to task name: "staffing-analysis" -> "staffing_analysis"
+                task_name = test_dir.name.replace("-", "_")
+                test_descriptions[task_name] = desc_file.read_text()
+    leaderboard["test_descriptions"] = test_descriptions
+
     # Aggregate per agent-test pair
     aggregates = []
     for agent in sorted(agents):
