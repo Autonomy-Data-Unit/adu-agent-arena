@@ -46,9 +46,6 @@
 
 	function formatScore(val: unknown): string {
 		if (typeof val === 'number') return (val * 100).toFixed(1) + '%';
-		if (val === 'C') return 'C';
-		if (val === 'P') return 'P';
-		if (val === 'I') return 'I';
 		return '-';
 	}
 
@@ -114,22 +111,12 @@
 		return '#f85149';
 	}
 
-	function gradeColor(grade: string): string {
-		if (grade === 'C') return '#3fb950';
-		if (grade === 'P') return '#d29922';
-		return '#f85149';
-	}
-
 	function getRunOverallScore(run: Run): number | null {
 		const details = run.score_details || {};
 		let total = 0;
 		let count = 0;
-		for (const [name, detail] of Object.entries(details)) {
-			if (name.includes('judge')) {
-				if (detail.value === 'C') { total += 1; count++; }
-				else if (detail.value === 'P') { total += 0.5; count++; }
-				else if (detail.value === 'I') { total += 0; count++; }
-			} else if (typeof detail.value === 'object' && detail.value !== null) {
+		for (const detail of Object.values(details)) {
+			if (typeof detail.value === 'object' && detail.value !== null) {
 				const vals = detail.value as Record<string, number>;
 				if ('overall' in vals) { total += vals.overall; count++; }
 			}
@@ -145,9 +132,7 @@
 			const isJudge = scorerName.includes('judge');
 			const relevantScores: Record<string, number | string> = {};
 
-			if (isJudge) {
-				relevantScores['grade'] = typeof detail.value === 'string' ? detail.value : String(detail.value);
-			} else if (typeof detail.value === 'object' && detail.value !== null) {
+			if (typeof detail.value === 'object' && detail.value !== null) {
 				for (const [k, v] of Object.entries(detail.value as Record<string, number>)) {
 					relevantScores[k] = v;
 				}
@@ -272,7 +257,7 @@
 												class="score-tag"
 												class:judge={scorer.type === 'judge'}
 												class:clickable={!!scorer.detail}
-												style:color={typeof val === 'number' ? scoreColor(val) : gradeColor(String(val))}
+												style:color={typeof val === 'number' ? scoreColor(val) : undefined}
 												onclick={(e) => { e.stopPropagation(); if (scorer.detail) openDetail(run, scorer.name, scorer.detail); }}
 											>
 												<span class="score-type-label">{scorer.type === 'judge' ? 'J' : 'D'}</span>

@@ -1,142 +1,105 @@
-"""LLM-judge scorer that reads agent-produced code from the sandbox."""
+"""LLM-judge scorer that reads agent-produced code from the sandbox.
 
+Scores each dimension on a 1-10 scale rather than a coarse C/P/I grade.
+"""
+
+import json
+import re
+
+from inspect_ai.model import (
+    ChatMessageAssistant,
+    ChatMessageSystem,
+    ChatMessageUser,
+    GenerateConfig,
+    ModelOutput,
+    get_model,
+)
 from inspect_ai.scorer import (
     Score,
     Scorer,
     Target,
-    accuracy,
-    model_graded_qa,
+    mean,
     scorer,
     stderr,
 )
 from inspect_ai.solver import TaskState
 from inspect_ai.util import sandbox
 
-RUBRICS = {
-    "scrape-and-structure": """\
-You are evaluating code that scrapes and structures data from web sources.
-
-## Task
-{question}
-
-## Agent's code
-{answer}
-
-## Expected outcome
-{criterion}
-
-## Evaluation criteria
-
-Grade on these dimensions:
-1. **Correctness**: Does the scraper extract the right data from the HTML?
-2. **Robustness**: Does it handle edge cases (missing fields, whitespace, encoding)?
-3. **Structure**: Is the output well-structured and validated?
-4. **Code quality**: Is the code clean, readable, and idiomatic Python?
-
-If the code is correct and well-written, grade GRADE: C.
-If the code is partially correct or has minor issues, grade GRADE: P.
-If the code fails to extract data correctly, grade GRADE: I.
-
-{instructions}
-""",
-    "notebook-analysis": """\
-You are evaluating code that performs data analysis.
-
-## Task
-{question}
-
-## Agent's code
-{answer}
-
-## Expected outcome
-{criterion}
-
-## Evaluation criteria
-
-Grade on these dimensions:
-1. **Correctness**: Does the code produce the right numerical results?
-2. **Methodology**: Is the data processing approach sound (correct merges, aggregations, formulas)?
-3. **Completeness**: Does it address all parts of the task specification?
-4. **Code quality**: Is the code clean, readable, and well-structured?
-
-If the code is correct, complete, and well-written, grade GRADE: C.
-If the code is partially correct or has minor issues, grade GRADE: P.
-If the code is incorrect or fundamentally flawed, grade GRADE: I.
-
-{instructions}
-""",
-    "pipeline-stage": """\
-You are evaluating code that performs a data pipeline transformation.
-
-## Task
-{question}
-
-## Agent's code
-{answer}
-
-## Expected outcome
-{criterion}
-
-## Evaluation criteria
-
-Grade on these dimensions:
-1. **Correctness**: Does the transformation produce the expected output?
-2. **Methodology**: Is the data transformation approach sound?
-3. **Code quality**: Is the code clean, readable, and well-structured?
-
-If the code is correct and well-written, grade GRADE: C.
-If the code is partially correct or has minor issues, grade GRADE: P.
-If the code is incorrect or fundamentally flawed, grade GRADE: I.
-
-{instructions}
-""",
-    "full-project-reproduction": """\
-You are evaluating a complete module or project implementation.
-
-## Task
-{question}
-
-## Agent's code
-{answer}
-
-## Expected outcome
-{criterion}
-
-## Evaluation criteria
-
-Grade on these dimensions:
-1. **Correctness**: Does the code work as specified?
-2. **Architecture**: Is the code well-organized and modular?
-3. **Edge cases**: Are edge cases handled appropriately?
-4. **Code quality**: Is the code clean, readable, and idiomatic?
-
-If the implementation is correct and well-structured, grade GRADE: C.
-If the implementation is partially correct or has structural issues, grade GRADE: P.
-If the implementation is incorrect or fundamentally broken, grade GRADE: I.
-
-{instructions}
-""",
+DIMENSIONS = {
+    "scrape-and-structure": [
+        ("correctness", "Does the scraper extract the right data from the HTML?"),
+        ("robustness", "Does it handle edge cases (missing fields, whitespace, HTML entities)?"),
+        ("structure", "Is the output well-structured, validated, and in the correct format?"),
+        ("code_quality", "Is the code clean, readable, and idiomatic Python?"),
+    ],
+    "notebook-analysis": [
+        ("correctness", "Does the code produce the right numerical results?"),
+        ("methodology", "Is the data processing approach sound (correct merges, aggregations, formulas)?"),
+        ("completeness", "Does it address all parts of the task specification?"),
+        ("code_quality", "Is the code clean, readable, and well-structured?"),
+    ],
+    "pipeline-stage": [
+        ("correctness", "Does the transformation produce the expected output?"),
+        ("methodology", "Is the data transformation approach sound and appropriate?"),
+        ("completeness", "Does it handle all the steps described in the specification?"),
+        ("code_quality", "Is the code clean, readable, and well-structured?"),
+    ],
+    "full-project-reproduction": [
+        ("correctness", "Does the code work as specified?"),
+        ("architecture", "Is the code well-organized and modular?"),
+        ("edge_cases", "Are edge cases handled appropriately?"),
+        ("code_quality", "Is the code clean, readable, and idiomatic Python?"),
+    ],
 }
 
+JUDGE_PROMPT = """\
+You are an expert code reviewer evaluating agent-produced code.
 
-@scorer(metrics=[accuracy(), stderr()])
+## Task given to the agent
+{task_prompt}
+
+## Code produced by the agent
+{code}
+
+## Expected outcome
+{target}
+
+## Instructions
+
+Score the code on each dimension below from 1 to 10, where:
+- 1-3: Fundamentally broken or incorrect
+- 4-5: Partially works but has significant issues
+- 6-7: Works correctly with minor issues
+- 8-9: Works well, clean and robust
+- 10: Excellent, nothing to improve
+
+Dimensions:
+{dimensions}
+
+Respond with ONLY a JSON object in this exact format (no other text before or after):
+```json
+{{
+{json_template}
+  "reasoning": "Brief explanation of your scores (2-4 sentences)"
+}}
+```
+"""
+
+
+@scorer(
+    metrics={
+        "overall": [mean(), stderr()],
+        "correctness": [mean(), stderr()],
+        "code_quality": [mean(), stderr()],
+    }
+)
 def judge_scorer(
     archetype: str = "notebook-analysis",
     model: str = "anthropic/claude-opus-4-7",
 ) -> Scorer:
-    """Score by reading agent-produced code from the sandbox and grading it with an LLM.
+    """Score by reading agent-produced code and grading each dimension 1-10."""
 
-    Reads .py files from the sandbox, injects them as the 'answer' into
-    Inspect's model_graded_qa scorer.
-    """
-
-    # Create the inner model_graded_qa scorer
-    rubric = RUBRICS.get(archetype, RUBRICS["notebook-analysis"])
-    inner_scorer = model_graded_qa(
-        template=rubric,
-        model=model,
-        partial_credit=True,
-    )
+    dims = DIMENSIONS.get(archetype, DIMENSIONS["notebook-analysis"])
 
     async def score(state: TaskState, target: Target) -> Score:
         sb = sandbox()
@@ -159,31 +122,63 @@ def judge_scorer(
 
         if not code_parts:
             return Score(
-                value="I",
+                value={d[0]: 0.0 for d in dims} | {"overall": 0.0},
                 explanation="No code files found in the sandbox",
             )
 
-        # Inject the code into the state's output so model_graded_qa sees it
-        # as the {answer} in the rubric template
         code_text = "\n\n".join(code_parts)
-        from inspect_ai.model import ChatMessageAssistant, ModelOutput
 
-        # Save originals, swap in code content, score, then restore
-        orig_output = state.output
-        orig_messages = list(state.messages)
+        # Build dimension descriptions and JSON template
+        dim_text = "\n".join(f"- **{name}**: {desc}" for name, desc in dims)
+        json_fields = ",\n".join(f'  "{name}": <1-10>' for name, _ in dims)
 
-        state.output = ModelOutput.from_content(
-            model="agent", content=code_text
+        prompt = JUDGE_PROMPT.format(
+            task_prompt=state.input_text[:4000],
+            code=code_text[:10000],
+            target=target.text,
+            dimensions=dim_text,
+            json_template=json_fields,
         )
-        state.messages.append(ChatMessageAssistant(content=code_text))
 
+        # Call the judge model
+        judge_model = get_model(model)
+        response = await judge_model.generate(
+            [
+                ChatMessageSystem(content="You are an expert code reviewer. Respond only with the requested JSON."),
+                ChatMessageUser(content=prompt),
+            ],
+            config=GenerateConfig(),
+        )
+
+        output_text = response.choices[0].message.text or ""
+
+        # Parse the JSON response
+        scores: dict[str, float] = {}
+        reasoning = ""
         try:
-            result = await inner_scorer(state, target)
-        finally:
-            state.output = orig_output
-            state.messages.clear()
-            state.messages.extend(orig_messages)
+            # Extract JSON from markdown code block if present
+            json_match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", output_text, re.DOTALL)
+            if json_match:
+                parsed = json.loads(json_match.group(1))
+            else:
+                parsed = json.loads(output_text)
 
-        return result
+            reasoning = parsed.pop("reasoning", "")
+            for name, _ in dims:
+                raw = parsed.get(name, 5)
+                scores[name] = max(0.0, min(10.0, float(raw))) / 10.0  # normalize to 0-1
+
+        except (json.JSONDecodeError, ValueError, TypeError):
+            # Fallback: couldn't parse, give middle scores
+            reasoning = f"Failed to parse judge response: {output_text[:200]}"
+            for name, _ in dims:
+                scores[name] = 0.5
+
+        scores["overall"] = sum(scores.values()) / len(scores)
+
+        return Score(
+            value=scores,
+            explanation=reasoning,
+        )
 
     return score
