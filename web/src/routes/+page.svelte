@@ -6,6 +6,8 @@
 	let data: Leaderboard = $state(pageData.leaderboard);
 	let selectedAgent: string | null = $state(null);
 	let selectedDetail: { run: Run; scorer: string; detail: ScoreDetail } | null = $state(null);
+	let sortColumn: string = $state('avg');
+	let sortDirection: 'asc' | 'desc' = $state('desc');
 
 	let hasData = $derived(data.runs.length > 0);
 
@@ -34,12 +36,46 @@
 		return count > 0 ? total / count : null;
 	}
 
+	function getAgentSortValue(agent: string, column: string): number {
+		const aggs = aggLookup.get(agent);
+		if (!aggs) return -Infinity;
+
+		if (column === 'avg') return getOverallScore(aggs) ?? -Infinity;
+		if (column === 'cost') return getAgentTotalCost(aggs) ?? -Infinity;
+		if (column === 'time') return getAgentTotalTime(aggs) ?? -Infinity;
+		if (column === 'runs') return getAgentRunCount(aggs);
+		if (column === 'agent') return 0; // handled separately as string sort
+
+		// Test column
+		const agg = aggs.get(column);
+		const val = agg?.['score_overall_mean_mean'];
+		return typeof val === 'number' ? val : -Infinity;
+	}
+
+	function toggleSort(column: string) {
+		if (sortColumn === column) {
+			sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+		} else {
+			sortColumn = column;
+			sortDirection = column === 'agent' ? 'asc' : 'desc';
+		}
+	}
+
+	function sortIndicator(column: string): string {
+		if (sortColumn !== column) return '';
+		return sortDirection === 'desc' ? ' \u25BC' : ' \u25B2';
+	}
+
 	let sortedAgents = $derived(
 		data
 			? [...data.agents].sort((a, b) => {
-					const scoreA = getOverallScore(aggLookup.get(a)) ?? -1;
-					const scoreB = getOverallScore(aggLookup.get(b)) ?? -1;
-					return scoreB - scoreA;
+					let cmp: number;
+					if (sortColumn === 'agent') {
+						cmp = a.localeCompare(b);
+					} else {
+						cmp = getAgentSortValue(a, sortColumn) - getAgentSortValue(b, sortColumn);
+					}
+					return sortDirection === 'desc' ? -cmp : cmp;
 				})
 			: []
 	);
@@ -188,14 +224,14 @@
 			<table>
 				<thead>
 					<tr>
-						<th>Agent</th>
+						<th class="sortable" onclick={() => toggleSort('agent')}>Agent{sortIndicator('agent')}</th>
 						{#each data.tests as test}
-							<th>{test}</th>
+							<th class="sortable" onclick={() => toggleSort(test)}>{test}{sortIndicator(test)}</th>
 						{/each}
-						<th>Avg</th>
-						<th>Cost</th>
-						<th>Time</th>
-						<th>Runs</th>
+						<th class="sortable" onclick={() => toggleSort('avg')}>Avg{sortIndicator('avg')}</th>
+						<th class="sortable" onclick={() => toggleSort('cost')}>Cost{sortIndicator('cost')}</th>
+						<th class="sortable" onclick={() => toggleSort('time')}>Time{sortIndicator('time')}</th>
+						<th class="sortable" onclick={() => toggleSort('runs')}>Runs{sortIndicator('runs')}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -378,6 +414,15 @@
 		color: #8b949e;
 		font-weight: 600;
 		white-space: nowrap;
+	}
+
+	th.sortable {
+		cursor: pointer;
+		user-select: none;
+	}
+
+	th.sortable:hover {
+		color: #e6edf3;
 	}
 
 	td {
