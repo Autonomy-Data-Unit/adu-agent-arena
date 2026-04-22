@@ -13,6 +13,7 @@ from inspect_ai.dataset import MemoryDataset, Sample
 
 from adu_arena.agents.pi_agent import pi_coding_agent
 from adu_arena.scorers.excel import excel_scorer
+from adu_arena.scorers.judge import judge_scorer
 
 TEST_DIR = Path(__file__).parent.parent.parent.parent / "tests" / "ets-windfall-calculation"
 
@@ -36,7 +37,10 @@ def ets_windfall_calculation(timeout: int = 900) -> Task:
     return Task(
         dataset=_load_dataset(),
         solver=pi_coding_agent(timeout=timeout),
-        scorer=excel_scorer(),
+        scorer=[
+            excel_scorer(),
+            judge_scorer(archetype="notebook-analysis"),
+        ],
         sandbox=("docker", str(TEST_DIR / "compose.yaml")),
         time_limit=timeout + 60,
         token_limit=500_000,
