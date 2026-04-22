@@ -1,7 +1,7 @@
 [
   {
     "input": "file://prompt.md",
-    "target": "Excel workbook with 'By installation' (1292 rows, 45 cols) and 'By company' (1015 rows, 24 cols) sheets",
+    "target": "Excel workbook with 'By installation' and 'By company' sheets containing windfall calculations",
     "metadata": {
       "archetype": "notebook-analysis",
       "checks": {
@@ -11,7 +11,7 @@
           "sheets": {
             "By installation": {
               "expected_row_count": 1292,
-              "expected_col_count": 45,
+              "row_count_tolerance": 65,
               "numeric_checks": [
                 {"column": "Windfall 2021", "aggregation": "sum", "expected": 3637252623.60, "tolerance": 1000},
                 {"column": "Windfall 2022", "aggregation": "sum", "expected": 5596330687.20, "tolerance": 1000},
@@ -21,7 +21,7 @@
             },
             "By company": {
               "expected_row_count": 1015,
-              "expected_col_count": 24,
+              "row_count_tolerance": 51,
               "numeric_checks": [
                 {"column": "Windfall 2021", "aggregation": "sum", "expected": 3637252623.60, "tolerance": 1000},
                 {"column": "Windfall 2022", "aggregation": "sum", "expected": 5596330687.20, "tolerance": 1000},

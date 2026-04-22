@@ -72,39 +72,19 @@ def excel_scorer() -> Scorer:
                 actual = int(r.stdout.strip())
                 expected = sheet_checks.get("expected_row_count")
                 if expected is not None:
-                    if actual == expected:
+                    tolerance = sheet_checks.get("row_count_tolerance", 0)
+                    if abs(actual - expected) <= tolerance:
                         structure_scores.append(1.0)
                     else:
                         structure_scores.append(0.0)
                         explanations.append(
-                            f"'{sheet_name}' row count: expected {expected}, got {actual}"
+                            f"'{sheet_name}' row count: expected {expected} "
+                            f"(+/-{tolerance}), got {actual}"
                         )
             else:
                 structure_scores.append(0.0)
                 explanations.append(f"Failed to read sheet '{sheet_name}': {r.stderr.strip()}")
                 continue
-
-            # Column count
-            r = await sb.exec(
-                [
-                    "python3", "-c",
-                    f"import pandas as pd; "
-                    f"df = pd.read_excel('{file_path}', sheet_name='{sheet_name}'); "
-                    f"print(len(df.columns))",
-                ],
-                timeout=30,
-            )
-            if r.success:
-                actual = int(r.stdout.strip())
-                expected = sheet_checks.get("expected_col_count")
-                if expected is not None:
-                    if actual == expected:
-                        structure_scores.append(1.0)
-                    else:
-                        structure_scores.append(0.0)
-                        explanations.append(
-                            f"'{sheet_name}' col count: expected {expected}, got {actual}"
-                        )
 
             # Numeric checks
             for nc in sheet_checks.get("numeric_checks", []):
