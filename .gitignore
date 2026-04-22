@@ -18,6 +18,8 @@ web/build/
 
 # Agent-generated artifacts in test workspaces
 tests/*/workspace/output.*
+tests/*/workspace/answers.json
+tests/*/workspace/summary.json
 tests/*/workspace/*.py
 tests/*/workspace/output/
 
