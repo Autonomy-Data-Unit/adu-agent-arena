@@ -1,0 +1,21 @@
+[project]
+name = "adu-arena"
+version = "0.1.0"
+description = "Benchmarking coding agents on ADU data-led research tasks"
+readme = "README.md"
+authors = [
+    { name = "Lukas Kikuchi", email = "lukas.kikuchi@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=0.95.0",
+    "inspect-ai>=0.3.46",
+    "openai>=2.31.0",
+    "openpyxl>=3.1.5",
+    "pandas>=2.2",
+    "pyarrow>=23.0.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"

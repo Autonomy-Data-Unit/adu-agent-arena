@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+
+# Inspect AI logs
+logs/
+
+# Node
+node_modules/
+web/.svelte-kit/
+web/build/
+
+# Agent-generated artifacts in test workspaces
+tests/*/workspace/output.*
+tests/*/workspace/*.py
+tests/*/workspace/output/
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
