@@ -1,3 +1,8 @@
+export interface ScoreDetail {
+	value: string | number | Record<string, number>;
+	explanation: string;
+}
+
 export interface Run {
 	id: string;
 	agent: string;
@@ -5,6 +10,7 @@ export interface Run {
 	timestamp: string;
 	status: string;
 	scores: Record<string, number | string>;
+	score_details: Record<string, ScoreDetail>;
 	total_time?: number;
 	total_cost?: number;
 	input_tokens?: number;

@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Leaderboard, Aggregate, Run } from '$lib/types';
+	import type { Leaderboard, Aggregate, Run, ScoreDetail } from '$lib/types';
 
 	let { data: pageData } = $props();
 	let data: Leaderboard = $state(pageData.leaderboard);
 	let selectedAgent: string | null = $state(null);
+	let selectedDetail: { run: Run; scorer: string; detail: ScoreDetail } | null = $state(null);
 
 	let hasData = $derived(data.runs.length > 0);
 
@@ -17,20 +18,6 @@
 	}
 
 	let aggLookup = $derived(data ? getAggregateLookup(data.aggregates) : new Map());
-
-	function getScoreKeys(aggregates: Aggregate[]): string[] {
-		const keys = new Set<string>();
-		for (const agg of aggregates) {
-			for (const key of Object.keys(agg)) {
-				if (key.endsWith('_mean') && key.startsWith('score_')) {
-					keys.add(key.replace('_mean', '').replace('score_', ''));
-				}
-			}
-		}
-		return [...keys].sort();
-	}
-
-	let scoreKeys = $derived(data ? getScoreKeys(data.aggregates) : []);
 
 	function getOverallScore(agentAggs: Map<string, Aggregate> | undefined): number | null {
 		if (!agentAggs) return null;
@@ -58,6 +45,9 @@
 
 	function formatScore(val: unknown): string {
 		if (typeof val === 'number') return (val * 100).toFixed(1) + '%';
+		if (val === 'C') return 'C';
+		if (val === 'P') return 'P';
+		if (val === 'I') return 'I';
 		return '-';
 	}
 
@@ -116,6 +106,57 @@
 	}
 
 	let selectedRuns = $derived(selectedAgent ? getAgentRuns(selectedAgent) : []);
+
+	function isJudgeScore(key: string): boolean {
+		return key.includes('judge');
+	}
+
+	function getScorersForRun(run: Run): { name: string; type: 'deterministic' | 'judge'; scores: Record<string, number | string>; detail?: ScoreDetail }[] {
+		const scorers: { name: string; type: 'deterministic' | 'judge'; scores: Record<string, number | string>; detail?: ScoreDetail }[] = [];
+		const details = run.score_details || {};
+
+		for (const [scorerName, detail] of Object.entries(details)) {
+			const isJudge = scorerName.includes('judge');
+			const relevantScores: Record<string, number | string> = {};
+
+			if (isJudge) {
+				// Judge scores: show the grade
+				relevantScores['grade'] = typeof detail.value === 'string' ? detail.value : String(detail.value);
+			} else {
+				// Deterministic scores: pull individual checks from the value dict
+				if (typeof detail.value === 'object' && detail.value !== null) {
+					for (const [k, v] of Object.entries(detail.value as Record<string, number>)) {
+						relevantScores[k] = v;
+					}
+				}
+			}
+
+			scorers.push({
+				name: scorerName,
+				type: isJudge ? 'judge' : 'deterministic',
+				scores: relevantScores,
+				detail,
+			});
+		}
+
+		return scorers;
+	}
+
+	function openDetail(run: Run, scorerName: string, detail: ScoreDetail) {
+		selectedDetail = { run, scorer: scorerName, detail };
+	}
+
+	function closeDetail() {
+		selectedDetail = null;
+	}
+
+	function formatDetailValue(val: string | number | Record<string, number>): string {
+		if (typeof val === 'object') {
+			return Object.entries(val).map(([k, v]) => `${k}: ${typeof v === 'number' ? (v * 100).toFixed(1) + '%' : v}`).join(', ');
+		}
+		if (typeof val === 'number') return (val * 100).toFixed(1) + '%';
+		return String(val);
+	}
 </script>
 
 {#if !hasData}
@@ -194,20 +235,23 @@
 							<tr>
 								<td>{run.test}</td>
 								<td class="time">{formatTime(run.total_time)}</td>
-								<td class="status" class:pass={run.status === 'success'}
-									>{run.status}</td
-								>
+								<td class="status" class:pass={run.status === 'success'}>{run.status}</td>
 								<td class="scores-cell">
-									{#each Object.entries(run.scores).filter(([k]) => !k.includes('stderr') && !k.includes('headline')) as [key, val]}
-										{@const isJudge = key.includes('model_graded') || key.includes('judge')}
-										<span class="score-tag" class:judge={isJudge}>
-											{key.replace('score_', '').replace('_accuracy', '').replace('_mean', '')}: {formatScore(val)}
-										</span>
+									{#each getScorersForRun(run) as scorer}
+										{#each Object.entries(scorer.scores) as [key, val]}
+											<button
+												class="score-tag"
+												class:judge={scorer.type === 'judge'}
+												class:clickable={!!scorer.detail}
+												onclick={(e) => { e.stopPropagation(); if (scorer.detail) openDetail(run, scorer.name, scorer.detail); }}
+											>
+												<span class="score-type-label">{scorer.type === 'judge' ? 'J' : 'D'}</span>
+												{key}: {typeof val === 'number' ? formatScore(val) : val}
+											</button>
+										{/each}
 									{/each}
 								</td>
-								<td class="timestamp"
-									>{new Date(run.timestamp).toLocaleString()}</td
-								>
+								<td class="timestamp">{new Date(run.timestamp).toLocaleString()}</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -215,6 +259,44 @@
 			</div>
 		</section>
 	{/if}
+{/if}
+
+{#if selectedDetail}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="panel-overlay" onclick={closeDetail} onkeydown={(e) => { if (e.key === 'Escape') closeDetail(); }}>
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="panel" onclick={(e) => e.stopPropagation()}>
+			<div class="panel-header">
+				<h3>
+					{#if selectedDetail.scorer.includes('judge')}
+						<span class="badge judge">Judge</span>
+					{:else}
+						<span class="badge deterministic">Deterministic</span>
+					{/if}
+					{selectedDetail.scorer}
+				</h3>
+				<button class="panel-close" onclick={closeDetail}>x</button>
+			</div>
+
+			<div class="panel-meta">
+				<span>{selectedDetail.run.test}</span>
+				<span>{selectedDetail.run.agent}</span>
+				<span>{new Date(selectedDetail.run.timestamp).toLocaleString()}</span>
+			</div>
+
+			<div class="panel-section">
+				<h4>Result</h4>
+				<p class="panel-value">{formatDetailValue(selectedDetail.detail.value)}</p>
+			</div>
+
+			{#if selectedDetail.detail.explanation}
+				<div class="panel-section">
+					<h4>Explanation</h4>
+					<div class="panel-explanation">{selectedDetail.detail.explanation}</div>
+				</div>
+			{/if}
+		</div>
+	</div>
 {/if}
 
 <style>
@@ -309,7 +391,7 @@
 
 	.scores-cell {
 		display: flex;
-		gap: 0.5rem;
+		gap: 0.375rem;
 		flex-wrap: wrap;
 	}
 
@@ -320,10 +402,32 @@
 		font-size: 0.75rem;
 		white-space: nowrap;
 		border-left: 2px solid #3fb950;
+		border-top: none;
+		border-right: none;
+		border-bottom: none;
+		color: #c9d1d9;
+		font-family: inherit;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
 	}
 
 	.score-tag.judge {
 		border-left-color: #d29922;
+	}
+
+	.score-tag.clickable {
+		cursor: pointer;
+	}
+
+	.score-tag.clickable:hover {
+		background: #30363d;
+	}
+
+	.score-type-label {
+		font-size: 0.625rem;
+		font-weight: 700;
+		opacity: 0.5;
 	}
 
 	.timestamp {
@@ -335,5 +439,128 @@
 		font-size: 1.125rem;
 		color: #e6edf3;
 		margin: 0 0 0.5rem;
+	}
+
+	/* Panel overlay */
+	.panel-overlay {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 100;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.panel {
+		width: min(600px, 90vw);
+		background: #161b22;
+		border-left: 1px solid #30363d;
+		padding: 1.5rem;
+		overflow-y: auto;
+		animation: slide-in 0.15s ease-out;
+	}
+
+	@keyframes slide-in {
+		from {
+			transform: translateX(100%);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+
+	.panel-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1rem;
+		padding-bottom: 0.75rem;
+		border-bottom: 1px solid #30363d;
+	}
+
+	.panel-header h3 {
+		margin: 0;
+		font-size: 1rem;
+		color: #e6edf3;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.panel-close {
+		background: none;
+		border: 1px solid #30363d;
+		color: #8b949e;
+		font-size: 1rem;
+		cursor: pointer;
+		padding: 0.25rem 0.5rem;
+		border-radius: 4px;
+	}
+
+	.panel-close:hover {
+		color: #e6edf3;
+		background: #21262d;
+	}
+
+	.badge {
+		font-size: 0.625rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		padding: 0.125rem 0.375rem;
+		border-radius: 3px;
+	}
+
+	.badge.deterministic {
+		background: rgba(63, 185, 80, 0.15);
+		color: #3fb950;
+	}
+
+	.badge.judge {
+		background: rgba(210, 153, 34, 0.15);
+		color: #d29922;
+	}
+
+	.panel-meta {
+		display: flex;
+		gap: 1rem;
+		font-size: 0.75rem;
+		color: #8b949e;
+		margin-bottom: 1.5rem;
+	}
+
+	.panel-section {
+		margin-bottom: 1.5rem;
+	}
+
+	.panel-section h4 {
+		margin: 0 0 0.5rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: #8b949e;
+	}
+
+	.panel-value {
+		margin: 0;
+		font-size: 1.125rem;
+		color: #e6edf3;
+		font-weight: 600;
+	}
+
+	.panel-explanation {
+		font-size: 0.8125rem;
+		line-height: 1.6;
+		color: #c9d1d9;
+		white-space: pre-wrap;
+		background: #0d1117;
+		padding: 1rem;
+		border-radius: 6px;
+		border: 1px solid #21262d;
+		max-height: 60vh;
+		overflow-y: auto;
 	}
 </style>

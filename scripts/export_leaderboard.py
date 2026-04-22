@@ -7,6 +7,23 @@ from pathlib import Path
 
 import pandas as pd
 from inspect_ai.analysis import evals_df
+from inspect_ai.log import read_eval_log
+
+
+def extract_score_details(log_path: str) -> dict[str, dict]:
+    """Read an eval log and extract per-scorer explanations and values."""
+    details: dict[str, dict] = {}
+    try:
+        log = read_eval_log(log_path)
+        for sample in log.samples or []:
+            for scorer_name, score in (sample.scores or {}).items():
+                details[scorer_name] = {
+                    "value": score.value if isinstance(score.value, (str, int, float)) else str(score.value),
+                    "explanation": score.explanation or "",
+                }
+    except Exception:
+        pass
+    return details
 
 
 def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -> None:
@@ -49,6 +66,7 @@ def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -
             "timestamp": str(row.get("created", "")),
             "status": str(row.get("status", "")),
             "scores": {},
+            "score_details": {},
         }
 
         # Extract score columns (they vary by scorer)
@@ -63,6 +81,11 @@ def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -
             val = row.get(field)
             if pd.notna(val):
                 run[field] = float(val) if isinstance(val, (int, float)) else str(val)
+
+        # Read detailed explanations from the eval log
+        log_file = row.get("log")
+        if pd.notna(log_file):
+            run["score_details"] = extract_score_details(str(log_file))
 
         leaderboard["runs"].append(run)
 
