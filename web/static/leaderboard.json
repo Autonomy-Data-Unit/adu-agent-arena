@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22T14:35:42.231026",
+  "generated_at": "2026-04-22T14:42:14.679045",
   "agents": [
     "anthropic/claude-sonnet-4-20250514",
     "openai/gpt-4o"
@@ -33,7 +33,13 @@
       },
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 0.0, 'csv_schema': 0.0, 'row_count': 0.0, 'content': 0.0, 'overall': 0.0}",
+          "value": {
+            "file_exists": 0.0,
+            "csv_schema": 0.0,
+            "row_count": 0.0,
+            "content": 0.0,
+            "overall": 0.0
+          },
           "explanation": "Missing file: /workspace/output.csv; CSV schema mismatch: expected abstract,authors,link,title, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/output.csv for content check"
         }
       }
@@ -47,7 +53,13 @@
       "scores": {},
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 1.0, 'csv_schema': 1.0, 'row_count': 1.0, 'content': 1.0, 'overall': 1.0}",
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
           "explanation": "All checks passed"
         }
       }
@@ -76,7 +88,13 @@
       },
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 1.0, 'csv_schema': 1.0, 'row_count': 1.0, 'content': 0.25, 'overall': 0.8125}",
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 0.25,
+            "overall": 0.8125
+          },
           "explanation": "Expected string not found: 'Susan A Ihejirika'; Expected string not found: 'Huimin Jin'; Expected string not found: 'Erik Perfalk'"
         }
       }
@@ -103,7 +121,12 @@
       },
       "score_details": {
         "excel_scorer": {
-          "value": "{'file_exists': 1.0, 'sheet_structure': 1.0, 'numeric': 1.0, 'overall': 1.0}",
+          "value": {
+            "file_exists": 1.0,
+            "sheet_structure": 1.0,
+            "numeric": 1.0,
+            "overall": 1.0
+          },
           "explanation": "All checks passed"
         }
       }
@@ -134,7 +157,13 @@
       },
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 1.0, 'csv_schema': 1.0, 'row_count': 1.0, 'content': 1.0, 'overall': 1.0}",
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
           "explanation": "All checks passed"
         },
         "judge_scorer": {
@@ -167,7 +196,13 @@
       },
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 0.0, 'csv_schema': 0.0, 'row_count': 0.0, 'content': 0.0, 'overall': 0.0}",
+          "value": {
+            "file_exists": 0.0,
+            "csv_schema": 0.0,
+            "row_count": 0.0,
+            "content": 0.0,
+            "overall": 0.0
+          },
           "explanation": "Missing file: /workspace/output.csv; CSV schema mismatch: expected abstract,authors,link,title, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/output.csv for content check"
         }
       }
@@ -196,7 +231,13 @@
       },
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 1.0, 'csv_schema': 1.0, 'row_count': 1.0, 'content': 1.0, 'overall': 1.0}",
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
           "explanation": "All checks passed"
         }
       }
@@ -225,7 +266,13 @@
       },
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 0.0, 'csv_schema': 0.0, 'row_count': 0.0, 'content': 0.0, 'overall': 0.0}",
+          "value": {
+            "file_exists": 0.0,
+            "csv_schema": 0.0,
+            "row_count": 0.0,
+            "content": 0.0,
+            "overall": 0.0
+          },
           "explanation": "Missing file: /workspace/output.csv; CSV schema mismatch: expected abstract,authors,link,title, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/output.csv for content check"
         }
       }
@@ -254,7 +301,12 @@
       },
       "score_details": {
         "excel_scorer": {
-          "value": "{'file_exists': 1.0, 'sheet_structure': 1.0, 'numeric': 1.0, 'overall': 1.0}",
+          "value": {
+            "file_exists": 1.0,
+            "sheet_structure": 1.0,
+            "numeric": 1.0,
+            "overall": 1.0
+          },
           "explanation": "All checks passed"
         },
         "judge_scorer": {
@@ -281,7 +333,13 @@
       "scores": {},
       "score_details": {
         "deterministic_scorer": {
-          "value": "{'file_exists': 1.0, 'csv_schema': 1.0, 'row_count': 1.0, 'content': 1.0, 'overall': 1.0}",
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
           "explanation": "All checks passed"
         }
       }

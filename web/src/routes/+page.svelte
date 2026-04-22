@@ -111,55 +111,28 @@
 		return key.includes('judge');
 	}
 
-	function getScorersForRun(run: Run): { name: string; type: 'deterministic' | 'judge'; scores: Record<string, number | string>; detail?: ScoreDetail }[] {
-		const scorers: { name: string; type: 'deterministic' | 'judge'; scores: Record<string, number | string>; detail?: ScoreDetail }[] = [];
+	function getScorersForRun(run: Run): { name: string; type: 'deterministic' | 'judge'; scores: Record<string, number | string>; detail: ScoreDetail }[] {
+		const scorers: { name: string; type: 'deterministic' | 'judge'; scores: Record<string, number | string>; detail: ScoreDetail }[] = [];
 		const details = run.score_details || {};
-		const hasDetails = Object.keys(details).length > 0;
 
-		if (hasDetails) {
-			// Rich display from score_details
-			for (const [scorerName, detail] of Object.entries(details)) {
-				const isJudge = scorerName.includes('judge');
-				const relevantScores: Record<string, number | string> = {};
+		for (const [scorerName, detail] of Object.entries(details)) {
+			const isJudge = scorerName.includes('judge');
+			const relevantScores: Record<string, number | string> = {};
 
-				if (isJudge) {
-					relevantScores['grade'] = typeof detail.value === 'string' ? detail.value : String(detail.value);
-				} else {
-					if (typeof detail.value === 'object' && detail.value !== null) {
-						for (const [k, v] of Object.entries(detail.value as Record<string, number>)) {
-							relevantScores[k] = v;
-						}
-					}
-				}
-
-				scorers.push({
-					name: scorerName,
-					type: isJudge ? 'judge' : 'deterministic',
-					scores: relevantScores,
-					detail,
-				});
-			}
-		} else {
-			// Fallback: use flat score columns from run.scores
-			const detScores: Record<string, number | string> = {};
-			const judgeScores: Record<string, number | string> = {};
-
-			for (const [key, val] of Object.entries(run.scores)) {
-				if (key.includes('stderr') || key.includes('headline')) continue;
-				const cleanKey = key.replace('score_', '').replace('_accuracy', '').replace('_mean', '');
-				if (key.includes('judge')) {
-					judgeScores[cleanKey] = val;
-				} else {
-					detScores[cleanKey] = val;
+			if (isJudge) {
+				relevantScores['grade'] = typeof detail.value === 'string' ? detail.value : String(detail.value);
+			} else if (typeof detail.value === 'object' && detail.value !== null) {
+				for (const [k, v] of Object.entries(detail.value as Record<string, number>)) {
+					relevantScores[k] = v;
 				}
 			}
 
-			if (Object.keys(detScores).length > 0) {
-				scorers.push({ name: 'deterministic', type: 'deterministic', scores: detScores });
-			}
-			if (Object.keys(judgeScores).length > 0) {
-				scorers.push({ name: 'judge', type: 'judge', scores: judgeScores });
-			}
+			scorers.push({
+				name: scorerName,
+				type: isJudge ? 'judge' : 'deterministic',
+				scores: relevantScores,
+				detail,
+			});
 		}
 
 		return scorers;

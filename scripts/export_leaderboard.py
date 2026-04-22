@@ -18,7 +18,7 @@ def extract_score_details(log_path: str) -> dict[str, dict]:
         for sample in log.samples or []:
             for scorer_name, score in (sample.scores or {}).items():
                 details[scorer_name] = {
-                    "value": score.value if isinstance(score.value, (str, int, float)) else str(score.value),
+                    "value": score.value if isinstance(score.value, (str, int, float, dict)) else str(score.value),
                     "explanation": score.explanation or "",
                 }
     except Exception:
