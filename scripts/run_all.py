@@ -5,9 +5,8 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from inspect_ai import eval
+from inspect_ai import eval, eval_set
 from inspect_ai.log import read_eval_log
 
 from adu_arena.tasks.staffing_analysis import staffing_analysis
@@ -49,23 +48,6 @@ def get_completed_pairs(log_dir: str) -> set[tuple[str, str]]:
             continue
 
     return completed
-
-
-def run_single(model: str, task_name: str, task_fn, log_dir: str) -> tuple[str, str, bool, str]:
-    """Run a single model+test combination. Returns (model, task, success, message)."""
-    try:
-        logs = eval(
-            tasks=[task_fn()],
-            model=model,
-            log_dir=log_dir,
-        )
-        if logs and logs[0].status == "success":
-            return (model, task_name, True, "success")
-        else:
-            status = logs[0].status if logs else "no logs"
-            return (model, task_name, False, status)
-    except Exception as e:
-        return (model, task_name, False, str(e))
 
 
 def main() -> None:
@@ -127,54 +109,58 @@ def main() -> None:
     # Check what's already done
     completed = get_completed_pairs(args.log_dir) if not args.force else set()
 
-    # Build run plan
-    plan: list[tuple[str, str]] = []
+    # Build run plan — group by model since eval_set handles multi-model natively
+    plan_models = set()
+    plan_tasks = set()
     skipped = 0
+    total = 0
     for model in models:
         for task_name in tasks:
             if (model, task_name) in completed:
                 skipped += 1
             else:
-                plan.append((model, task_name))
+                plan_models.add(model)
+                plan_tasks.add(task_name)
+                total += 1
 
-    print(f"\n{len(plan)} runs to do, {skipped} already completed")
+    print(f"\n{total} runs to do, {skipped} already completed")
+
     if args.list:
-        for model, task_name in plan:
-            print(f"  {model} x {task_name}")
+        for model in sorted(plan_models):
+            for task_name in sorted(plan_tasks):
+                if (model, task_name) not in completed:
+                    print(f"  {model} x {task_name}")
         if skipped:
             print(f"\n{skipped} combinations already in {args.log_dir}/")
         return
 
-    if not plan:
+    if total == 0:
         print("Nothing to run — all combinations already completed.")
         print("Use --force to re-run, or add new models to models.json")
         return
 
-    # Run with parallelism
+    # Build task instances for all needed tasks
+    task_instances = [tasks[name]() for name in sorted(plan_tasks)]
+    model_list = sorted(plan_models)
+
     log_dir = Path(args.log_dir)
     log_dir.mkdir(parents=True, exist_ok=True)
-    succeeded = 0
-    failed = 0
-    total = len(plan)
 
-    print(f"Running with --parallel {args.parallel}\n")
+    print(f"Running {len(model_list)} models x {len(task_instances)} tests with --parallel {args.parallel}\n")
 
-    with ThreadPoolExecutor(max_workers=args.parallel) as executor:
-        futures = {
-            executor.submit(run_single, model, task_name, tasks[task_name], args.log_dir): (model, task_name)
-            for model, task_name in plan
-        }
+    success, logs = eval_set(
+        tasks=task_instances,
+        model=model_list,
+        log_dir=args.log_dir,
+        max_tasks=args.parallel,
+    )
 
-        for future in as_completed(futures):
-            model, task_name, success, message = future.result()
-            if success:
-                succeeded += 1
-                print(f"  [{succeeded + failed}/{total}] OK  {model} x {task_name}")
-            else:
-                failed += 1
-                print(f"  [{succeeded + failed}/{total}] FAIL {model} x {task_name}: {message}")
+    succeeded = sum(1 for l in logs if l.status == "success")
+    failed = sum(1 for l in logs if l.status != "success")
 
     print(f"\nDone: {succeeded} succeeded, {failed} failed")
+    if not success:
+        print("Some evaluations failed.", file=sys.stderr)
     print("Run `uv run python scripts/export_leaderboard.py` to update the leaderboard.")
 
 
