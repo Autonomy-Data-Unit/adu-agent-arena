@@ -86,11 +86,30 @@ def extract_log_details(log_path: str) -> tuple[dict[str, dict], float | None]:
     return details, duration
 
 
+def load_existing_summaries(output: str) -> dict[str, str]:
+    """Load summaries from existing leaderboard.json, keyed by run ID."""
+    path = Path(output)
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text())
+        return {
+            r["id"]: r["summary"]
+            for r in data.get("runs", [])
+            if r.get("summary")
+        }
+    except Exception:
+        return {}
+
+
 def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -> None:
     log_path = Path(log_dir)
     if not log_path.exists():
         print(f"Log directory not found: {log_dir}", file=sys.stderr)
         sys.exit(1)
+
+    # Preserve existing summaries before rebuilding
+    existing_summaries = load_existing_summaries(output)
 
     df, errors = evals_df(log_dir, strict=False)
     if df.empty:
@@ -158,6 +177,11 @@ def export(log_dir: str = "logs", output: str = "web/static/leaderboard.json") -
                 run["input_tokens"] = cost_data["input_tokens"]
                 run["output_tokens"] = cost_data["output_tokens"]
                 run["total_cost"] = cost_data["total_cost"]
+
+        # Restore existing summary if available
+        run_id = run["id"]
+        if run_id in existing_summaries:
+            run["summary"] = existing_summaries[run_id]
 
         leaderboard["runs"].append(run)
 
