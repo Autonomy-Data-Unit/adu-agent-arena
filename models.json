@@ -21,6 +21,11 @@
       "tier": "mid"
     },
     {
+      "id": "openai/gpt-5.3-codex",
+      "label": "GPT-5.3 Codex",
+      "tier": "mid"
+    },
+    {
       "id": "openrouter/deepseek/deepseek-v3.2",
       "label": "DeepSeek V3.2",
       "tier": "open-source"
