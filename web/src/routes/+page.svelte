@@ -315,6 +315,7 @@
 					</thead>
 					<tbody>
 						{#each agentTestSummaries as summary}
+							{@const latestSummary = summary.runs.find(r => r.summary)?.summary}
 							<tr
 								class="test-summary-row"
 								class:expanded={expandedTest === summary.test}
@@ -328,6 +329,11 @@
 								<td class="time">{formatTime(summary.avgTime)}</td>
 								<td class="runs">{summary.runs.length}</td>
 							</tr>
+							{#if latestSummary && expandedTest !== summary.test}
+								<tr class="summary-row">
+									<td colspan="5" class="summary-cell">{latestSummary}</td>
+								</tr>
+							{/if}
 							{#if expandedTest === summary.test}
 								{#each summary.runs as run}
 									<tr class="run-detail-row">
