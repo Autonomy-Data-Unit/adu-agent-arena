@@ -12,6 +12,9 @@ else
     echo "No eval logs found — using existing leaderboard.json"
 fi
 
+echo "=== Generating summaries ==="
+uv run python scripts/generate_summaries.py
+
 echo "=== Building SvelteKit app ==="
 cd web
 npm run build

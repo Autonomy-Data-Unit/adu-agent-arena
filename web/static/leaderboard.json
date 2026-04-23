@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22T18:47:13.583845",
+  "generated_at": "2026-04-23T09:24:58.002735",
   "agents": [
     "anthropic/claude-opus-4-7",
     "anthropic/claude-sonnet-4-20250514",
@@ -17,6 +17,57 @@
     "staffing_analysis"
   ],
   "runs": [
+    {
+      "id": "Ga5YpGkpU6f4vRK96GXvWQ",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-22 16:33:41+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.6,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.7,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.625,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.7,
+            "architecture": 0.6,
+            "edge_cases": 0.6,
+            "code_quality": 0.6,
+            "overall": 0.625
+          },
+          "explanation": "Two modules (deduplicator.py and company_deduplicator.py) implement essentially the same functionality, which is redundant and confusing. Both appear functionally correct for the stated requirements, though deduplicator.py has a minor quirk where duplicate_count is assigned externally while other fields are set internally. The test file is truncated/incomplete. Edge cases like empty groups, NaN names/addresses, or missing columns aren't handled, but the core logic follows the rules correctly including case-insensitive postcode matching and proper merge rules."
+        }
+      },
+      "total_time": 84.0,
+      "summary": "The agent successfully implemented the core CSV deduplication functionality with perfect adherence to the technical requirements, correctly handling case-insensitive postcode matching and merge rules. However, the solution suffered from poor architectural decisions, creating two redundant modules that implement essentially the same functionality, which created confusion and code duplication. Additionally, the implementation lacked robustness in handling edge cases like empty data groups, missing values, or malformed input, and included an incomplete test file."
+    },
     {
       "id": "jwmzmEmnerxSMymhjDtZGY",
       "agent": "anthropic/claude-sonnet-4-20250514",
@@ -65,7 +116,59 @@
           "explanation": "The agent produced three separate scripts (scraper.py, contract_scraper.py, and an incomplete scrape_contracts.py) plus an unrelated test.py, which is messy and unclear which is canonical. scraper.py appears correct and complete, handling HTML entity decoding and producing proper output. However, contract_scraper.py casts avg_value_gbp to int (losing precision, likely spec violation since spec implies a mean), and scrape_contracts.py is truncated/broken. Robustness is limited: no handling of missing elements, and BeautifulSoup's get_text already decodes entities making html.unescape redundant but harmless. Overall functional via scraper.py but the duplicated/incomplete files hurt quality."
         }
       },
-      "total_time": 64.0
+      "total_time": 64.0,
+      "summary": "The agent successfully implemented a functional government contracts scraper that meets all basic requirements, correctly extracting and formatting the required data fields. However, the implementation was marred by poor organization, producing multiple redundant script files with unclear purposes and varying quality levels, including one incomplete/broken version. While the primary scraper works correctly, the code lacks robustness features like error handling for missing data elements and contains some unnecessary redundancies in the HTML processing logic."
+    },
+    {
+      "id": "QjHr6yAZYvJXBUcr7NGFVS",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-22 16:33:41+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.6,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.6,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.575,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.6,
+            "robustness": 0.5,
+            "structure": 0.6,
+            "code_quality": 0.6,
+            "overall": 0.575
+          },
+          "explanation": "The agent produced three separate scripts rather than one cohesive solution, which is messy and the third file is truncated/incomplete. The first two scripts are functionally correct for the happy path, extracting fields properly and computing summaries. However, contract_scraper.py casts avg_value_gbp to int (losing precision, not specified as rounding), while scraper.py leaves it as a float \u2014 inconsistent interpretations. Minimal error handling for missing fields, and no validation of the 8-contract count. Overall works but lacks polish and has a truncated file."
+        }
+      },
+      "total_time": 65.0,
+      "summary": "The agent successfully completed the core requirements of the government contracts scraper task, producing functionally correct scripts that properly extract data fields and generate accurate summaries. However, the solution lacks cohesion and polish, delivering three separate scripts instead of one unified approach, with the third file being incomplete and truncated. While the basic functionality works well for the happy path, the agent struggled with implementation consistency (inconsistent data type handling for average values) and failed to include robust error handling or data validation features."
     },
     {
       "id": "3cjpiotdBVWjqiKZQBMsbe",
@@ -115,7 +218,8 @@
           "explanation": "The workspace contains multiple files in inconsistent states: company_deduplicator.py (the apparent main file) is truncated mid-function and won't run, deduplicator.py is completely corrupted/garbled, and check_columns.py is a debug script. Only company_deduplicator_backup.py appears to be a complete, working, well-structured implementation with proper modularity, type hints, and edge case handling. Since the primary deliverable is broken and the backup file suggests the agent abandoned a clean solution, correctness suffers significantly. If evaluated solely on the backup file, scores would be much higher, but the overall delivered workspace is messy and the main module is unusable."
         }
       },
-      "total_time": 497.0
+      "total_time": 497.0,
+      "summary": "The agent successfully completed all the core functional requirements, producing a CSV deduplicator that works correctly and handles the data as specified. However, the implementation suffered from poor file management and organization, with the main deliverable file being truncated and unusable, while leaving the workspace cluttered with multiple incomplete or corrupted versions alongside debug scripts. Despite having created a well-structured backup implementation with proper modularity and error handling, the agent failed to properly finalize and present a clean, professional solution."
     },
     {
       "id": "iftnWa6RvSTin5mm9xvKsr",
@@ -165,7 +269,59 @@
           "explanation": "The workspace contains multiple files: company_deduplicator.py is clean, modular, and correct, but deduplicator.py is clearly corrupted/broken, and company_deduplicator_final.py is truncated mid-function. check_columns.py has debug prints and doesn't write summary.json. While the primary solution (company_deduplicator.py) is well-written with good separation of concerns and edge case handling, the presence of broken/duplicate files harms overall quality and signals confusion about which file is the deliverable."
         }
       },
-      "total_time": 68.0
+      "total_time": 68.0,
+      "summary": "The agent successfully produced a functionally correct CSV deduplication solution that passes all deterministic requirements, with the primary file (company_deduplicator.py) demonstrating good modular design and proper edge case handling. However, the agent's workflow was disorganized, creating multiple files including corrupted and incomplete versions that significantly detracted from code quality and created confusion about the final deliverable. While the core functionality works well, the cluttered workspace and presence of broken auxiliary files suggest poor development practices and unclear execution strategy."
+    },
+    {
+      "id": "BbmJbkR86LKP5wvrHidJ6d",
+      "agent": "openrouter/deepseek/deepseek-v3.2",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-22 16:54:20+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.6,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.6,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.575,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.6,
+            "robustness": 0.5,
+            "structure": 0.6,
+            "code_quality": 0.6,
+            "overall": 0.575
+          },
+          "explanation": "The agent produced three overlapping scripts instead of one, which is messy and creates ambiguity about which one to run. The second script (contract_scraper.py) truncates avg_value_gbp to int rather than keeping the mean as a float, which likely violates the spec. The third script is incomplete/truncated. Core logic (parsing, sorting, summary) is correct in scripts 1 and 2, HTML entities are handled via html.unescape, but there's no error handling for missing fields and no deduplication/validation across the multiple scripts."
+        }
+      },
+      "total_time": 284.0,
+      "summary": "The agent successfully completed the core technical requirements, producing functional code that correctly scraped, parsed, and formatted the government contracts data as evidenced by perfect deterministic scores. However, the implementation was poorly organized, delivering three overlapping scripts instead of a single cohesive solution, which created confusion about execution and introduced data type inconsistencies (truncating float values to integers in one version). While the fundamental scraping logic and HTML processing were sound, the lack of error handling, input validation, and the fragmented code structure significantly undermined the overall quality and robustness of the solution."
     },
     {
       "id": "63ybTPBGm96zZJ3jFsLehM",
@@ -215,7 +371,8 @@
           "explanation": "The workspace contains multiple files in various states: a well-written backup (`company_deduplicator_backup.py`) that appears correct and complete, but the main `company_deduplicator.py` is truncated mid-function and would not run, and `deduplicator.py` is completely corrupted/malformed. The `check_columns.py` is a debug scratch file that shouldn't be in the deliverable. Since the primary entry point is broken/incomplete, the overall deliverable fails correctness, though the backup file shows good modularity, typing, and edge case handling (normalization, status tie-breaking, missing column validation)."
         }
       },
-      "total_time": 26.0
+      "total_time": 26.0,
+      "summary": "The agent successfully generated the correct output file with perfect structure and content, demonstrating that its core deduplication logic was sound. However, the code deliverable was severely compromised, with the main entry point file being truncated mid-function and another implementation file being completely corrupted, making the solution non-executable despite having a well-written backup file. While the backup showed good architectural practices including proper typing and edge case handling, the presence of debug files and broken primary code indicates poor file management and quality control in the final deliverable."
     },
     {
       "id": "cwRShT6msWUG3qyTZzm2tK",
@@ -268,7 +425,8 @@
           "explanation": "The agent produced multiple scripts (analyze_staffing.py and staffing_analysis.py) that appear to correctly implement the task: filtering Shire Districts, excluding Cumbrian districts, renaming Shepway, merging with population data, computing both metrics, and generating output.csv and summary.json. However, staffing_analysis.py computes median_temp_casual_pct using .median() on the full series (pandas automatically skips NaN, so this is actually correct). The fourth script (local_authority_staffing_analysis.py) is truncated/incomplete, and there are two broken verify scripts that appear corrupted. The proliferation of multiple redundant scripts and broken verification files hurts code quality significantly, though the primary working scripts appear functionally correct."
         }
       },
-      "total_time": 65.0
+      "total_time": 65.0,
+      "summary": "The agent successfully completed all functional requirements, producing correct output files with proper schema, data processing, and calculations as evidenced by perfect deterministic scores. However, the agent significantly undermined its performance by generating multiple redundant scripts and creating broken verification files, leading to poor code organization and quality issues. While the core analysis was methodologically sound and complete, the cluttered approach with duplicated and corrupted code prevented the agent from achieving a higher overall score."
     },
     {
       "id": "br3e7XXU2ULfQxnCeTFFmi",
@@ -321,7 +479,8 @@
           "explanation": "The primary scripts (analyze_staffing.py and staffing_analysis.py) correctly implement all required steps: filtering, exclusions, renaming Shepway, merging, computing metrics, sorting, and producing both output files with proper rounding. However, the workspace contains multiple redundant scripts (analyze_staffing.py, staffing_analysis.py, local_authority_analysis.py), one of which (local_authority_analysis.py) is incomplete/truncated, and verify_output.py appears corrupted/malformed. This clutter and duplication significantly hurts code quality, though the main analysis logic is sound and should produce the expected 164-row output."
         }
       },
-      "total_time": 13.0
+      "total_time": 13.0,
+      "summary": "The agent successfully executed all core requirements of the staffing analysis task, correctly implementing data filtering, transformations, calculations, and output generation with perfect technical execution. However, the agent's approach was significantly hampered by poor code organization, creating multiple redundant scripts and leaving incomplete or corrupted files in the workspace rather than producing a single, clean solution. While the underlying analysis logic was sound and produced the expected results, the cluttered and duplicated codebase demonstrates a lack of systematic development practices."
     },
     {
       "id": "hGCNhKAr8bcHAem2CyPDYV",
@@ -371,7 +530,8 @@
           "explanation": "The agent produced multiple redundant scripts (scraper.py, contract_scraper.py, scrape_contracts.py) with the last one truncated/incomplete, plus an unrelated test.py. The first two scripts work and extract the required data correctly, but contract_scraper.py casts avg_value_gbp to int, violating the spec (should be a mean, not truncated). Neither script handles missing fields or malformed data robustly. The clutter of multiple files and an incomplete third script significantly hurts structure and code quality, though the core logic in scraper.py is clean and correct."
         }
       },
-      "total_time": 247.0
+      "total_time": 247.0,
+      "summary": "The agent successfully completed the core scraping functionality, generating valid CSV output with correct schema and data extraction as evidenced by perfect deterministic scores. However, the implementation suffered from significant organizational issues, producing multiple redundant scripts with one being incomplete, and included data type violations (casting averages to integers) that deviated from specifications. While the primary scraper logic was sound, the lack of robust error handling for missing or malformed data and the cluttered file structure substantially undermined the overall code quality."
     },
     {
       "id": "EJBj437E5wQapyS6m6dBjD",
@@ -424,7 +584,53 @@
           "explanation": "The main scripts (analyze_staffing.py and staffing_analysis.py) correctly implement all specified steps: filtering, Cumbrian exclusions, Shepway rename, merge, computations, sorting, and output generation. However, the workspace contains multiple redundant/duplicate scripts, including a truncated local_authority_analysis.py and two corrupted/garbled verify scripts, which significantly hurts code quality. One minor issue: staffing_analysis.py computes median_temp_casual_pct using .median() which pandas handles NaN correctly by default, so this is fine, but the spec's 'excluding NaN' is implicitly handled."
         }
       },
-      "total_time": 478.0
+      "total_time": 478.0,
+      "summary": "The agent successfully executed the core staffing analysis task with perfect technical implementation, correctly handling all data processing steps including filtering, merging, calculations, and output formatting. However, the workspace was cluttered with multiple redundant and corrupted script files, significantly undermining code quality and organization. While the functional requirements were met excellently, the poor file management and presence of garbled duplicate scripts detracted from an otherwise solid performance."
+    },
+    {
+      "id": "8cmTFhc874ZoXG5t4FSLcF",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-22 16:33:41+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.7,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.8,
+        "score_correctness_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.8,
+        "score_overall_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.8,
+            "methodology": 0.8,
+            "completeness": 0.9,
+            "code_quality": 0.7,
+            "overall": 0.8
+          },
+          "explanation": "Both scripts correctly implement the four analytical questions using appropriate pandas operations. The merge-based approach in the first script is cleaner and more efficient than the loop-based approach in the second. Having two nearly identical scripts is redundant and could cause confusion about which one to run. Minor concerns: idxmax picks a single row on ties without tie-breaking, and equality comparison on floats for zero check could be fragile but is likely fine here."
+        }
+      },
+      "total_time": 92.0,
+      "summary": "The agent successfully completed the culture spending analysis task with correct implementation of all required analytical questions using appropriate pandas operations. While the code functioned well and produced accurate results, there were some methodology concerns including a cleaner merge-based approach being overshadowed by redundant code duplication and minor technical issues like potential float comparison fragility. The agent demonstrated solid coding fundamentals but could have been more concise and refined in its approach."
     },
     {
       "id": "FTcmAVAZYCGyBPXxATWUNP",
@@ -477,7 +683,8 @@
           "explanation": "The main scripts (analyze_staffing.py and staffing_analysis.py) correctly implement all the required steps: filtering, excluding Cumbrian districts, renaming Shepway, merging, computing metrics, sorting, and generating outputs. However, there are multiple redundant script files (4 versions), and local_authority_staffing_analysis.py appears truncated. The verify scripts are malformed/garbled. Also, staffing_analysis.py uses median() on temp_casual_pct which pandas handles by skipping NaN by default (correct), but analyze_staffing.py uses .dropna().median() explicitly (cleaner). Overall functional but messy with duplication."
         }
       },
-      "total_time": 589.0
+      "total_time": 589.0,
+      "summary": "The agent successfully completed the core technical requirements of the staffing analysis task, producing correct outputs with proper data filtering, transformations, and calculations. However, the implementation suffered from significant organizational issues, including multiple redundant script versions, truncated files, and malformed verification scripts that created unnecessary code duplication. While the methodology and analysis approach were sound, the poor code organization and quality issues detracted from an otherwise functional solution."
     },
     {
       "id": "aqkPvZUbxYFbPqa3yh7F2V",
@@ -521,7 +728,8 @@
           "explanation": "The three scripts all implement the same correct logic: filtering for 2024, using idxmax for Q1, filtering spend_total==0 for Q2, summing England/2023 spend_total_real for Q3, and merging on la_name for Q4. Methodology is sound with proper inner-merge semantics for Q4. Minor issues: q1_value in the third script isn't explicitly cast to float, and producing three nearly identical scripts is redundant/messy. Otherwise the code is readable and addresses all task requirements."
         }
       },
-      "total_time": 30.0
+      "total_time": 30.0,
+      "summary": "The agent successfully completed the culture spending analysis task with correct logic implementation across all questions, properly filtering data, identifying maximum values, and performing appropriate merges. While the methodology was sound and all requirements were addressed, the agent produced three nearly identical scripts which was unnecessarily redundant, and there were minor technical issues like missing explicit type casting. The code quality suffered from this redundancy and some formatting inconsistencies, though the core analytical approach remained reliable and readable."
     },
     {
       "id": "RWv5mgWZXtCkaSmNCBJpHg",
@@ -565,7 +773,8 @@
           "explanation": "The code correctly addresses all four questions using sound pandas operations (idxmax, filter-and-sum, merge on la_name for intersection). The main concern is the agent produced four separate scripts rather than one clear solution, which is messy, though each individually appears correct. Minor issues: q1_value isn't explicitly cast to float in one version, and there's no handling of potential ties or NaN values in idxmax, but results should match expected answers."
         }
       },
-      "total_time": 28.0
+      "total_time": 28.0,
+      "summary": "The agent successfully solved all components of the culture spending analysis task with correct pandas operations and sound analytical methodology, meeting all deterministic requirements. However, the solution was delivered as four separate scripts instead of a cohesive single solution, creating unnecessary fragmentation and reducing code organization quality. While the individual analyses were technically correct, minor improvements could include explicit type casting and better handling of edge cases like ties or missing values."
     },
     {
       "id": "2FTJXfnETESUXq3SYDGsKb",
@@ -615,7 +824,8 @@
           "explanation": "The backup file (company_deduplicator_backup.py) contains a clean, correct implementation, but the main deduplicator.py file appears to be corrupted/garbled and non-functional. There are also extraneous files (test_deduplication.py, check_columns.py) cluttering the workspace that shouldn't be part of the deliverable. The main entry point being broken is a major correctness issue, though the backup logic itself is well-written with good separation of concerns, type hints, and proper handling of the merge rules."
         }
       },
-      "total_time": 108.0
+      "total_time": 108.0,
+      "summary": "The agent successfully created a functional CSV deduplication solution with correct output format and content, as evidenced by the perfect deterministic scores. However, the implementation suffered from significant organizational issues - the main entry point file was corrupted or garbled while the working code was relegated to a backup file, and the workspace was cluttered with unnecessary test files that shouldn't have been included in the deliverable. While the underlying deduplication logic was well-architected with proper type hints and separation of concerns, the broken main file and poor file management resulted in a solution that wouldn't work out-of-the-box despite being technically correct."
     },
     {
       "id": "NUY27DVh3FEYbCFwsjU2ng",
@@ -665,7 +875,8 @@
           "explanation": "The agent produced three separate scripts (scraper.py, contract_scraper.py, and a truncated scrape_contracts.py), which is messy and leaves ambiguity about which is the intended solution. The first two scripts appear functionally correct for extracting fields, parsing dates/values, and producing output.csv and summary.json. However, contract_scraper.py casts avg_value_gbp to int (losing precision vs the spec's implied mean), while scraper.py keeps it as float\u2014inconsistent interpretations. Robustness is limited: no handling for missing elements, and the third file is incomplete. Overall it likely works but lacks polish and consistency."
         }
       },
-      "total_time": 55.0
+      "total_time": 55.0,
+      "summary": "The agent successfully delivered a functional government contracts scraper that met all basic requirements, correctly extracting data fields, parsing dates and monetary values, and producing the expected output files with proper schema. However, the implementation suffered from poor organization and inconsistency, generating three separate scripts with conflicting approaches to data precision (particularly for average values) and leaving uncertainty about which solution to use. While the core functionality worked well, the agent demonstrated weaknesses in code robustness and quality, failing to handle edge cases like missing data elements and producing an incomplete third script."
     },
     {
       "id": "Y7J9KeCFxcd7ViwnPixFZC",
@@ -709,7 +920,8 @@
           "explanation": "The main solution scripts correctly address all four questions using sensible pandas operations (idxmax for Q1, boolean filter for Q2, sum for Q3, merge/pivot for Q4 with proper handling of LAs present in both years). Numerical results should be correct assuming standard data. Code quality is hurt by the workspace containing multiple redundant scripts (solution.py, analyse_spending.py, compute_answers.py, solve.py) and a broken analyze_data.py file with a malformed string literal, indicating messy artifacts rather than a single clean deliverable."
         }
       },
-      "total_time": 63.0
+      "total_time": 63.0,
+      "summary": "The agent successfully completed the culture spending analysis task with correct methodology and comprehensive results, demonstrating strong analytical capabilities by properly using pandas operations to address all four questions. However, the implementation suffered from poor code organization, producing multiple redundant solution scripts and leaving broken code artifacts in the workspace rather than delivering a single, clean solution file. While the core analysis was sound and complete, the messy workspace organization significantly detracted from the overall code quality."
     },
     {
       "id": "geaPPd56iAaFwpDS9uuAHB",
@@ -759,7 +971,8 @@
           "explanation": "The agent produced three separate scripts (scraper.py, contract_scraper.py, scrape_contracts.py) which is messy; the third is truncated/incomplete. The first two scripts appear to work correctly for the happy path, extracting fields, parsing dates/values, and computing summaries. However, contract_scraper.py casts avg_value_gbp to int (losing decimal precision which may not match spec expectations). Robustness is limited: no handling of missing fields, and the scripts would crash on any absent element. The duplication across files and truncated third file reduces code quality significantly."
         }
       },
-      "total_time": 184.0
+      "total_time": 184.0,
+      "summary": "The agent successfully completed the core scraping functionality, producing working code that correctly extracts contract data, parses fields, and generates the required CSV output with perfect schema compliance. However, the implementation suffered from significant organizational issues, creating three separate scripts with duplicated functionality and leaving one incomplete, while also lacking basic error handling for missing data fields. The code quality was further compromised by precision loss in numerical calculations and insufficient robustness testing beyond the happy path scenario."
     },
     {
       "id": "KmuvbepgBwbKesWyRiggas",
@@ -803,7 +1016,8 @@
           "explanation": "The agent produced three scripts that all implement the same logic correctly: filtering for 2024 max, using nominal spend_total for Q2, summing English 2023 real spend, and merging 2010/2024 for Q4. Methodology is sound with proper merges for intersection of years. Minor issues: producing three redundant scripts is messy, q1_value is not explicitly rounded/cast in the third script, and Q4 could be vectorized more efficiently in the second script. Assumes la_name uniqueness per year which is reasonable for this dataset."
         }
       },
-      "total_time": 10.0
+      "total_time": 10.0,
+      "summary": "The agent successfully completed the culture spending analysis task with correct logic across all components, properly filtering data, performing merges, and calculating the required metrics. However, the implementation was unnecessarily redundant by producing three separate scripts that accomplished the same objectives, and there were minor technical issues including inconsistent value formatting and suboptimal vectorization in some scripts. Despite these code quality concerns, the core analytical approach was methodologically sound and produced accurate results."
     },
     {
       "id": "5Lcfz68RNihYa7vWbnYpiy",
@@ -847,7 +1061,62 @@
           "explanation": "The solution scripts correctly address all four questions using sound methodology: filtering by year/country, using idxmax for Q1, equality check for Q2, sum for Q3, and inner merge/intersection for Q4 to only count LAs present in both years. Numerical results should be correct. Code quality is reduced because the workspace contains multiple redundant scripts (solution.py, analyse_spending.py, solve.py, compute_answers.py) plus a broken analyze_data.py file that appears to be a malformed string literal, indicating messy iteration rather than a clean final deliverable."
         }
       },
-      "total_time": 20.0
+      "total_time": 20.0,
+      "summary": "The agent successfully solved the culture spending analysis task with correct methodology and complete results across all four questions, demonstrating strong analytical capabilities in data filtering, aggregation, and comparison operations. However, the execution was marred by poor code organization, as the agent created multiple redundant script files and left broken code artifacts in the workspace rather than delivering a clean, consolidated solution. While the technical approach was sound and the final answers were accurate, the messy development process significantly detracted from the overall code quality."
+    },
+    {
+      "id": "YxmpWGURq5TTjouxvt4CUE",
+      "agent": "anthropic/claude-sonnet-4-20250514",
+      "test": "staffing_analysis",
+      "timestamp": "2026-04-22 16:33:41+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.6,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.6,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_numeric_mean": 1.0,
+        "score_numeric_stderr": 0.0,
+        "score_overall_mean": 0.6499999999999999,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "numeric": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.6,
+            "methodology": 0.7,
+            "completeness": 0.7,
+            "code_quality": 0.6,
+            "overall": 0.6499999999999999
+          },
+          "explanation": "The agent produced two scripts. The first (analyze_staffing.py) searches for 'South Cambridgeshire District Council' which likely won't match the QPSES name 'South Cambridgeshire', but has a fallback regex match that would work. The second script (staffing_analysis.py) is truncated/incomplete \u2014 it cuts off mid-dictionary and never writes summary.json or closes main(). Having two overlapping scripts is confusing, and the truncated one would fail. The first script should produce correct results, but the duplication and incomplete second file reduce quality."
+        }
+      },
+      "total_time": 95.0,
+      "summary": "The agent successfully generated the required output files with correct structure and content, as evidenced by perfect scores on all deterministic checks. However, the implementation was marred by significant issues including the creation of two overlapping scripts (one of which was incomplete and truncated mid-execution), and an initial search strategy that relied on exact string matching before falling back to a more robust regex approach. While the functional script ultimately produced the correct results, the code duplication and incomplete deliverable substantially detracted from the overall quality and professionalism of the solution."
     },
     {
       "id": "d2ARPLTrpk2xPtUEDHwPnR",
@@ -891,7 +1160,8 @@
           "explanation": "The main solution files (solution.py, solve.py) correctly implement all four questions with sound methodology: idxmax for Q1, equality check for Q2, sum with rounding for Q3, and proper intersection/merge for Q4 to handle LAs present in both years. However, the workspace contains multiple redundant files (analyze_culture_spending.py, solution.py, solve.py, analyze_data.py, verify.py, analyse_spending.py), one of which (analyze_data.py) appears broken/corrupted as a string literal, and analyse_spending.py appears truncated. This clutter hurts code quality though the core logic is correct. Q1 value is returned as numpy float rather than native Python float in some versions, which may or may not serialize cleanly."
         }
       },
-      "total_time": 52.0
+      "total_time": 52.0,
+      "summary": "The agent successfully solved the culture spending analysis task with correct logic and sound methodology across all four questions, demonstrating strong analytical capabilities. However, the implementation suffered from poor workspace organization, creating multiple redundant files with some appearing broken or truncated, which significantly impacted code quality despite the correct core solutions. The agent would benefit from better file management and ensuring clean, single-source implementations rather than scattered duplicate attempts."
     },
     {
       "id": "6wTPKGLf5odeywPn4JUUik",
@@ -941,7 +1211,8 @@
           "explanation": "The agent produced three scripts with overlapping functionality, which is messy. scraper.py looks correct and complete. contract_scraper.py casts avg_value_gbp to int, losing precision (the spec doesn't explicitly require rounding but int truncation is questionable). scrape_contracts.py is truncated/incomplete. None handle missing fields defensively (would crash on None elements). HTML entity decoding is done, whitespace is stripped. Having multiple scripts with one incomplete is a structural issue, though scraper.py alone is reasonable."
         }
       },
-      "total_time": 33.0
+      "total_time": 33.0,
+      "summary": "The agent successfully completed all deterministic requirements, producing a functional scraper that correctly extracts and formats government contract data with proper CSV output. However, the implementation suffered from poor organization by creating three overlapping scripts with one being incomplete, along with technical issues like precision loss from casting monetary values to integers and lack of defensive handling for missing data fields. While the core functionality works as evidenced by the perfect deterministic scores, the messy structure and robustness gaps significantly undermined the overall quality of the solution."
     },
     {
       "id": "LZgaxE8BP9WoH8TyGuruCA",
@@ -991,7 +1262,8 @@
           "explanation": "The agent produced three separate scripts, with the third one truncated mid-code, suggesting confusion about the deliverable. The first script (scraper.py) appears complete and correct, properly extracting fields, decoding HTML entities, and computing stats. However, contract_scraper.py casts avg_value_gbp to int (losing precision vs spec's implied mean) which could be a minor deviation. None of the scripts handle missing fields gracefully, and the multiple overlapping files reduce structural clarity. Core logic is sound but the delivery is messy."
         }
       },
-      "total_time": 12.0
+      "total_time": 12.0,
+      "summary": "The agent successfully implemented the core scraping functionality with proper data extraction, HTML entity decoding, and statistical calculations, meeting all technical requirements perfectly. However, the delivery was significantly hampered by producing three overlapping scripts with unclear purpose differentiation, including one that was incomplete, demonstrating confusion about the expected deliverable format. While the fundamental scraping logic was sound, the lack of graceful error handling for missing fields and the messy file structure undermined the overall code quality and robustness."
     },
     {
       "id": "NWKWPKwkKAoYBGM7zgt3C7",
@@ -1044,7 +1316,18 @@
           "explanation": "The agent produced multiple redundant scripts (analyze_staffing.py, staffing_analysis.py, local_authority_staffing_analysis.py), with the last one appearing truncated/incomplete. The first two complete scripts correctly implement filtering, renaming Shepway, merging, computing metrics, and generating summary.json. However, the median_temp_casual_pct uses .median() which pandas handles NaN by default (skipna=True), so that's fine. Code quality suffers from duplication and the garbled verify scripts suggesting messy workspace; the main logic is sound but not cleanly delivered."
         }
       },
-      "total_time": 32.0
+      "total_time": 32.0,
+      "summary": "The agent successfully completed all the core technical requirements for the staffing analysis task, producing correct output files with proper schema, data processing, and calculations. However, the implementation suffered from significant code organization issues, including multiple redundant scripts and an incomplete final version that created workspace clutter. While the underlying analytical logic was sound and produced accurate results, the poor code quality and lack of clean delivery detracted from an otherwise technically competent solution."
+    },
+    {
+      "id": "W56Rf3NxwfyWDjxcQDeefG",
+      "agent": "openrouter/deepseek/deepseek-v3.2",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-22 16:49:59+00:00",
+      "status": "error",
+      "scores": {},
+      "score_details": {},
+      "total_time": 241.0
     },
     {
       "id": "5GuDCt4SJXpC2yyLvgKFRP",
@@ -1094,7 +1377,8 @@
           "explanation": "The primary file company_deduplicator.py appears functionally correct and implements the spec reasonably, using pandas groupby and proper merge logic. However, the workspace also contains deduplicator.py which is completely broken/garbled (appears to be a corrupted file with escaped strings), which is a serious quality issue. The main code has minor issues: the group_key column may leak into output (it's assigned to min_id_row which is a copy of a row including group_key), and edge cases like empty files or missing columns aren't handled. Tests are included which is a plus."
         }
       },
-      "total_time": 137.0
+      "total_time": 137.0,
+      "summary": "The agent successfully implemented a functional CSV deduplication solution that meets all basic requirements, with the primary file demonstrating solid pandas-based logic for grouping and merging duplicate records. However, the implementation suffers from significant quality issues including a completely corrupted secondary file, potential data leakage from internal columns into the output, and lack of robust edge case handling for scenarios like empty files or missing columns. While the core functionality works correctly, the overall execution reflects poor code organization and insufficient error handling."
     },
     {
       "id": "LuzwKa747TkSUNL57LGj9f",
@@ -1147,7 +1431,8 @@
           "explanation": "The agent produced multiple scripts (analyze_staffing.py, staffing_analysis.py, local_authority_analysis.py) that all implement the task correctly \u2014 filtering, renaming Shepway, merging, computing both metrics, sorting, and writing output. The primary scripts produce correct output and summary. However, the final script (local_authority_analysis.py) appears truncated mid-file, and having three near-duplicate scripts plus a debug file hurts code quality and clarity. Minor concern: np.median on dropna should work correctly, and rounding is handled appropriately in the complete scripts."
         }
       },
-      "total_time": 55.0
+      "total_time": 55.0,
+      "summary": "The agent successfully completed the staffing analysis task with perfect execution of all technical requirements, correctly implementing data filtering, transformations, calculations, and output generation. While the methodology was strong and the analysis was comprehensive, the agent's approach suffered from poor code organization, producing multiple redundant scripts and leaving one implementation incomplete. Despite these code quality issues, the core functionality worked flawlessly and delivered accurate results."
     },
     {
       "id": "gnVL5nMGqgYrEZkZvcqUhu",
@@ -1191,7 +1476,8 @@
           "explanation": "The main solution scripts (solution.py, compute_answers.py, solve.py, analyse_spending.py) correctly address all four questions using sound pandas operations: filtering 2024 for Q1/Q2, filtering England+2023 for Q3, and pivoting/merging to compare 2010 vs 2024 for Q4. Methodology is appropriate, including handling duplicates via pivot and dropna for LAs present in both years. Code quality suffers due to significant duplication\u2014five near-identical scripts plus a broken analyze_data.py containing a malformed string literal rather than real code. q1_value is not explicitly cast to float in some versions but JSON serialization should handle numpy floats in most cases."
         }
       },
-      "total_time": 329.0
+      "total_time": 329.0,
+      "summary": "The agent successfully implemented a correct solution for the culture spending analysis task, demonstrating solid data manipulation skills with appropriate pandas operations for filtering, pivoting, and handling missing data across all four questions. However, the implementation suffered from poor code organization, with significant duplication across five nearly identical scripts and one completely broken file containing malformed code rather than functional analysis. While the core methodology and results were sound, the excessive redundancy and inclusion of non-functional code significantly detracted from overall code quality."
     },
     {
       "id": "FjWiaPwzSg2S9t8PAMvVxD",
@@ -1241,7 +1527,8 @@
           "explanation": "The agent produced three separate scripts, which is messy and leaves ambiguity about which to run. The first two scripts (scraper.py and contract_scraper.py) implement the task correctly in principle, but contract_scraper.py casts avg_value_gbp to int, losing precision vs the spec's implicit mean. The third script is truncated/incomplete. Robustness is limited: no handling of missing fields, no try/except, and title extraction uses get_text() which won't decode entities like &amp; from attributes (though it does for text). Overall it likely works on the happy path but has quality and consistency issues."
         }
       },
-      "total_time": 34.0
+      "total_time": 34.0,
+      "summary": "The agent successfully completed the core scraping functionality and met all technical requirements, producing a valid CSV with the correct schema and data content. However, the implementation suffered from poor organization by creating three separate scripts instead of a single cohesive solution, along with precision issues in data casting and lack of robust error handling. While the code works for the happy path scenario, it demonstrates quality concerns around code structure, data type handling, and resilience to edge cases."
     },
     {
       "id": "ACThFNv7aELNKDmF8FW7tb",
@@ -1291,7 +1578,8 @@
           "explanation": "The agent produced two separate deduplicator modules which is confusing - unclear which is canonical. Both implementations appear logically correct for the stated rules (lowest id, longest name/address, Active precedence, duplicate_count). However, company_deduplicator.py outputs the extra 'group_key' column to CSV since it's not dropped before saving, which breaks the expected output format. The test file is also truncated (ends mid-statement with 'as'). Edge cases like empty groups, NaN values, or ties in length are not explicitly handled. Code is reasonably readable but duplication across two files and the broken test hurt quality."
         }
       },
-      "total_time": 81.0
+      "total_time": 81.0,
+      "summary": "The agent successfully implemented the core CSV deduplication logic and produced output that meets all basic requirements, but suffered from poor code organization by creating two separate deduplicator modules without clear indication of which to use. While the deduplication algorithms appear functionally correct, the implementation has significant issues including an extra 'group_key' column in one output that breaks the expected format, a truncated test file, and insufficient handling of edge cases like NaN values or tie-breaking scenarios. The code quality was further diminished by unnecessary duplication across files and lack of robust error handling."
     },
     {
       "id": "4CQpuAfGwCvSaK7YYCWf6U",
@@ -1341,7 +1629,8 @@
           "explanation": "The agent produced two separate implementations (deduplicator.py and company_deduplicator.py) which is confusing - unclear which is canonical. Both appear functionally correct for the main task, though deduplicator.py has a bug where it includes a 'postcode_normalized' key in the merged dict but then tries to drop it as a column after creating the DataFrame (this works but is awkward). The test file is truncated mid-statement ('as' at the end), suggesting incomplete delivery. Edge cases like empty groups, NaN values, or ties in longest name/address aren't explicitly handled. Code is readable but duplication across two modules and the truncated test hurt quality."
         }
       },
-      "total_time": 11.0
+      "total_time": 11.0,
+      "summary": "The agent successfully completed the core CSV deduplication functionality with perfect deterministic scores, demonstrating that the basic requirements were met effectively. However, the implementation suffered from poor organization and delivery issues, including creating two separate modules without clear indication of which to use, a truncated test file, and an awkward data handling pattern that works but is unnecessarily complex. While the core logic appears sound, the agent struggled with code quality, edge case handling, and providing a clean, professional deliverable."
     },
     {
       "id": "d5kr8CsA7TzpbBAczaNVPo",
@@ -1391,7 +1680,8 @@
           "explanation": "There are two separate implementations (deduplicator.py and company_deduplicator.py) which is confusing\u2014unclear which is canonical. Both correctly implement the core matching and merge rules, though company_deduplicator.py's 'duplicates_found' counts only records in groups >1 (excluding the kept record), which may or may not match the spec's intent ('records that were part of a duplicate group' is ambiguous). The deduplicator.py version counts all records in duplicate groups (including the merged one). Code is reasonably clean with type hints and docstrings, but having duplicate modules hurts architecture. Minor issues: trailing comma missing in the JSON example format, sic_code case sensitivity not normalized, no handling of NaN values in name/address for max(key=len)."
         }
       },
-      "total_time": 48.0
+      "total_time": 48.0,
+      "summary": "The agent successfully implemented the core CSV deduplication functionality, correctly handling file operations, schema requirements, and producing accurate output with proper matching and merging logic. However, the implementation suffered from architectural confusion due to creating two separate deduplication modules rather than a single canonical solution, leading to ambiguity about which version should be used. While the code quality was decent with type hints and documentation, the agent missed some edge cases like proper handling of NaN values and case sensitivity normalization for certain fields."
     },
     {
       "id": "o4LAev9MpzNAmNJ5P5EEaJ",
@@ -1441,7 +1731,8 @@
           "explanation": "The agent produced three separate scripts (scraper.py, contract_scraper.py, scrape_contracts.py), with the third one being truncated/incomplete. This creates ambiguity about which is the 'real' solution. The first two scripts appear functionally correct and handle the basic extraction, sorting, CSV, and summary JSON, but contract_scraper.py casts avg_value_gbp to int (potentially losing precision \u2014 the spec doesn't specify rounding), while scraper.py keeps it as a float. Both handle HTML entity decoding and whitespace adequately, but neither has defensive handling for missing fields. The proliferation of scripts (including a stray test.py) and truncated file hurt structure and code quality."
         }
       },
-      "total_time": 32.0
+      "total_time": 32.0,
+      "summary": "The agent successfully implemented the core functionality for scraping government contracts, producing clean CSV output with correct schema and content that met all deterministic requirements. However, the submission suffered from poor organization by creating multiple redundant scripts with unclear purpose, including an incomplete truncated file, which created ambiguity about the intended solution. While the functional scripts handled basic requirements well, they lacked defensive programming for edge cases like missing fields and had inconsistent data type handling that could affect precision."
     },
     {
       "id": "b42EhBpHcXaRKwR8qPmLzN",
@@ -1494,7 +1785,8 @@
           "explanation": "The primary script `analyze_staffing.py` appears correct: it filters Shire Districts, excludes Cumbrian districts, renames Shepway to Folkestone and Hythe before merging, computes both metrics, sorts, and writes outputs as specified. However, the workspace is cluttered with multiple redundant/broken scripts (verify_results.py and verify_output.py appear to be corrupted/garbled, and staffing_analysis.py renames in the wrong direction\u2014Folkestone to Shepway\u2014which is inconsistent with the spec though it still works via the inner merge). The truncated `local_authority_staffing_analysis.py` also indicates incomplete cleanup. Code quality suffers due to duplication and broken files, but the core deliverable is functional."
         }
       },
-      "total_time": 79.0
+      "total_time": 79.0,
+      "summary": "The agent successfully completed the core staffing analysis task, producing the correct output file with accurate data filtering, merging, and calculations as evidenced by perfect deterministic scores. However, the execution was marred by poor workspace management, resulting in multiple redundant scripts, corrupted verification files, and inconsistent naming logic across different files. While the primary deliverable was functional and met specifications, the cluttered workspace and code duplication significantly undermined the overall code quality and professionalism of the solution."
     },
     {
       "id": "CPSwmieBNmHwJLfrGQpmsN",
@@ -1538,7 +1830,8 @@
           "explanation": "The main solution scripts (solution.py, compute_answers.py, analyse_spending.py, solve.py) correctly implement all four questions with sound methodology: proper filtering, idxmax for Q1, equality check for Q2, sum+round for Q3, and pivot/merge for Q4 intersection of LAs present in both years. However, q1_value is left as a numpy float rather than cast to a plain float (minor JSON serialization risk), and the workspace contains multiple redundant scripts plus a broken analyze_data.py file (a stray string literal list), which hurts code quality and organization. Overall the logic is correct and addresses all requirements."
         }
       },
-      "total_time": 672.0
+      "total_time": 672.0,
+      "summary": "The agent demonstrated strong analytical capabilities by correctly implementing all four required questions with appropriate methodologies, but completely failed to deliver the expected output format. While the code logic was sound and comprehensive, the agent produced multiple redundant script files and critically failed to generate the required `answers.json` file, resulting in a complete failure of the deterministic checks. The disconnect between good problem-solving approach and poor deliverable execution significantly undermined the overall effectiveness."
     },
     {
       "id": "LVKeh3ahWKjfQ6mhyj7Pan",
@@ -1591,7 +1884,8 @@
           "explanation": "The main scripts (analyze_staffing.py, staffing_analysis.py, local_authority_analysis.py) appear to correctly implement the required steps: filtering, excluding Cumbrian districts, renaming Shepway, merging, computing metrics, and generating output. However, there are multiple redundant scripts doing essentially the same thing, verify_output.py appears corrupted/malformed, and local_authority_analysis.py is truncated mid-comment. The staffing_analysis.py uses median() on temp_casual_pct which by default excludes NaN in pandas, matching the spec. Code quality suffers from duplication and the broken verify script."
         }
       },
-      "total_time": 36.0
+      "total_time": 36.0,
+      "summary": "The agent successfully completed the core staffing analysis requirements, producing correct output files with proper data transformations, filtering, and calculations as evidenced by perfect deterministic scores. However, the implementation suffered from significant code organization issues, including multiple redundant scripts performing the same analysis, a corrupted verification script, and truncated code files that detracted from overall code quality. While the methodology and completeness were generally solid, the lack of clean, consolidated code structure prevented this from being a truly polished solution."
     }
   ],
   "test_descriptions": {
@@ -1748,21 +2042,21 @@
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "csv_deduplicator",
-      "run_count": 1,
+      "run_count": 2,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.4,
-      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.1414,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
       "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.4,
-      "score_correctness_mean_std": 0.0,
+      "score_correctness_mean_mean": 0.55,
+      "score_correctness_mean_std": 0.2121,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
       "score_csv_schema_accuracy_mean": 1.0,
@@ -1773,8 +2067,8 @@
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.475,
-      "score_overall_mean_std": 0.0,
+      "score_overall_mean_mean": 0.55,
+      "score_overall_mean_std": 0.1061,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
       "score_row_count_accuracy_mean": 1.0,
@@ -1785,13 +2079,13 @@
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "culture_spending_analysis",
-      "run_count": 1,
+      "run_count": 2,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.6,
-      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_mean_mean": 0.65,
+      "score_code_quality_mean_std": 0.0707,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
       "score_content_accuracy_mean": 1.0,
@@ -1814,13 +2108,13 @@
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "gov_contracts_scraper",
-      "run_count": 1,
+      "run_count": 2,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.5,
-      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_mean_mean": 0.55,
+      "score_code_quality_mean_std": 0.0707,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
       "score_content_accuracy_mean": 1.0,
@@ -1839,8 +2133,8 @@
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.55,
-      "score_overall_mean_std": 0.0,
+      "score_overall_mean_mean": 0.5625,
+      "score_overall_mean_std": 0.0177,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
       "score_row_count_accuracy_mean": 1.0,
@@ -1851,21 +2145,21 @@
     {
       "agent": "anthropic/claude-sonnet-4-20250514",
       "test": "staffing_analysis",
-      "run_count": 1,
+      "run_count": 2,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.5,
-      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_mean_mean": 0.55,
+      "score_code_quality_mean_std": 0.0707,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
       "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.7,
-      "score_correctness_mean_std": 0.0,
+      "score_correctness_mean_mean": 0.65,
+      "score_correctness_mean_std": 0.0707,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
       "score_csv_schema_accuracy_mean": 1.0,
@@ -1880,8 +2174,8 @@
       "score_numeric_mean_std": 0.0,
       "score_numeric_stderr_mean": 0.0,
       "score_numeric_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.675,
-      "score_overall_mean_std": 0.0,
+      "score_overall_mean_mean": 0.6625,
+      "score_overall_mean_std": 0.0177,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
       "score_row_count_accuracy_mean": 1.0,
@@ -2246,21 +2540,21 @@
     {
       "agent": "openrouter/deepseek/deepseek-v3.2",
       "test": "gov_contracts_scraper",
-      "run_count": 1,
+      "run_count": 3,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.5,
-      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_mean_mean": 0.55,
+      "score_code_quality_mean_std": 0.0707,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
       "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.7,
-      "score_correctness_mean_std": 0.0,
+      "score_correctness_mean_mean": 0.65,
+      "score_correctness_mean_std": 0.0707,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
       "score_csv_schema_accuracy_mean": 1.0,

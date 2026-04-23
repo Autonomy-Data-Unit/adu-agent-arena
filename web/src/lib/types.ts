@@ -15,6 +15,7 @@ export interface Run {
 	total_cost?: number;
 	input_tokens?: number;
 	output_tokens?: number;
+	summary?: string;
 }
 
 export interface Aggregate {

@@ -310,6 +310,11 @@
 								</td>
 								<td class="timestamp">{new Date(run.timestamp).toLocaleString()}</td>
 							</tr>
+							{#if run.summary}
+								<tr class="summary-row">
+									<td colspan="7" class="summary-cell">{run.summary}</td>
+								</tr>
+							{/if}
 						{/each}
 					</tbody>
 				</table>
@@ -565,6 +570,24 @@
 	.timestamp {
 		color: #8b949e;
 		white-space: nowrap;
+	}
+
+	.summary-row {
+		background: none;
+	}
+
+	.summary-row:hover {
+		background: none;
+		cursor: default;
+	}
+
+	.summary-cell {
+		padding: 0.25rem 0.75rem 0.75rem;
+		font-size: 0.8125rem;
+		color: #8b949e;
+		font-style: italic;
+		line-height: 1.5;
+		border-bottom: 1px solid #21262d;
 	}
 
 	section h2 {
