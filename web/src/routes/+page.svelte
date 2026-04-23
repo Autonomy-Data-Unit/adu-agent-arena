@@ -180,7 +180,9 @@
 
 	function scoreColor(val: number): string {
 		if (val >= 0.9) return '#3fb950';
-		if (val >= 0.5) return '#d29922';
+		if (val >= 0.8) return '#a3d977';
+		if (val >= 0.7) return '#d29922';
+		if (val >= 0.5) return '#e09030';
 		return '#f85149';
 	}
 
