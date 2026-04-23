@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-23T13:11:01.112505",
+  "generated_at": "2026-04-23T13:39:16.497806",
   "agents": [
     "anthropic/claude-opus-4-7",
     "anthropic/claude-sonnet-4-20250514",
@@ -8,8 +8,8 @@
     "openai/gpt-5.4",
     "openrouter/deepseek/deepseek-v3.2",
     "openrouter/mistralai/mistral-large-2512",
-    "openrouter/moonshotai/kimi-k2.5",
-    "openrouter/qwen/qwen3-coder"
+    "openrouter/moonshotai/kimi-k2.6",
+    "openrouter/qwen/qwen3-235b-a22b-2507"
   ],
   "tests": [
     "csv_deduplicator",
@@ -18,63 +18,6 @@
     "staffing_analysis"
   ],
   "runs": [
-    {
-      "id": "gJ79G9HFnsWBC7Z36xRZpz",
-      "agent": "openrouter/moonshotai/kimi-k2.5",
-      "test": "staffing_analysis",
-      "timestamp": "2026-04-23 11:29:02+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 1.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.9,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 1.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.9,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 1.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 1.0,
-        "score_file_exists_stderr": 0.0,
-        "score_numeric_mean": 1.0,
-        "score_numeric_stderr": 0.0,
-        "score_overall_mean": 0.925,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 1.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 1.0,
-            "csv_schema": 1.0,
-            "row_count": 1.0,
-            "numeric": 1.0,
-            "content": 1.0,
-            "overall": 1.0
-          },
-          "explanation": "All checks passed"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.9,
-            "methodology": 0.9,
-            "completeness": 1.0,
-            "code_quality": 0.9,
-            "overall": 0.925
-          },
-          "explanation": "The code correctly implements all specified steps: filtering Shire Districts, excluding Cumbrian authorities, renaming Shepway, merging, computing both metrics, sorting, and generating both output files. The NaN handling for temp_casual_pct arises naturally from 0/0 division, matching the spec. Code is clean, well-commented, with appropriate warnings for unmatched districts and a sensible error for missing South Cambridgeshire. Minor nit: explicit handling of the division-by-zero case could be more defensive, but pandas produces NaN as required."
-        }
-      },
-      "total_time": 973.0,
-      "input_tokens": 11337,
-      "output_tokens": 2477,
-      "total_cost": 0.0111,
-      "summary": "The agent delivered an excellent implementation that met all technical requirements and produced the correct outputs with proper data transformations. The code demonstrated strong methodology with appropriate data filtering, merging, and metric calculations, while also including thoughtful features like warnings for unmatched districts and error handling for missing data. The only minor area for improvement was slightly more defensive handling of division-by-zero cases, though the current pandas-based approach correctly produces the required NaN values."
-    },
     {
       "id": "oRiJJ7CyGCdsJPaTY5PHBN",
       "agent": "openai/gpt-5.3-codex",
@@ -295,58 +238,58 @@
       "summary": "The agent delivered an excellent implementation that correctly handled the core deduplication logic with proper grouping, merging rules, and output generation, achieving perfect scores on all functional requirements. The code demonstrated strong architectural design with well-separated functions, good readability, and proper handling of key edge cases like case-insensitive postcode matching. However, the implementation could have been more robust in defensive programming, particularly around handling NaN values and missing columns, which prevented it from achieving the highest marks on edge case coverage."
     },
     {
-      "id": "cC4MaJSmkHgjmNNN7LH5Lt",
-      "agent": "openrouter/qwen/qwen3-coder",
+      "id": "AhGGPz7s24VrNpryjcYegx",
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
       "test": "gov_contracts_scraper",
-      "timestamp": "2026-04-23 11:48:00+00:00",
+      "timestamp": "2026-04-23 12:32:31+00:00",
       "status": "success",
       "scores": {
         "score_headline_name": "deterministic_scorer",
         "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
+        "score_headline_value": 1.0,
         "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.1,
+        "score_code_quality_mean": 0.8,
         "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
+        "score_content_accuracy": 1.0,
         "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.1,
+        "score_correctness_mean": 0.7,
         "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
+        "score_csv_schema_accuracy": 1.0,
         "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
+        "score_file_exists_accuracy": 1.0,
         "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.1,
+        "score_overall_mean": 0.7,
         "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
+        "score_row_count_accuracy": 1.0,
         "score_row_count_stderr": 0.0
       },
       "score_details": {
         "deterministic_scorer": {
           "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "content": 0.0,
-            "overall": 0.0
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
           },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected award_date,contract_id,duration_days,end_date,organisation,start_date,supplier,title,value_gbp, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
+          "explanation": "All checks passed"
         },
         "judge_scorer": {
           "value": {
-            "correctness": 0.1,
-            "robustness": 0.1,
-            "structure": 0.1,
-            "code_quality": 0.1,
-            "overall": 0.1
+            "correctness": 0.7,
+            "robustness": 0.5,
+            "structure": 0.8,
+            "code_quality": 0.8,
+            "overall": 0.7
           },
-          "explanation": "The submitted files appear to be corrupted/mangled representations rather than valid Python source code. They contain Python lists and dicts with fragmented string pieces instead of executable code, so none of the scripts would run. No output.csv or summary.json can be produced from this code as presented."
+          "explanation": "The code correctly extracts most fields and computes the required summary statistics, but it assumes the title is in an h2 tag rather than selecting the anchor inside .search-result-title as specified \u2014 this could include extra text or fail if the structure differs. BeautifulSoup's get_text automatically decodes HTML entities, so &amp; handling works implicitly, but there's no explicit handling of missing fields or malformed data (e.g., no try/except, no None checks). The output structure follows spec well, with proper CSV headers and JSON formatting. Code is clean and readable with reasonable variable names and logical flow."
         }
       },
-      "total_time": 672.0,
-      "input_tokens": 140755,
-      "output_tokens": 5540,
-      "total_cost": 0.0365,
-      "summary": "The agent completely failed to generate valid Python code for the government contracts scraper task, instead producing corrupted files containing fragmented string pieces and malformed data structures that could not be executed. This fundamental code generation failure prevented the creation of any output files (output.csv and summary.json), resulting in a total inability to complete the scraping task. The agent appears to have suffered from a severe code serialization or formatting issue that rendered all its output unusable."
+      "total_time": 197.0,
+      "input_tokens": 31115,
+      "output_tokens": 1217,
+      "total_cost": 0.0023,
+      "summary": "The agent successfully implemented a functional government contracts scraper that met all basic requirements, producing the correct file structure, schema, and data content. However, the implementation had some robustness issues, particularly in HTML parsing where it incorrectly assumed titles would be in h2 tags rather than following the specified anchor selection within `.search-result-title`, and lacked proper error handling for missing or malformed data. While the code was clean and well-structured, these parsing assumptions and missing defensive programming reduced its reliability for handling varied or unexpected input formats."
     },
     {
       "id": "fBRdxk8GgWWRmVdJKLbtZk",
@@ -721,63 +664,6 @@
       "summary": "The agent delivered an excellent implementation of the staffing analysis task, achieving perfect scores on all technical requirements including file structure, data schema, and content accuracy. The code demonstrated strong methodology with proper data filtering, merging, and metric calculations, while incorporating thoughtful defensive programming practices like handling division by zero cases and including comprehensive logging. Minor deductions in the judge scoring appear to reflect very high standards rather than significant flaws, as the solution successfully completed all specified requirements with clean, well-documented code."
     },
     {
-      "id": "Tewh27g3kiKE5zznQqnCki",
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "staffing_analysis",
-      "timestamp": "2026-04-23 11:48:00+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.1,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.1,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_numeric_mean": 0.0,
-        "score_numeric_stderr": 0.0,
-        "score_overall_mean": 0.15000000000000002,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "numeric": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected Auth Name,Temporary/Casual,Total Headcount,employees_per_1000,population,temp_casual_pct, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Numeric check failed for employees_per_1000: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.1,
-            "methodology": 0.2,
-            "completeness": 0.2,
-            "code_quality": 0.1,
-            "overall": 0.15000000000000002
-          },
-          "explanation": "The code files appear to be corrupted/malformed - they are presented as Python list literals containing fragmented strings with escaped quotes and newlines rather than actual executable Python code. None of the files contain valid imports, function definitions, or even complete syntax. The last file is truncated mid-statement. While the underlying logic (if reconstructed) seems to follow the spec reasonably, the code as delivered cannot run and would not produce any output."
-        }
-      },
-      "total_time": 973.0,
-      "input_tokens": 732122,
-      "output_tokens": 21182,
-      "total_cost": 0.1822,
-      "summary": "The agent completely failed to deliver functional code, producing malformed Python files that appear as corrupted list literals with escaped strings rather than executable scripts. While the judge noted that the underlying logic seemed to follow the specification reasonably well, the code was entirely non-functional and could not run to produce any output files. This resulted in a total failure of all deterministic checks since no CSV or JSON output files were generated, representing a fundamental breakdown in code generation and formatting."
-    },
-    {
       "id": "dMWU8rE3wjyx2a6YbSnhzV",
       "agent": "openai/gpt-5.4",
       "test": "culture_spending_analysis",
@@ -826,10 +712,64 @@
       "summary": "The agent delivered a highly effective solution that correctly answered all four questions with clean, efficient code using a single-pass CSV read approach. The implementation demonstrated solid technical choices with appropriate data structures and logic, resulting in well-structured and readable code. The only minor issue was a potential semantic ambiguity in handling zero values where empty/missing data might be treated the same as explicitly reported zeros, though this didn't significantly impact the overall quality of the solution."
     },
     {
-      "id": "Pj9GuANLuv3QxegDyVAZid",
-      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "id": "CAp8d6mTqCX8KYJYmw7pHZ",
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-23 12:32:31+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.8,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.9,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.8,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.9,
+            "architecture": 0.8,
+            "edge_cases": 0.7,
+            "code_quality": 0.8,
+            "overall": 0.8
+          },
+          "explanation": "The code correctly implements the deduplication logic: groups by normalized postcode and sic_code, applies the correct merge rules (lowest id, longest name/address, Active-preferred status), and outputs the expected files. Single-record groups preserve the temporary postcode_norm column in the dict but it's dropped at the end, so output is clean. Architecture is modular with a clear function signature and main entry. Minor issues: the single-record branch includes postcode_norm in the dict (handled later), status tie-breaking with mode is deterministic only due to pandas behavior, and there's no error handling for missing columns/files."
+        }
+      },
+      "total_time": 341.0,
+      "input_tokens": 51617,
+      "output_tokens": 2510,
+      "total_cost": 0.0039,
+      "summary": "The agent delivered a functionally correct CSV deduplication solution that passed all deterministic tests and properly implemented the core business logic for grouping and merging records. The code demonstrated good modular architecture with clear function design, though it had some minor implementation quirks like unnecessary column handling in edge cases and relied on pandas default behavior for deterministic tie-breaking rather than explicit logic. Overall, this represents solid performance with room for improvement in code robustness and error handling."
+    },
+    {
+      "id": "YsUKCoRjHgrELQQmRmPPdK",
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
       "test": "culture_spending_analysis",
-      "timestamp": "2026-04-23 11:29:04+00:00",
+      "timestamp": "2026-04-23 12:32:31+00:00",
       "status": "success",
       "scores": {
         "score_headline_name": "deterministic_scorer",
@@ -864,14 +804,14 @@
             "code_quality": 0.8,
             "overall": 0.8250000000000001
           },
-          "explanation": "The code correctly addresses all four questions using appropriate filters and aggregations. One minor concern is Q2: if spend_total contains empty strings or NaN values, float() would fail; similar risk for Q1 with missing spend_total_real. Q4 uses la_name as the key which could theoretically be ambiguous across countries, but since it's filtered to England in both dicts, this is fine. Overall clean, readable, and functionally correct assuming well-formed data."
+          "explanation": "The code correctly addresses all four questions using appropriate pandas operations. The dropna on spend_total_real could potentially exclude valid rows, but in practice this likely doesn't affect results. The join on la_name for Q4 is reasonable, though using (country, la_name) would be marginally safer. Code is clean and readable."
         }
       },
-      "total_time": 151.0,
-      "input_tokens": 82483,
-      "output_tokens": 1642,
-      "total_cost": 0.0392,
-      "summary": "The agent delivered a technically sound solution that correctly answered all four analysis questions with appropriate data filtering and aggregation logic. While the code was clean and readable with perfect file structure, it had minor robustness issues around error handling for potential missing or malformed data values that could cause runtime failures. Overall, this represents a strong performance with good methodology and completeness, though it could benefit from more defensive programming practices."
+      "total_time": 332.0,
+      "input_tokens": 634060,
+      "output_tokens": 1468,
+      "total_cost": 0.0452,
+      "summary": "The agent successfully completed the culture spending analysis task with solid technical execution, correctly implementing pandas operations to address all four questions and producing clean, readable code. The analysis methodology was sound overall, though there were minor areas for improvement such as potentially dropping valid rows when removing nulls from spend_total_real and using a single join key instead of a composite key for safer data merging. Despite these small methodological considerations, the agent delivered a comprehensive and largely correct solution that met the task requirements effectively."
     },
     {
       "id": "JxccP3dzE2csgNh4P5mG7X",
@@ -926,54 +866,6 @@
       "output_tokens": 5252,
       "total_cost": 0.129,
       "summary": "The agent delivered a functionally correct CSV deduplication solution that passed all deterministic tests and properly implemented the core grouping and merging logic as specified. The code demonstrated good structure with clear functions and documentation, showing solid pandas proficiency. However, the implementation fell short on robustness, lacking explicit handling of edge cases like empty files, missing columns, or null values that would be important for production use."
-    },
-    {
-      "id": "AXFhjswEwDCLy8a3awpFmH",
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "culture_spending_analysis",
-      "timestamp": "2026-04-23 11:48:00+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.1,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.1,
-        "score_correctness_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.1,
-        "score_overall_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/answers.json; Could not read /workspace/answers.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.1,
-            "methodology": 0.1,
-            "completeness": 0.1,
-            "code_quality": 0.1,
-            "overall": 0.1
-          },
-          "explanation": "The code is presented as a malformed Python list of strings rather than a valid script. It lacks imports, the DataFrame loading step, and has broken syntax in the dictionary construction. It cannot execute and will produce no results."
-        }
-      },
-      "total_time": 671.0,
-      "input_tokens": 257094,
-      "output_tokens": 328,
-      "total_cost": 0.0713,
-      "summary": "The agent completely failed to deliver a functional solution, producing malformed code that resembled a broken Python list of strings rather than an executable script. Critical elements like imports, data loading, and proper syntax were entirely missing, while the required output file was never generated. The agent appears to have fundamentally misunderstood the task requirements and failed to produce any working code whatsoever."
     },
     {
       "id": "SkrfsMXmzfnyicxso2qGBs",
@@ -1085,60 +977,6 @@
       "output_tokens": 1891,
       "total_cost": 0.0086,
       "summary": "The agent successfully implemented a functional government contracts scraper that meets all basic requirements, correctly extracting and formatting data with proper sorting and output generation. The code demonstrates good Python practices and clean structure, but lacks robustness in error handling, particularly for missing fields and malformed data that could cause the scraper to fail on real-world inputs. While the core functionality is solid, the implementation would benefit from defensive programming techniques to handle edge cases and data quality issues commonly encountered in web scraping scenarios."
-    },
-    {
-      "id": "PswkPAUrRg9okdUYKFP6uS",
-      "agent": "openrouter/moonshotai/kimi-k2.5",
-      "test": "gov_contracts_scraper",
-      "timestamp": "2026-04-23 11:31:11+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 1.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.8,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 1.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.8,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 1.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 1.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.75,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 1.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 1.0,
-            "csv_schema": 1.0,
-            "row_count": 1.0,
-            "content": 1.0,
-            "overall": 1.0
-          },
-          "explanation": "All checks passed"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.8,
-            "robustness": 0.6,
-            "structure": 0.8,
-            "code_quality": 0.8,
-            "overall": 0.75
-          },
-          "explanation": "The scraper correctly extracts the required fields and computes summary statistics as specified. However, get_text(strip=True) automatically decodes HTML entities so that's handled, but there's no explicit normalization of whitespace within text (e.g. internal whitespace collapsing). The avg_value_gbp isn't explicitly rounded or formatted, which could produce long floats. Error handling for missing/malformed fields is minimal (parse_value would crash on empty strings). Code is clean and well-organized with good separation of concerns, though parsing dates twice per field is slightly inefficient."
-        }
-      },
-      "total_time": 191.0,
-      "input_tokens": 14690,
-      "output_tokens": 2524,
-      "total_cost": 0.0115,
-      "summary": "The agent successfully implemented a functional government contracts scraper that correctly extracts all required fields and produces the expected output format with accurate data. While the core functionality works well with clean code organization and proper separation of concerns, the implementation lacks robustness in handling edge cases such as malformed data, empty fields, and proper text normalization. Minor inefficiencies like duplicate date parsing and missing output formatting for monetary values prevent this from being a production-ready solution."
     },
     {
       "id": "P6MxVChSoh7kLPkDRh7ehh",
@@ -1289,6 +1127,60 @@
       "output_tokens": 2983,
       "total_cost": 0.0763,
       "summary": "The agent performed very well on this culture spending analysis task, successfully completing all required components with sound analytical methodology and clean code organization. The implementation correctly handled data filtering, aggregation, and merging operations, though there were minor edge case considerations around tie-breaking in maximum value selection and floating-point comparisons that could be refined. Overall, the solution demonstrated strong technical execution with proper function separation, type handling, and logging practices."
+    },
+    {
+      "id": "EaqeHR5ejogcZE3sVu73iA",
+      "agent": "openrouter/moonshotai/kimi-k2.6",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-23 12:35:50+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.9,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.9,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.85,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.9,
+            "architecture": 0.9,
+            "edge_cases": 0.7,
+            "code_quality": 0.9,
+            "overall": 0.85
+          },
+          "explanation": "The code correctly implements the deduplication logic with proper merging rules (lowest id, longest name/address, Active-preference status, duplicate_count). It's well-modularized into distinct functions with clear docstrings. Minor concerns: `include_groups=False` is a newer pandas parameter that may fail on older versions, and there's no handling for NaN values in name/address columns (str.len() would return NaN and idxmax could behave unexpectedly). The tuple return type hint uses PEP 604 syntax requiring Python 3.9+."
+        }
+      },
+      "total_time": 140.0,
+      "input_tokens": 3305,
+      "output_tokens": 3594,
+      "total_cost": 0.0182,
+      "summary": "The agent delivered a highly functional CSV deduplication solution that correctly implemented all the core requirements, including proper merging logic and well-structured, documented code. While the implementation successfully handled the main deduplication tasks with appropriate modularization, it fell short on edge case handling, particularly around NaN values in name/address columns and potential pandas version compatibility issues. The code demonstrates strong architectural design and correctness but would benefit from more robust error handling for real-world deployment scenarios."
     },
     {
       "id": "cVMePNCoZ8iEddo2LhtYo6",
@@ -1459,6 +1351,63 @@
       "summary": "The agent demonstrated excellent performance on this staffing analysis task, achieving perfect scores on all deterministic checks and strong results on judge evaluation criteria. The code successfully implemented all required data processing steps including filtering, merging, calculations, and output generation, with the judge noting clean structure, good documentation, and defensive programming practices like merge validation. While there were minor areas for improvement in methodology and code quality that prevented a perfect judge score, the agent delivered a robust and complete solution that met all specifications."
     },
     {
+      "id": "QR53fhqZEFV8ByacfK3pZe",
+      "agent": "openrouter/moonshotai/kimi-k2.6",
+      "test": "staffing_analysis",
+      "timestamp": "2026-04-23 12:32:31+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.9,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.9,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_numeric_mean": 1.0,
+        "score_numeric_stderr": 0.0,
+        "score_overall_mean": 0.925,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "numeric": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.9,
+            "methodology": 0.9,
+            "completeness": 1.0,
+            "code_quality": 0.9,
+            "overall": 0.925
+          },
+          "explanation": "The code correctly implements all required steps: filtering Shire Districts, excluding Cumbrian authorities, renaming Shepway, merging, computing both metrics, and generating the summary JSON. The median_temp_casual_pct naturally excludes NaN via pandas default behavior, matching the spec. Code is clean, well-commented, and readable. Minor nit: pandas division by zero produces NaN as desired, so no special handling needed."
+        }
+      },
+      "total_time": 91.0,
+      "input_tokens": 5143,
+      "output_tokens": 3099,
+      "total_cost": 0.0194,
+      "summary": "The agent delivered an excellent performance on this staffing analysis task, successfully implementing all required data processing steps including filtering, merging, and metric calculations while producing correctly formatted output. The code demonstrated strong technical execution with clean, well-commented implementation that handled edge cases appropriately, such as NaN values in median calculations. The only minor areas for improvement were in methodology and code quality details, but overall the solution was comprehensive and met all functional requirements."
+    },
+    {
       "id": "MiHBgPqNvf8Hg5jFU7mskW",
       "agent": "openrouter/deepseek/deepseek-v3.2",
       "test": "csv_deduplicator",
@@ -1559,117 +1508,6 @@
       "output_tokens": 788,
       "total_cost": 0.0045,
       "summary": "The agent performed very well on this culture spending analysis task, successfully creating the required output file and correctly addressing all four analytical questions using appropriate pandas operations. The code demonstrated good readability with clear comments and proper data manipulation techniques, including a correct merge operation for the England-specific analysis. The only notable weakness was a minor technical oversight regarding potential JSON serialization issues with numpy float types, which could cause environment-dependent failures despite the code generally working in most setups."
-    },
-    {
-      "id": "RsxL84iCqmkUhKpwKYpPTn",
-      "agent": "openrouter/moonshotai/kimi-k2.5",
-      "test": "staffing_analysis",
-      "timestamp": "2026-04-23 11:44:33+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 1.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.8,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 1.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.8,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 1.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 1.0,
-        "score_file_exists_stderr": 0.0,
-        "score_numeric_mean": 1.0,
-        "score_numeric_stderr": 0.0,
-        "score_overall_mean": 0.8,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 1.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 1.0,
-            "csv_schema": 1.0,
-            "row_count": 1.0,
-            "numeric": 1.0,
-            "content": 1.0,
-            "overall": 1.0
-          },
-          "explanation": "All checks passed"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.8,
-            "methodology": 0.8,
-            "completeness": 0.8,
-            "code_quality": 0.8,
-            "overall": 0.8
-          },
-          "explanation": "The code correctly filters, excludes Cumbrian districts, renames Shepway, merges, computes both metrics, and outputs the expected files. One minor issue: median_temp_casual_pct uses pandas median which already excludes NaN by default, so that's fine. The NaN handling for temp_casual_pct (divide by zero) will naturally produce NaN via pandas, matching the spec. Code is clean and readable with appropriate comments."
-        }
-      },
-      "total_time": 127.0,
-      "input_tokens": 11337,
-      "output_tokens": 2477,
-      "total_cost": 0.0111,
-      "summary": "The agent performed exceptionally well on the technical implementation, correctly handling all data processing requirements including filtering, renaming districts, merging datasets, and computing the required metrics with proper NaN handling. The code was clean, well-commented, and produced output files that met all structural and content specifications perfectly. While the core functionality was flawless, there were minor areas for improvement in methodology and completeness that prevented a perfect score, though the overall execution demonstrated strong coding practices and attention to the task requirements."
-    },
-    {
-      "id": "2WhwC3Xt9bGPDfZ7iBgh2a",
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "csv_deduplicator",
-      "timestamp": "2026-04-23 11:48:00+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.1,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.1,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.1,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected address,duplicate_count,id,name,postcode,sic_code,status, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.1,
-            "architecture": 0.1,
-            "edge_cases": 0.1,
-            "code_quality": 0.1,
-            "overall": 0.1
-          },
-          "explanation": "The code files are completely corrupted \u2014 they appear as malformed nested lists of string fragments rather than valid Python source. None of the files would execute, and no deduplication logic could run. The task output (output.csv with 11 rows and summary.json) cannot be produced from this code."
-        }
-      },
-      "total_time": 672.0,
-      "input_tokens": 17653,
-      "output_tokens": 8021,
-      "total_cost": 0.0151,
-      "summary": "The agent completely failed to produce any working code for the CSV deduplication task, generating malformed files consisting of corrupted nested lists of string fragments instead of valid Python source code. As a result, no executable deduplication logic was created, and the required output files (output.csv and summary.json) were never generated. This represents a fundamental failure in code generation, suggesting the agent may have encountered a severe parsing or formatting issue during the task execution."
     },
     {
       "id": "84Gp65FBTgwAukq3Cd2cFN",
@@ -1780,6 +1618,111 @@
       "summary": "The agent performed exceptionally well on the core functionality, successfully implementing a government contracts scraper that correctly extracts, processes, and outputs all required data with proper formatting and sorting. The code demonstrates strong technical execution with clean architecture, good type hints, and effective use of helper functions for parsing dates and values. However, the implementation lacks robustness in error handling, particularly around missing fields that could cause crashes, and doesn't adequately handle edge cases like whitespace trimming beyond basic text extraction."
     },
     {
+      "id": "B8RFXsDwDkrRHkCxPxKYav",
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
+      "test": "staffing_analysis",
+      "timestamp": "2026-04-23 12:32:31+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.8,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.9,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_numeric_mean": 1.0,
+        "score_numeric_stderr": 0.0,
+        "score_overall_mean": 0.9,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "numeric": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.9,
+            "methodology": 0.9,
+            "completeness": 1.0,
+            "code_quality": 0.8,
+            "overall": 0.9
+          },
+          "explanation": "The code correctly implements all specified steps: filtering Shire Districts, excluding Cumbrian authorities, renaming Folkestone and Hythe, merging, computing both metrics, sorting, and producing both output files with proper rounding. The rename direction (NOMIS \u2192 QPSES name 'Shepway') matches the spec. Minor issues: the `import json` is placed mid-file rather than at the top, and an inner merge could silently drop rows if names mismatch (though a left merge with validation would be more defensive). Overall clean and correct."
+        }
+      },
+      "total_time": 227.0,
+      "input_tokens": 294159,
+      "output_tokens": 1300,
+      "total_cost": 0.021,
+      "summary": "The agent delivered a highly successful implementation that correctly executed all required data processing steps including filtering, merging, and metric calculations while producing properly formatted output files. The code demonstrated strong technical competence with accurate logic and complete functionality, though it had minor style issues such as misplaced imports and could have benefited from more defensive programming practices like validation during data merges. Overall, this represents excellent performance with only small refinements needed for code quality and robustness."
+    },
+    {
+      "id": "ff4Abh7q3e9aS3eyBdFczQ",
+      "agent": "openrouter/moonshotai/kimi-k2.6",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-23 12:34:05+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.9,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.9,
+        "score_correctness_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.9,
+        "score_overall_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.9,
+            "methodology": 0.9,
+            "completeness": 0.9,
+            "code_quality": 0.9,
+            "overall": 0.9
+          },
+          "explanation": "The code correctly handles all four questions with a single pass through the CSV, which is efficient. It properly distinguishes between spend_total (nominal) for Q2 and spend_total_real for the others. Minor nit: the task spec doesn't require rounding q1_value but the code rounds it, which is a harmless deviation. Potential issue if spend_total contains empty strings, but assuming clean data this works well."
+        }
+      },
+      "total_time": 102.0,
+      "input_tokens": 3940,
+      "output_tokens": 4626,
+      "total_cost": 0.0222,
+      "summary": "The agent delivered a highly effective solution that correctly implemented all requirements with efficient single-pass data processing and proper handling of both nominal and real spending values as specified. The code demonstrated good methodology and completeness, with only minor deviations like unnecessary rounding that didn't impact correctness. The solution shows strong technical execution with appropriate data handling assumptions, though it could be slightly more robust in handling potential data quality issues like empty strings."
+    },
+    {
       "id": "KcmujzrozBHGnHByM8t4i6",
       "agent": "anthropic/claude-opus-4-7",
       "test": "staffing_analysis",
@@ -1835,60 +1778,6 @@
       "output_tokens": 1139,
       "total_cost": 0.0634,
       "summary": "The agent delivered a technically sound solution that successfully completed all required data processing steps, including proper filtering, merging, and metric calculations, with correct output formatting. While the core functionality was implemented flawlessly, the code quality suffered from minor style issues such as compact imports and unclosed file handles that reduced readability. Overall, this represents strong performance with excellent technical execution but room for improvement in code organization and best practices."
-    },
-    {
-      "id": "mG5rqWBQX9mitj6XhxtqpJ",
-      "agent": "openrouter/moonshotai/kimi-k2.5",
-      "test": "csv_deduplicator",
-      "timestamp": "2026-04-23 11:31:37+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.9,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.9,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.85,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected address,duplicate_count,id,name,postcode,sic_code,status, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.9,
-            "architecture": 0.9,
-            "edge_cases": 0.7,
-            "code_quality": 0.9,
-            "overall": 0.85
-          },
-          "explanation": "The code correctly implements all specified requirements: postcode normalization for case-insensitive matching, proper merge rules with longest name/address, lowest id, status priority, and duplicate count. It's well-organized with clear separation of concerns across three functions. Edge cases like NaN values in name/address or empty groups aren't explicitly handled, but for the given input this works fine. The code is clean, well-documented with docstrings, uses type hints, and follows Pythonic conventions."
-        }
-      },
-      "total_time": 673.0,
-      "input_tokens": 5108,
-      "output_tokens": 1686,
-      "total_cost": 0.0057,
-      "summary": "The agent demonstrated strong understanding of the CSV deduplication requirements and produced high-quality, well-documented code with correct logic for postcode normalization, merge rules, and duplicate handling. However, the implementation completely failed in execution, as it did not generate the required output files (output.csv and summary.json) in the expected workspace directory. This represents a critical gap between code correctness and practical deliverable completion, suggesting the agent may have written the code but failed to actually run it or save the results properly."
     },
     {
       "id": "fri62WdyCXGiwevV27YBfZ",
@@ -1991,6 +1880,60 @@
       "output_tokens": 1811,
       "total_cost": 0.0356,
       "summary": "The agent delivered an excellent implementation of the CSV deduplication task, achieving perfect scores on all deterministic checks including file structure, schema, row count, and content accuracy. The code demonstrates strong software engineering practices with well-modularized functions, proper type hints, and comprehensive handling of edge cases like NaN values and case-insensitive postcodes. The only minor weakness identified was using a simple first-encountered approach for status tiebreaking rather than a more principled method, though this doesn't violate the specification."
+    },
+    {
+      "id": "RTuxBHTnbuX3kWS6YcEidn",
+      "agent": "openrouter/moonshotai/kimi-k2.6",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-23 12:35:50+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.9,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.9,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.825,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.9,
+            "robustness": 0.6,
+            "structure": 0.9,
+            "code_quality": 0.9,
+            "overall": 0.825
+          },
+          "explanation": "The scraper correctly extracts all required fields, parses dates and values, sorts by award_date, and produces both CSV and JSON outputs as specified. BeautifulSoup's get_text automatically decodes HTML entities, so that requirement is met. Robustness is moderate: there's no explicit handling for missing elements (would crash on None), no try/except around parsing, and no explicit handling for entities beyond the default parser behavior. Code is clean, well-organized with helper functions, and idiomatic."
+        }
+      },
+      "total_time": 74.0,
+      "input_tokens": 2608,
+      "output_tokens": 2216,
+      "total_cost": 0.0131,
+      "summary": "The agent delivered a fully functional government contracts scraper that met all core requirements, successfully extracting and formatting data with proper CSV schema, row counts, and content accuracy. The code demonstrated good structure and quality with clean helper functions and idiomatic Python, though it fell short on robustness due to lack of error handling for missing elements and parsing failures that could cause crashes. Overall, this represents a solid implementation that works correctly for well-formed data but needs defensive programming to handle edge cases gracefully."
     }
   ],
   "test_descriptions": {
@@ -3065,10 +3008,10 @@
       "total_cost_mean": 0.0119
     },
     {
-      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "agent": "openrouter/moonshotai/kimi-k2.6",
       "test": "csv_deduplicator",
       "run_count": 1,
-      "score_headline_value_mean": 0.0,
+      "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
@@ -3076,7 +3019,7 @@
       "score_code_quality_mean_std": 0.0,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
+      "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
@@ -3084,11 +3027,11 @@
       "score_correctness_mean_std": 0.0,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
       "score_csv_schema_accuracy_std": 0.0,
       "score_csv_schema_stderr_mean": 0.0,
       "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
@@ -3096,15 +3039,167 @@
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
       "score_row_count_accuracy_std": 0.0,
       "score_row_count_stderr_mean": 0.0,
       "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 673.0,
-      "total_cost_mean": 0.0057
+      "total_time_mean": 140.0,
+      "total_cost_mean": 0.0182
     },
     {
-      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "agent": "openrouter/moonshotai/kimi-k2.6",
+      "test": "culture_spending_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.9,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.9,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.9,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "total_time_mean": 102.0,
+      "total_cost_mean": 0.0222
+    },
+    {
+      "agent": "openrouter/moonshotai/kimi-k2.6",
+      "test": "gov_contracts_scraper",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.9,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.9,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.825,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0,
+      "total_time_mean": 74.0,
+      "total_cost_mean": 0.0131
+    },
+    {
+      "agent": "openrouter/moonshotai/kimi-k2.6",
+      "test": "staffing_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.9,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.9,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_numeric_mean_mean": 1.0,
+      "score_numeric_mean_std": 0.0,
+      "score_numeric_stderr_mean": 0.0,
+      "score_numeric_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.925,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0,
+      "total_time_mean": 91.0,
+      "total_cost_mean": 0.0194
+    },
+    {
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
+      "test": "csv_deduplicator",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.8,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.9,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.8,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0,
+      "total_time_mean": 341.0,
+      "total_cost_mean": 0.0039
+    },
+    {
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
       "test": "culture_spending_analysis",
       "run_count": 1,
       "score_headline_value_mean": 1.0,
@@ -3131,11 +3226,11 @@
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
-      "total_time_mean": 151.0,
-      "total_cost_mean": 0.0392
+      "total_time_mean": 332.0,
+      "total_cost_mean": 0.0452
     },
     {
-      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
       "test": "gov_contracts_scraper",
       "run_count": 1,
       "score_headline_value_mean": 1.0,
@@ -3150,7 +3245,7 @@
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.8,
+      "score_correctness_mean_mean": 0.7,
       "score_correctness_mean_std": 0.0,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
@@ -3162,7 +3257,7 @@
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.75,
+      "score_overall_mean_mean": 0.7,
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
@@ -3170,27 +3265,27 @@
       "score_row_count_accuracy_std": 0.0,
       "score_row_count_stderr_mean": 0.0,
       "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 191.0,
-      "total_cost_mean": 0.0115
+      "total_time_mean": 197.0,
+      "total_cost_mean": 0.0023
     },
     {
-      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "agent": "openrouter/qwen/qwen3-235b-a22b-2507",
       "test": "staffing_analysis",
-      "run_count": 2,
+      "run_count": 1,
       "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.85,
-      "score_code_quality_mean_std": 0.0707,
+      "score_code_quality_mean_mean": 0.8,
+      "score_code_quality_mean_std": 0.0,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
       "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.85,
-      "score_correctness_mean_std": 0.0707,
+      "score_correctness_mean_mean": 0.9,
+      "score_correctness_mean_std": 0.0,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
       "score_csv_schema_accuracy_mean": 1.0,
@@ -3205,168 +3300,16 @@
       "score_numeric_mean_std": 0.0,
       "score_numeric_stderr_mean": 0.0,
       "score_numeric_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.8625,
-      "score_overall_mean_std": 0.0884,
+      "score_overall_mean_mean": 0.9,
+      "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
       "score_row_count_accuracy_mean": 1.0,
       "score_row_count_accuracy_std": 0.0,
       "score_row_count_stderr_mean": 0.0,
       "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 550.0,
-      "total_cost_mean": 0.0111
-    },
-    {
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "csv_deduplicator",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.1,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.1,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
-      "score_csv_schema_accuracy_std": 0.0,
-      "score_csv_schema_stderr_mean": 0.0,
-      "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.1,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
-      "score_row_count_accuracy_std": 0.0,
-      "score_row_count_stderr_mean": 0.0,
-      "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 672.0,
-      "total_cost_mean": 0.0151
-    },
-    {
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "culture_spending_analysis",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.1,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.1,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.1,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "total_time_mean": 671.0,
-      "total_cost_mean": 0.0713
-    },
-    {
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "gov_contracts_scraper",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.1,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.1,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
-      "score_csv_schema_accuracy_std": 0.0,
-      "score_csv_schema_stderr_mean": 0.0,
-      "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.1,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
-      "score_row_count_accuracy_std": 0.0,
-      "score_row_count_stderr_mean": 0.0,
-      "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 672.0,
-      "total_cost_mean": 0.0365
-    },
-    {
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "staffing_analysis",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.1,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.1,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
-      "score_csv_schema_accuracy_std": 0.0,
-      "score_csv_schema_stderr_mean": 0.0,
-      "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_numeric_mean_mean": 0.0,
-      "score_numeric_mean_std": 0.0,
-      "score_numeric_stderr_mean": 0.0,
-      "score_numeric_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.15,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
-      "score_row_count_accuracy_std": 0.0,
-      "score_row_count_stderr_mean": 0.0,
-      "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 973.0,
-      "total_cost_mean": 0.1822
+      "total_time_mean": 227.0,
+      "total_cost_mean": 0.021
     }
   ]
 }

@@ -31,8 +31,8 @@
       "tier": "open-source"
     },
     {
-      "id": "openrouter/qwen/qwen3-coder",
-      "label": "Qwen3 Coder",
+      "id": "openrouter/qwen/qwen3-235b-a22b-2507",
+      "label": "Qwen3 235B",
       "tier": "open-source"
     },
     {
@@ -41,8 +41,8 @@
       "tier": "open-source"
     },
     {
-      "id": "openrouter/moonshotai/kimi-k2.5",
-      "label": "Kimi K2.5",
+      "id": "openrouter/moonshotai/kimi-k2.6",
+      "label": "Kimi K2.6",
       "tier": "open-source"
     }
   ]
