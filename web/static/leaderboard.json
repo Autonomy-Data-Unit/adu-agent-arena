@@ -1,12 +1,11 @@
 {
-  "generated_at": "2026-04-23T11:49:33.507742",
+  "generated_at": "2026-04-23T12:13:35.659715",
   "agents": [
     "anthropic/claude-opus-4-7",
     "anthropic/claude-sonnet-4-20250514",
     "openai/gpt-5.1-codex-mini",
     "openai/gpt-5.4",
     "openrouter/deepseek/deepseek-v3.2",
-    "openrouter/meta-llama/llama-4-maverick",
     "openrouter/mistralai/mistral-large-2512",
     "openrouter/moonshotai/kimi-k2.5",
     "openrouter/qwen/qwen3-coder"
@@ -19,58 +18,58 @@
   ],
   "runs": [
     {
-      "id": "WCSbay8HpGaQud8QK7Bygo",
+      "id": "Cq57QFQ69dbfmgzMbQZYJD",
       "agent": "openrouter/qwen/qwen3-coder",
-      "test": "csv_deduplicator",
-      "timestamp": "2026-04-23 10:10:27+00:00",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-23 11:09:29+00:00",
       "status": "success",
       "scores": {
         "score_headline_name": "deterministic_scorer",
         "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
+        "score_headline_value": 1.0,
         "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.1,
+        "score_code_quality_mean": 0.7,
         "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
+        "score_content_accuracy": 1.0,
         "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.1,
+        "score_correctness_mean": 0.8,
         "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
+        "score_csv_schema_accuracy": 1.0,
         "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
+        "score_file_exists_accuracy": 1.0,
         "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.1,
+        "score_overall_mean": 0.7,
         "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
+        "score_row_count_accuracy": 1.0,
         "score_row_count_stderr": 0.0
       },
       "score_details": {
         "deterministic_scorer": {
           "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "content": 0.0,
-            "overall": 0.0
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
           },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected address,duplicate_count,id,name,postcode,sic_code,status, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
+          "explanation": "All checks passed"
         },
         "judge_scorer": {
           "value": {
-            "correctness": 0.1,
-            "architecture": 0.1,
-            "edge_cases": 0.1,
-            "code_quality": 0.1,
-            "overall": 0.1
+            "correctness": 0.8,
+            "robustness": 0.5,
+            "structure": 0.8,
+            "code_quality": 0.7,
+            "overall": 0.7
           },
-          "explanation": "The submitted code is not valid Python \u2014 it appears to be a corrupted/mangled list of string fragments rather than an actual module. It cannot be executed, has no valid imports, function definitions, or proper syntax. Nothing in the task requirements is functionally delivered."
+          "explanation": "The main parse_contracts.py script correctly extracts fields, parses dates, computes duration, sorts by award_date, and writes both CSV and summary JSON as specified. However, it assumes specific tag types (h2, dd) which may be fragile, and get_text(strip=True) handles whitespace but HTML entity decoding relies on BeautifulSoup's default behavior (which does work). There's no handling of missing/malformed fields. The verify_results.py file appears corrupted/garbled, which is concerning but doesn't affect the main deliverable."
         }
       },
-      "total_time": 659.0,
-      "input_tokens": 6758,
-      "output_tokens": 968,
-      "total_cost": 0.0025,
-      "summary": "The agent completely failed to deliver a functional solution for the CSV deduplication task, producing corrupted, non-executable code that appears to be mangled string fragments rather than valid Python syntax. The submission lacks any proper imports, function definitions, or executable logic, resulting in no output files being generated and preventing any meaningful evaluation of the deduplication functionality. This represents a fundamental failure in code generation, suggesting either a severe issue with the agent's output formatting or a complete misunderstanding of the task requirements."
+      "total_time": 212.0,
+      "input_tokens": 140755,
+      "output_tokens": 5540,
+      "total_cost": 0.0365,
+      "summary": "The agent successfully completed the core requirements of the government contracts scraper, correctly extracting all required fields, formatting the output, and generating both CSV and summary files as specified. However, the implementation shows some fragility in its HTML parsing approach by hardcoding specific tag assumptions, and lacks robust error handling for missing or malformed data fields. Additionally, the verification script was corrupted during generation, indicating potential issues with the agent's file management or code organization capabilities."
     },
     {
       "id": "i6ohzbyaniFRFeTHSphT8d",
@@ -127,109 +126,52 @@
       "summary": "The agent delivered a highly functional CSV deduplication solution with excellent core functionality, producing the correct output file structure and implementing sound deduplication logic with proper grouping and merging rules. The code demonstrates strong architectural design with well-separated helper functions and a clean CLI interface, while appropriately handling most edge cases like empty values. Minor weaknesses include potential edge case handling gaps (such as status mode calculation on empty groups) and some ambiguity in tie-breaking logic for name/address length comparisons, though these don't significantly impact the overall robust implementation."
     },
     {
-      "id": "TRc63Pa6SMdeCnyaimZX7T",
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "staffing_analysis",
-      "timestamp": "2026-04-23 10:10:26+00:00",
+      "id": "8aZ3GSaotR9QnhYEDuRJDa",
+      "agent": "openrouter/qwen/qwen3-coder",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-23 11:09:29+00:00",
       "status": "success",
       "scores": {
         "score_headline_name": "deterministic_scorer",
         "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
+        "score_headline_value": 1.0,
         "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.0,
+        "score_code_quality_mean": 0.8,
         "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
+        "score_content_accuracy": 1.0,
         "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.0,
+        "score_correctness_mean": 0.9,
         "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
+        "score_file_exists_accuracy": 1.0,
         "score_file_exists_stderr": 0.0,
-        "score_numeric_mean": 0.0,
-        "score_numeric_stderr": 0.0,
-        "score_overall_mean": 0.0,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
-        "score_row_count_stderr": 0.0
+        "score_overall_mean": 0.9,
+        "score_overall_stderr": 0.0
       },
       "score_details": {
         "deterministic_scorer": {
           "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "numeric": 0.0,
-            "content": 0.0,
-            "overall": 0.0
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
           },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected Auth Name,Temporary/Casual,Total Headcount,employees_per_1000,population,temp_casual_pct, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Numeric check failed for employees_per_1000: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
+          "explanation": "All checks passed"
         },
         "judge_scorer": {
           "value": {
-            "correctness": 0.0,
-            "methodology": 0.0,
-            "completeness": 0.0,
-            "code_quality": 0.0,
-            "overall": 0.0
+            "correctness": 0.9,
+            "methodology": 0.9,
+            "completeness": 1.0,
+            "code_quality": 0.8,
+            "overall": 0.9
           },
-          "explanation": "No code files found in the sandbox"
+          "explanation": "The code correctly addresses all four questions using appropriate pandas operations: idxmax for Q1, filtering on nominal column for Q2, sum aggregation for Q3, and an inner merge for Q4 to ensure LAs are present in both years. Types are properly cast for JSON serialization and the output structure matches the spec. Minor improvements could include handling potential NaN values or duplicate la_names across years, but overall it's clean and correct."
         }
       },
-      "total_time": 7.0,
-      "summary": "The agent completely failed to execute the staffing analysis task, producing no code files, output CSV, or summary JSON as required. The fundamental issue appears to be that the agent did not generate or run any code whatsoever, as evidenced by the judge finding no code files in the sandbox and all deterministic checks failing due to missing output files. This represents a total breakdown in task execution rather than issues with code quality or analytical approach."
-    },
-    {
-      "id": "ngUsEPMjpxp3eqHLEtEPGJ",
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "csv_deduplicator",
-      "timestamp": "2026-04-23 10:10:26+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.0,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.0,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.0,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected address,duplicate_count,id,name,postcode,sic_code,status, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.0,
-            "architecture": 0.0,
-            "edge_cases": 0.0,
-            "code_quality": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "No code files found in the sandbox"
-        }
-      },
-      "total_time": 6.0,
-      "summary": "The agent completely failed to deliver any working solution for the CSV deduplication task, producing no code files, output CSV, or summary JSON as required. The benchmark indicates a total breakdown in task execution, with the agent failing to generate even basic file outputs or demonstrate any understanding of the deduplication requirements. This represents a fundamental failure where the agent did not engage meaningfully with the task at all."
+      "total_time": 88.0,
+      "input_tokens": 36419,
+      "output_tokens": 1941,
+      "total_cost": 0.01,
+      "summary": "The agent performed exceptionally well on this culture spending analysis task, successfully implementing all required pandas operations with correct methodology and producing the expected output format. The code demonstrates solid technical competence with appropriate data manipulation techniques like filtering, aggregation, and inner joins, while properly handling type casting for JSON serialization. The only minor weakness noted was in code quality, where additional robustness measures like NaN handling and duplicate data checks could have been implemented, but the core solution was clean and functionally correct."
     },
     {
       "id": "kUjMkpTX3yVcZ9cN68QdJz",
@@ -338,57 +280,6 @@
       "output_tokens": 1430,
       "total_cost": 0.0129,
       "summary": "The agent successfully implemented a functional government contracts scraper that meets all basic requirements, correctly extracting and formatting data while producing the expected output structure and content. However, the implementation lacks robustness with insufficient error handling for missing fields that could cause crashes, and contains some inefficient code patterns like redundant date parsing in the duration calculation. While the code is generally clean and well-organized, these robustness and efficiency issues prevent it from being a production-ready solution."
-    },
-    {
-      "id": "5hNu6uyekLCSQuBxJmJudQ",
-      "agent": "openrouter/qwen/qwen3-coder",
-      "test": "gov_contracts_scraper",
-      "timestamp": "2026-04-23 10:10:27+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.1,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.1,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.1,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected award_date,contract_id,duration_days,end_date,organisation,start_date,supplier,title,value_gbp, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.1,
-            "robustness": 0.1,
-            "structure": 0.1,
-            "code_quality": 0.1,
-            "overall": 0.1
-          },
-          "explanation": "The submitted code is not valid Python \u2014 it appears to be a corrupted/garbled representation of a script as nested lists and fragmented strings. It cannot be executed, so nothing is extracted, no CSV or JSON is produced, and no requirements are met."
-        }
-      },
-      "total_time": 672.0,
-      "summary": "The agent completely failed to generate valid Python code for the government contracts scraper task, instead producing corrupted output that appeared as nested lists and fragmented strings. This fundamental code generation failure prevented the script from executing at all, resulting in no output files being created and none of the scraping requirements being met. The agent appears to have encountered a serious malfunction in its code synthesis process rather than simply making implementation errors."
     },
     {
       "id": "n3QKndmrQiR4iQmHWhvzQn",
@@ -556,54 +447,6 @@
       "summary": "The agent successfully implemented the core CSV deduplication logic with perfect file structure and schema compliance, but struggled with implementation quality and edge case handling. While the grouping, merging rules, and summary generation worked correctly, the code suffered from convoluted name/address selection logic, potential data type issues with duplicate counts, and column leakage problems. The deterministic check failure suggests a specific output formatting issue with the duplicates count, indicating attention to detail problems despite achieving the main functional requirements."
     },
     {
-      "id": "H8nyUfTAn9bfEU8m7Z4JAt",
-      "agent": "openrouter/mistralai/mistral-large-2512",
-      "test": "culture_spending_analysis",
-      "timestamp": "2026-04-23 10:10:26+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.0,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.0,
-        "score_correctness_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.0,
-        "score_overall_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/answers.json; Could not read /workspace/answers.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.0,
-            "methodology": 0.0,
-            "completeness": 0.0,
-            "code_quality": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "No code files found in the sandbox"
-        }
-      },
-      "total_time": 322.0,
-      "input_tokens": 473,
-      "output_tokens": 14,
-      "total_cost": 0.0003,
-      "summary": "The agent completely failed to produce any deliverables for the culture spending analysis task, as evidenced by the missing answers.json file and absence of any code files in the workspace. This represents a fundamental execution failure where the agent either didn't understand the task requirements or encountered a critical error that prevented it from generating any output whatsoever. The total absence of work product suggests a systemic issue with task comprehension or file generation rather than merely incorrect analysis."
-    },
-    {
       "id": "4Wss2cLDkX4nQdpBcTSWgg",
       "agent": "openrouter/deepseek/deepseek-v3.2",
       "test": "staffing_analysis",
@@ -661,52 +504,58 @@
       "summary": "The agent delivered an excellent performance on this staffing analysis task, successfully implementing all required data processing steps including filtering, merging, calculations, and output generation with perfect structural compliance. The code demonstrated strong quality with proper validation checks, clear documentation, and appropriate handling of edge cases like NaN values through infinity replacement. The only minor weaknesses were potential silent row dropping during merges and some redundant rounding operations, but these didn't materially impact the overall robust and well-structured solution."
     },
     {
-      "id": "M62XTV2ga9Cy7PcVTo3dgo",
+      "id": "NkXPfChtSf7e48mascoW43",
       "agent": "openrouter/qwen/qwen3-coder",
-      "test": "culture_spending_analysis",
-      "timestamp": "2026-04-23 10:10:27+00:00",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-23 11:09:29+00:00",
       "status": "success",
       "scores": {
         "score_headline_name": "deterministic_scorer",
         "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
+        "score_headline_value": 1.0,
         "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.0,
+        "score_code_quality_mean": 0.9,
         "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
+        "score_content_accuracy": 1.0,
         "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.0,
+        "score_correctness_mean": 0.9,
         "score_correctness_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
         "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.0,
-        "score_overall_stderr": 0.0
+        "score_overall_mean": 0.825,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
       },
       "score_details": {
         "deterministic_scorer": {
           "value": {
-            "file_exists": 0.0,
-            "content": 0.0,
-            "overall": 0.0
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
           },
-          "explanation": "Missing file: /workspace/answers.json; Could not read /workspace/answers.json for content check"
+          "explanation": "All checks passed"
         },
         "judge_scorer": {
           "value": {
-            "correctness": 0.0,
-            "methodology": 0.0,
-            "completeness": 0.0,
-            "code_quality": 0.0,
-            "overall": 0.0
+            "correctness": 0.9,
+            "architecture": 0.8,
+            "edge_cases": 0.7,
+            "code_quality": 0.9,
+            "overall": 0.825
           },
-          "explanation": "No code files found in the sandbox"
+          "explanation": "The code correctly implements all specified merge and matching rules: grouping by lowercased postcode and sic_code, selecting min id, longest name/address, Active-priority status, and duplicate_count. Output sorting, CSV/JSON writing, and summary counts all match the spec. Minor issues: groupby uses the lowercased postcode as the key but preserves the original postcode via iloc[0] (good), though case variations in the stored postcode aren't normalized. Edge cases like NaN in name/address or ties in status most_common aren't explicitly handled, but are acceptable for this task. Code is clean, modular, and well-documented."
         }
       },
-      "total_time": 160.0,
-      "input_tokens": 653649,
-      "output_tokens": 363,
-      "total_cost": 0.1442,
-      "summary": "The agent completely failed to produce any output for this task, as evidenced by the missing answers.json file and absence of any code files in the workspace. This represents a total execution failure where the agent likely encountered an error early in the process or failed to understand the task requirements entirely. The lack of any deliverables suggests either a fundamental breakdown in the agent's ability to process the task or a critical error that prevented any meaningful work from being completed."
+      "total_time": 117.0,
+      "input_tokens": 32980,
+      "output_tokens": 1817,
+      "total_cost": 0.0092,
+      "summary": "The agent successfully implemented a fully functional CSV deduplicator that met all core requirements, correctly handling merge rules, grouping logic, and output formatting with clean, well-documented code. While the implementation handled the main specifications perfectly, it fell short on some edge cases like explicit handling of NaN values and tie-breaking scenarios, and had minor architectural considerations around case normalization of stored postcodes. Overall, this represents a strong implementation that would work reliably in practice despite not being bulletproof against all possible edge conditions."
     },
     {
       "id": "heiNLyomZ3uZUkeuGP23U4",
@@ -809,57 +658,6 @@
       "output_tokens": 723,
       "total_cost": 0.0474,
       "summary": "The agent delivered a strong performance with correct methodologies for all four analysis questions, including proper use of pandas functions and appropriate handling of multi-year data comparisons. The code successfully implemented sound analytical approaches like using idxmax for finding maximums and set intersections for cross-year analysis. However, there were minor code quality issues around resource management, specifically not using context managers for file operations, which prevented the solution from achieving full marks despite being functionally correct and complete."
-    },
-    {
-      "id": "YV56sWFzrKKkTjWe5oENeq",
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "gov_contracts_scraper",
-      "timestamp": "2026-04-23 10:10:26+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.0,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.0,
-        "score_correctness_stderr": 0.0,
-        "score_csv_schema_accuracy": 0.0,
-        "score_csv_schema_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.0,
-        "score_overall_stderr": 0.0,
-        "score_row_count_accuracy": 0.0,
-        "score_row_count_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "csv_schema": 0.0,
-            "row_count": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/output.csv; Missing file: /workspace/summary.json; CSV schema mismatch: expected award_date,contract_id,duration_days,end_date,organisation,start_date,supplier,title,value_gbp, got Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Row count check failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 873, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 300, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1645, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1904, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pandas/io/common.py\", line 926, in get_handle\n    handle = open(\n             ^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/output.csv'; Could not read /workspace/summary.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.0,
-            "robustness": 0.0,
-            "structure": 0.0,
-            "code_quality": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "No code files found in the sandbox"
-        }
-      },
-      "total_time": 6.0,
-      "summary": "The agent completely failed to execute the government contracts scraping task, producing no code files, output CSV, or summary JSON as required. The benchmark indicates a fundamental breakdown where the agent either didn't understand the task requirements or encountered critical errors that prevented any code generation or execution. This represents a total system failure rather than partial implementation issues, as no deliverables were produced despite the clear expectation for structured data output."
     },
     {
       "id": "oABku2YVrGSwiTc6Rz5UQ9",
@@ -1283,6 +1081,54 @@
       "output_tokens": 4252,
       "total_cost": 0.0062,
       "summary": "The agent delivered an excellent implementation that perfectly met all the core requirements for CSV deduplication, correctly implementing complex matching rules like case-insensitive postcode matching and sophisticated merging logic for names, addresses, and status priorities. The code demonstrated strong architectural design with well-modularized functions and handled most edge cases appropriately, though there were minor issues with data type handling (specifically sic_code string coercion potentially affecting CSV representation) and some unnecessary additions like the verify.py script. Overall, this represents a highly competent solution that successfully balanced correctness, code organization, and practical functionality."
+    },
+    {
+      "id": "Mdi83ZL2kJUGe9cfBN3k4M",
+      "agent": "openrouter/mistralai/mistral-large-2512",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-23 11:09:29+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.8,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.8,
+        "score_correctness_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.8250000000000001,
+        "score_overall_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.8,
+            "methodology": 0.8,
+            "completeness": 0.9,
+            "code_quality": 0.8,
+            "overall": 0.8250000000000001
+          },
+          "explanation": "The code correctly addresses all four questions with appropriate filtering, merging, and aggregation logic. One minor issue: q1_value will be a numpy float which json.dump handles but isn't explicitly converted, and there's no handling of potential NaN values from coercion that could affect Q2 (NaN != 0, so likely fine). The merge for Q4 correctly handles the 'present in both years' constraint. Code is clean, readable, and well-commented."
+        }
+      },
+      "total_time": 33.0,
+      "input_tokens": 8299,
+      "output_tokens": 990,
+      "total_cost": 0.006,
+      "summary": "The agent performed very well on this culture spending analysis task, successfully implementing all required functionality with correct data filtering, merging, and aggregation logic that addressed each of the four questions. The code demonstrated good structure and readability with appropriate comments, though there were minor technical oversights around data type handling (numpy float serialization) and potential NaN value management from data coercion. Overall, the solution was functionally sound and met the task requirements effectively, with only small refinements needed for robustness."
     },
     {
       "id": "PFcWLVQXwgGFtyhc6SJJhH",
@@ -1763,51 +1609,6 @@
       "output_tokens": 2507,
       "total_cost": 0.0082,
       "summary": "The agent successfully implemented a functional government contracts scraper that meets all basic requirements, correctly extracting and formatting data while producing the expected output files. The code demonstrates good structure and quality with clean, idiomatic implementation. However, the solution lacks robustness in error handling, missing safeguards for malformed data, missing fields, and parsing failures, and contains a minor specification deviation by rounding the average value to an integer rather than preserving decimal precision."
-    },
-    {
-      "id": "PdxvCXn9oU5eysbkdx49RW",
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "culture_spending_analysis",
-      "timestamp": "2026-04-23 10:10:26+00:00",
-      "status": "success",
-      "scores": {
-        "score_headline_name": "deterministic_scorer",
-        "score_headline_metric": "accuracy",
-        "score_headline_value": 0.0,
-        "score_headline_stderr": 0.0,
-        "score_code_quality_mean": 0.0,
-        "score_code_quality_stderr": 0.0,
-        "score_content_accuracy": 0.0,
-        "score_content_stderr": 0.0,
-        "score_correctness_mean": 0.0,
-        "score_correctness_stderr": 0.0,
-        "score_file_exists_accuracy": 0.0,
-        "score_file_exists_stderr": 0.0,
-        "score_overall_mean": 0.0,
-        "score_overall_stderr": 0.0
-      },
-      "score_details": {
-        "deterministic_scorer": {
-          "value": {
-            "file_exists": 0.0,
-            "content": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "Missing file: /workspace/answers.json; Could not read /workspace/answers.json for content check"
-        },
-        "judge_scorer": {
-          "value": {
-            "correctness": 0.0,
-            "methodology": 0.0,
-            "completeness": 0.0,
-            "code_quality": 0.0,
-            "overall": 0.0
-          },
-          "explanation": "No code files found in the sandbox"
-        }
-      },
-      "total_time": 6.0,
-      "summary": "The agent completely failed to produce any deliverables for this culture spending analysis task, with no code files or required output files (answers.json) generated in the workspace. This represents a fundamental execution failure where the agent either did not understand the task requirements or encountered a critical error that prevented it from writing any files to the sandbox environment. The absence of any work product suggests the agent may have failed to initialize properly or execute its intended workflow."
     },
     {
       "id": "kuyjUKzizdnQoYFVoEWsmF",
@@ -2682,154 +2483,6 @@
       "total_cost_mean": 0.016
     },
     {
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "csv_deduplicator",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.0,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.0,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
-      "score_csv_schema_accuracy_std": 0.0,
-      "score_csv_schema_stderr_mean": 0.0,
-      "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.0,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
-      "score_row_count_accuracy_std": 0.0,
-      "score_row_count_stderr_mean": 0.0,
-      "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 6.0
-    },
-    {
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "culture_spending_analysis",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.0,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.0,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.0,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "total_time_mean": 6.0
-    },
-    {
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "gov_contracts_scraper",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.0,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.0,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
-      "score_csv_schema_accuracy_std": 0.0,
-      "score_csv_schema_stderr_mean": 0.0,
-      "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.0,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
-      "score_row_count_accuracy_std": 0.0,
-      "score_row_count_stderr_mean": 0.0,
-      "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 6.0
-    },
-    {
-      "agent": "openrouter/meta-llama/llama-4-maverick",
-      "test": "staffing_analysis",
-      "run_count": 1,
-      "score_headline_value_mean": 0.0,
-      "score_headline_value_std": 0.0,
-      "score_headline_stderr_mean": 0.0,
-      "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.0,
-      "score_code_quality_mean_std": 0.0,
-      "score_code_quality_stderr_mean": 0.0,
-      "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
-      "score_content_accuracy_std": 0.0,
-      "score_content_stderr_mean": 0.0,
-      "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.0,
-      "score_correctness_mean_std": 0.0,
-      "score_correctness_stderr_mean": 0.0,
-      "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
-      "score_csv_schema_accuracy_std": 0.0,
-      "score_csv_schema_stderr_mean": 0.0,
-      "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
-      "score_file_exists_accuracy_std": 0.0,
-      "score_file_exists_stderr_mean": 0.0,
-      "score_file_exists_stderr_std": 0.0,
-      "score_numeric_mean_mean": 0.0,
-      "score_numeric_mean_std": 0.0,
-      "score_numeric_stderr_mean": 0.0,
-      "score_numeric_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.0,
-      "score_overall_mean_std": 0.0,
-      "score_overall_stderr_mean": 0.0,
-      "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
-      "score_row_count_accuracy_std": 0.0,
-      "score_row_count_stderr_mean": 0.0,
-      "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 7.0
-    },
-    {
       "agent": "openrouter/mistralai/mistral-large-2512",
       "test": "csv_deduplicator",
       "run_count": 1,
@@ -2871,32 +2524,32 @@
       "agent": "openrouter/mistralai/mistral-large-2512",
       "test": "culture_spending_analysis",
       "run_count": 1,
-      "score_headline_value_mean": 0.0,
+      "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.0,
+      "score_code_quality_mean_mean": 0.8,
       "score_code_quality_mean_std": 0.0,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
+      "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.0,
+      "score_correctness_mean_mean": 0.8,
       "score_correctness_mean_std": 0.0,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.0,
+      "score_overall_mean_mean": 0.825,
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
-      "total_time_mean": 322.0,
-      "total_cost_mean": 0.0003
+      "total_time_mean": 33.0,
+      "total_cost_mean": 0.006
     },
     {
       "agent": "openrouter/mistralai/mistral-large-2512",
@@ -3136,109 +2789,110 @@
       "agent": "openrouter/qwen/qwen3-coder",
       "test": "csv_deduplicator",
       "run_count": 1,
-      "score_headline_value_mean": 0.0,
+      "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.1,
+      "score_code_quality_mean_mean": 0.9,
       "score_code_quality_mean_std": 0.0,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
+      "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.1,
+      "score_correctness_mean_mean": 0.9,
       "score_correctness_mean_std": 0.0,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
       "score_csv_schema_accuracy_std": 0.0,
       "score_csv_schema_stderr_mean": 0.0,
       "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.1,
+      "score_overall_mean_mean": 0.825,
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
       "score_row_count_accuracy_std": 0.0,
       "score_row_count_stderr_mean": 0.0,
       "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 659.0,
-      "total_cost_mean": 0.0025
+      "total_time_mean": 117.0,
+      "total_cost_mean": 0.0092
     },
     {
       "agent": "openrouter/qwen/qwen3-coder",
       "test": "culture_spending_analysis",
       "run_count": 1,
-      "score_headline_value_mean": 0.0,
+      "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.0,
+      "score_code_quality_mean_mean": 0.8,
       "score_code_quality_mean_std": 0.0,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
+      "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.0,
+      "score_correctness_mean_mean": 0.9,
       "score_correctness_mean_std": 0.0,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.0,
+      "score_overall_mean_mean": 0.9,
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
-      "total_time_mean": 160.0,
-      "total_cost_mean": 0.1442
+      "total_time_mean": 88.0,
+      "total_cost_mean": 0.01
     },
     {
       "agent": "openrouter/qwen/qwen3-coder",
       "test": "gov_contracts_scraper",
       "run_count": 1,
-      "score_headline_value_mean": 0.0,
+      "score_headline_value_mean": 1.0,
       "score_headline_value_std": 0.0,
       "score_headline_stderr_mean": 0.0,
       "score_headline_stderr_std": 0.0,
-      "score_code_quality_mean_mean": 0.1,
+      "score_code_quality_mean_mean": 0.7,
       "score_code_quality_mean_std": 0.0,
       "score_code_quality_stderr_mean": 0.0,
       "score_code_quality_stderr_std": 0.0,
-      "score_content_accuracy_mean": 0.0,
+      "score_content_accuracy_mean": 1.0,
       "score_content_accuracy_std": 0.0,
       "score_content_stderr_mean": 0.0,
       "score_content_stderr_std": 0.0,
-      "score_correctness_mean_mean": 0.1,
+      "score_correctness_mean_mean": 0.8,
       "score_correctness_mean_std": 0.0,
       "score_correctness_stderr_mean": 0.0,
       "score_correctness_stderr_std": 0.0,
-      "score_csv_schema_accuracy_mean": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
       "score_csv_schema_accuracy_std": 0.0,
       "score_csv_schema_stderr_mean": 0.0,
       "score_csv_schema_stderr_std": 0.0,
-      "score_file_exists_accuracy_mean": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
       "score_file_exists_accuracy_std": 0.0,
       "score_file_exists_stderr_mean": 0.0,
       "score_file_exists_stderr_std": 0.0,
-      "score_overall_mean_mean": 0.1,
+      "score_overall_mean_mean": 0.7,
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,
-      "score_row_count_accuracy_mean": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
       "score_row_count_accuracy_std": 0.0,
       "score_row_count_stderr_mean": 0.0,
       "score_row_count_stderr_std": 0.0,
-      "total_time_mean": 672.0
+      "total_time_mean": 212.0,
+      "total_cost_mean": 0.0365
     },
     {
       "agent": "openrouter/qwen/qwen3-coder",

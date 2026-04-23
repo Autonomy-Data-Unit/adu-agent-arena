@@ -31,11 +31,6 @@
       "tier": "open-source"
     },
     {
-      "id": "openrouter/meta-llama/llama-4-maverick",
-      "label": "Llama 4 Maverick",
-      "tier": "open-source"
-    },
-    {
       "id": "openrouter/mistralai/mistral-large-2512",
       "label": "Mistral Large 3",
       "tier": "open-source"
