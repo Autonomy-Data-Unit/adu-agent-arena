@@ -20,7 +20,6 @@ ARCHETYPE_MAP = {
 
 def extract_session_cost(sessions_dir: Path, model: str, task_name: str) -> dict | None:
     """Extract token usage and cost from a pi session JSONL file."""
-    # Build the expected session filename
     if "/" in model:
         provider, model_id = model.split("/", 1)
     else:
@@ -28,10 +27,13 @@ def extract_session_cost(sessions_dir: Path, model: str, task_name: str) -> dict
 
     archetype = ARCHETYPE_MAP.get(task_name, "unknown")
     safe_model_id = model_id.replace("/", "_")
-    session_file = sessions_dir / f"{provider}_{safe_model_id}_{archetype}_1.jsonl"
 
-    if not session_file.exists():
+    # Find matching session files (glob for any timestamp suffix)
+    pattern = f"{provider}_{safe_model_id}_{archetype}_*.jsonl"
+    matches = sorted(sessions_dir.glob(pattern))
+    if not matches:
         return None
+    session_file = matches[-1]  # latest by filename (timestamp sorted)
 
     total_input = 0
     total_output = 0

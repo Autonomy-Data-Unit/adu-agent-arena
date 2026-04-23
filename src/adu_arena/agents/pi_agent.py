@@ -108,12 +108,13 @@ def pi_coding_agent(
         elif not result.success:
             assistant_text = f"ERROR (exit {result.returncode}): {result.stderr}"
 
-        # Save full session to disk
+        # Save full session to disk with unique timestamp
         SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
         task_name = state.metadata.get("archetype", "unknown")
-        sample_id = state.sample_id or "0"
         safe_model = model.replace("/", "_")
-        session_file = SESSIONS_DIR / f"{provider}_{safe_model}_{task_name}_{sample_id}.jsonl"
+        from datetime import datetime
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        session_file = SESSIONS_DIR / f"{provider}_{safe_model}_{task_name}_{ts}.jsonl"
         with open(session_file, "w") as f:
             for event in session_events:
                 f.write(json.dumps(event) + "\n")
