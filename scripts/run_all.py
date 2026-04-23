@@ -38,7 +38,7 @@ def get_completed_pairs(log_dir: str) -> set[tuple[str, str]]:
     if not log_path.exists():
         return completed
 
-    for log_file in log_path.glob("*.eval"):
+    for log_file in log_path.rglob("*.eval"):
         try:
             log = read_eval_log(str(log_file), header_only=True)
             if log.status == "success":
@@ -143,17 +143,27 @@ def main() -> None:
     task_instances = [tasks[name]() for name in sorted(plan_tasks)]
     model_list = sorted(plan_models)
 
-    log_dir = Path(args.log_dir)
-    log_dir.mkdir(parents=True, exist_ok=True)
+    from datetime import datetime
+    run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_log_dir = Path(args.log_dir) / f"run_{run_id}"
+    run_log_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Running {len(model_list)} models x {len(task_instances)} tests with --parallel {args.parallel}\n")
+    print(f"Running {len(model_list)} models x {len(task_instances)} tests with --parallel {args.parallel}")
+    print(f"Logs: {run_log_dir}\n")
 
     success, logs = eval_set(
         tasks=task_instances,
         model=model_list,
-        log_dir=args.log_dir,
+        log_dir=str(run_log_dir),
         max_tasks=args.parallel,
     )
+
+    # Copy logs to parent dir so export_leaderboard can find them all
+    for log_file in run_log_dir.glob("*.eval"):
+        dest = Path(args.log_dir) / log_file.name
+        if not dest.exists():
+            import shutil
+            shutil.copy2(log_file, dest)
 
     succeeded = sum(1 for l in logs if l.status == "success")
     failed = sum(1 for l in logs if l.status != "success")
