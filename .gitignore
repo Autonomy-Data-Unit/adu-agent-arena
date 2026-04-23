@@ -14,6 +14,10 @@ sessions/
 # Preserved agent workspaces (tar.gz archives)
 workspaces/
 
+# Generated data (rebuild with export_leaderboard.py + generate_summaries.py)
+summaries/
+web/static/leaderboard.json
+
 # Node
 node_modules/
 web/.svelte-kit/
