@@ -5,6 +5,7 @@
 	let { data: pageData } = $props();
 	let data: Leaderboard = $state(pageData.leaderboard);
 	let selectedAgent: string | null = $state(null);
+	let expandedTest: string | null = $state(null);
 	let selectedDetail: { run: Run; scorer: string; detail: ScoreDetail } | null = $state(null);
 	let selectedTestDesc: string | null = $state(null);
 	let sortColumn: string = $state('avg');
@@ -133,14 +134,44 @@
 		return total;
 	}
 
-	function getAgentRuns(agent: string): Run[] {
+	function getAgentRuns(agent: string, test?: string): Run[] {
 		if (!data) return [];
 		return data.runs
-			.filter((r) => r.agent === agent)
+			.filter((r) => r.agent === agent && (!test || r.test === test))
 			.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 	}
 
-	let selectedRuns = $derived(selectedAgent ? getAgentRuns(selectedAgent) : []);
+	interface TestSummary {
+		test: string;
+		runs: Run[];
+		avgScore: number | null;
+		avgCost: number | null;
+		avgTime: number | null;
+	}
+
+	function getAgentTestSummaries(agent: string): TestSummary[] {
+		if (!data) return [];
+		const summaries: TestSummary[] = [];
+		for (const test of data.tests) {
+			const runs = getAgentRuns(agent, test);
+			if (runs.length === 0) continue;
+
+			const scores = runs.map(r => getRunOverallScore(r)).filter((s): s is number => s !== null);
+			const costs = runs.map(r => r.total_cost).filter((c): c is number => c !== undefined && c !== null);
+			const times = runs.map(r => r.total_time).filter((t): t is number => t !== undefined && t !== null);
+
+			summaries.push({
+				test,
+				runs,
+				avgScore: scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : null,
+				avgCost: costs.length > 0 ? costs.reduce((a, b) => a + b, 0) / costs.length : null,
+				avgTime: times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : null,
+			});
+		}
+		return summaries;
+	}
+
+	let agentTestSummaries = $derived(selectedAgent ? getAgentTestSummaries(selectedAgent) : []);
 
 	function scoreColor(val: number): string {
 		if (val >= 0.9) return '#3fb950';
@@ -268,52 +299,64 @@
 		</div>
 	</section>
 
-	{#if selectedAgent && selectedRuns.length > 0}
+	{#if selectedAgent && agentTestSummaries.length > 0}
 		<section class="detail">
-			<h2>Runs for {selectedAgent}</h2>
+			<h2>{selectedAgent}</h2>
 			<div class="table-wrap">
 				<table>
 					<thead>
 						<tr>
 							<th>Test</th>
+							<th>Avg Score</th>
+							<th>Cost</th>
 							<th>Time</th>
-							<th>Status</th>
-							<th>Avg</th>
-							<th>Scores</th>
-							<th>Timestamp</th>
+							<th>Runs</th>
 						</tr>
 					</thead>
 					<tbody>
-						{#each selectedRuns as run}
-							<tr>
-								<td>{run.test}</td>
-								<td class="time">{formatTime(run.total_time)}</td>
-								<td class="status" class:pass={run.status === 'success'}>{run.status}</td>
-								<td class="score avg" style:color={getRunOverallScore(run) !== null ? scoreColor(getRunOverallScore(run)!) : undefined}>
-									{getRunOverallScore(run) !== null ? formatScore(getRunOverallScore(run)) : '-'}
+						{#each agentTestSummaries as summary}
+							<tr
+								class="test-summary-row"
+								class:expanded={expandedTest === summary.test}
+								onclick={() => expandedTest = expandedTest === summary.test ? null : summary.test}
+							>
+								<td class="agent-name">{summary.test}</td>
+								<td class="score avg" style:color={summary.avgScore !== null ? scoreColor(summary.avgScore) : undefined}>
+									{summary.avgScore !== null ? formatScore(summary.avgScore) : '-'}
 								</td>
-								<td class="scores-cell">
-									{#each getScorersForRun(run) as scorer}
-										{#each Object.entries(scorer.scores) as [key, val]}
-											<button
-												class="score-tag"
-												class:judge={scorer.type === 'judge'}
-												class:clickable={!!scorer.detail}
-												style:color={typeof val === 'number' ? scoreColor(val) : undefined}
-												onclick={(e) => { e.stopPropagation(); if (scorer.detail) openDetail(run, scorer.name, scorer.detail); }}
-											>
-												<span class="score-type-label">{scorer.type === 'judge' ? 'J' : 'D'}</span>
-												{key}: {typeof val === 'number' ? formatScore(val) : val}
-											</button>
-										{/each}
-									{/each}
-								</td>
-								<td class="timestamp">{new Date(run.timestamp).toLocaleString()}</td>
+								<td class="cost">{formatCost(summary.avgCost)}</td>
+								<td class="time">{formatTime(summary.avgTime)}</td>
+								<td class="runs">{summary.runs.length}</td>
 							</tr>
-							{#if run.summary}
-								<tr class="summary-row">
-									<td colspan="7" class="summary-cell">{run.summary}</td>
-								</tr>
+							{#if expandedTest === summary.test}
+								{#each summary.runs as run}
+									<tr class="run-detail-row">
+										<td class="scores-cell" colspan="2">
+											{#each getScorersForRun(run) as scorer}
+												{#each Object.entries(scorer.scores) as [key, val]}
+													<button
+														class="score-tag"
+														class:judge={scorer.type === 'judge'}
+														class:clickable={!!scorer.detail}
+														style:color={typeof val === 'number' ? scoreColor(val) : undefined}
+														onclick={(e) => { e.stopPropagation(); if (scorer.detail) openDetail(run, scorer.name, scorer.detail); }}
+													>
+														<span class="score-type-label">{scorer.type === 'judge' ? 'J' : 'D'}</span>
+														{key}: {typeof val === 'number' ? formatScore(val) : val}
+													</button>
+												{/each}
+											{/each}
+										</td>
+										<td class="cost">{formatCost(run.total_cost)}</td>
+										<td class="time">{formatTime(run.total_time)}</td>
+										<td class="timestamp">{new Date(run.timestamp).toLocaleString()}</td>
+									</tr>
+									{#if run.summary}
+										<tr class="summary-row">
+											<td colspan="5" class="summary-cell">{run.summary}</td>
+										</tr>
+									{/if}
+								{/each}
 							{/if}
 						{/each}
 					</tbody>
@@ -572,12 +615,29 @@
 		white-space: nowrap;
 	}
 
+	.test-summary-row {
+		cursor: pointer;
+	}
+
+	.test-summary-row.expanded {
+		background: #1c2128;
+		border-bottom-color: transparent;
+	}
+
+	.run-detail-row {
+		background: #161b22;
+	}
+
+	.run-detail-row:hover {
+		background: #1c2128;
+	}
+
 	.summary-row {
-		background: none;
+		background: #161b22;
 	}
 
 	.summary-row:hover {
-		background: none;
+		background: #161b22;
 		cursor: default;
 	}
 
