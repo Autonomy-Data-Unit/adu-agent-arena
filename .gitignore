@@ -11,6 +11,9 @@ logs/
 # Pi-coding-agent session recordings
 sessions/
 
+# Preserved agent workspaces (tar.gz archives)
+workspaces/
+
 # Node
 node_modules/
 web/.svelte-kit/
