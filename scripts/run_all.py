@@ -1,44 +1,42 @@
 #!/usr/bin/env python3
-"""Run arena tests across configured models, skipping already-completed runs."""
+"""Run arena tests across configured models.
+
+Uses subprocess calls to `inspect eval` for parallelism — each run is
+an independent process, avoiding Inspect's single-eval_async limitation.
+"""
 
 import argparse
 import json
+import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from inspect_ai import eval, eval_set
 from inspect_ai.log import read_eval_log
 
-from adu_arena.tasks.staffing_analysis import staffing_analysis
-from adu_arena.tasks.culture_spending import culture_spending_analysis
-from adu_arena.tasks.gov_contracts import gov_contracts_scraper
-from adu_arena.tasks.csv_deduplicator import csv_deduplicator
-
 ALL_TASKS = {
-    "staffing_analysis": staffing_analysis,
-    "culture_spending_analysis": culture_spending_analysis,
-    "gov_contracts_scraper": gov_contracts_scraper,
-    "csv_deduplicator": csv_deduplicator,
+    "staffing_analysis": "src/adu_arena/tasks/staffing_analysis.py@staffing_analysis",
+    "culture_spending_analysis": "src/adu_arena/tasks/culture_spending.py@culture_spending_analysis",
+    "gov_contracts_scraper": "src/adu_arena/tasks/gov_contracts.py@gov_contracts_scraper",
+    "csv_deduplicator": "src/adu_arena/tasks/csv_deduplicator.py@csv_deduplicator",
 }
 
 MODELS_FILE = Path("models.json")
 DEFAULT_PARALLEL = 5
+LOGS_DIR = Path("logs")
 
 
 def load_models(path: Path) -> list[str]:
-    """Load model IDs from models.json."""
     data = json.loads(path.read_text())
     return [m["id"] for m in data["models"]]
 
 
-def get_completed_pairs(log_dir: str) -> set[tuple[str, str]]:
-    """Return set of (model, task_name) pairs that have already succeeded."""
+def get_completed_pairs(log_dir: Path) -> set[tuple[str, str]]:
+    """Return (model, task_name) pairs that already succeeded."""
     completed = set()
-    log_path = Path(log_dir)
-    if not log_path.exists():
+    if not log_dir.exists():
         return completed
-
-    for log_file in log_path.rglob("*.eval"):
+    for log_file in log_dir.glob("*.eval"):
         try:
             log = read_eval_log(str(log_file), header_only=True)
             if log.status == "success":
@@ -46,45 +44,33 @@ def get_completed_pairs(log_dir: str) -> set[tuple[str, str]]:
                 completed.add((log.eval.model, task_name))
         except Exception:
             continue
-
     return completed
+
+
+def run_single(model: str, task_spec: str, log_dir: str) -> tuple[str, str, bool, str]:
+    """Run one model+test via subprocess."""
+    result = subprocess.run(
+        ["uv", "run", "inspect", "eval", task_spec, "--model", model, "--log-dir", log_dir],
+        capture_output=True,
+        text=True,
+        timeout=900,
+    )
+    task_name = task_spec.split("@")[-1]
+    if result.returncode == 0:
+        return (model, task_name, True, "success")
+    else:
+        # Extract error from stderr
+        err = result.stderr.strip().split("\n")[-1] if result.stderr else "unknown error"
+        return (model, task_name, False, err[:200])
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run arena tests across models")
-    parser.add_argument(
-        "--model",
-        nargs="+",
-        default=None,
-        help="Specific model(s) to run (default: all from models.json)",
-    )
-    parser.add_argument(
-        "--test",
-        nargs="+",
-        default=None,
-        help="Specific test(s) to run (default: all)",
-    )
-    parser.add_argument(
-        "--log-dir",
-        default="logs",
-        help="Directory for eval logs (default: logs)",
-    )
-    parser.add_argument(
-        "--parallel",
-        type=int,
-        default=DEFAULT_PARALLEL,
-        help=f"Max parallel runs (default: {DEFAULT_PARALLEL})",
-    )
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="Re-run even if results already exist",
-    )
-    parser.add_argument(
-        "--list",
-        action="store_true",
-        help="Show what would be run without running",
-    )
+    parser.add_argument("--model", nargs="+", default=None, help="Model(s) to run (default: all from models.json)")
+    parser.add_argument("--test", nargs="+", default=None, help="Test(s) to run (default: all)")
+    parser.add_argument("--parallel", type=int, default=DEFAULT_PARALLEL, help=f"Max parallel runs (default: {DEFAULT_PARALLEL})")
+    parser.add_argument("--force", action="store_true", help="Clear old results and re-run everything")
+    parser.add_argument("--list", action="store_true", help="Show what would run without running")
     args = parser.parse_args()
 
     # Resolve models
@@ -99,79 +85,70 @@ def main() -> None:
 
     # Resolve tests
     if args.test:
-        tasks = {name: fn for name, fn in ALL_TASKS.items() if name in args.test}
+        tasks = {k: v for k, v in ALL_TASKS.items() if k in args.test}
         if not tasks:
             print(f"No matching tests. Available: {list(ALL_TASKS.keys())}", file=sys.stderr)
             sys.exit(1)
     else:
         tasks = ALL_TASKS
 
-    # Check what's already done
-    completed = get_completed_pairs(args.log_dir) if not args.force else set()
+    # Handle --force: clear logs
+    if args.force:
+        LOGS_DIR.mkdir(parents=True, exist_ok=True)
+        for f in LOGS_DIR.glob("*.eval"):
+            f.unlink()
+        for d in LOGS_DIR.iterdir():
+            if d.is_dir():
+                import shutil
+                shutil.rmtree(d)
+        print("Cleared old results")
+        completed: set[tuple[str, str]] = set()
+    else:
+        completed = get_completed_pairs(LOGS_DIR)
 
-    # Build run plan — group by model since eval_set handles multi-model natively
-    plan_models = set()
-    plan_tasks = set()
+    # Build run plan
+    plan: list[tuple[str, str, str]] = []  # (model, task_name, task_spec)
     skipped = 0
-    total = 0
     for model in models:
-        for task_name in tasks:
+        for task_name, task_spec in tasks.items():
             if (model, task_name) in completed:
                 skipped += 1
             else:
-                plan_models.add(model)
-                plan_tasks.add(task_name)
-                total += 1
+                plan.append((model, task_name, task_spec))
 
-    print(f"\n{total} runs to do, {skipped} already completed")
+    print(f"\n{len(plan)} runs to do, {skipped} already completed")
 
     if args.list:
-        for model in sorted(plan_models):
-            for task_name in sorted(plan_tasks):
-                if (model, task_name) not in completed:
-                    print(f"  {model} x {task_name}")
-        if skipped:
-            print(f"\n{skipped} combinations already in {args.log_dir}/")
+        for model, task_name, _ in plan:
+            print(f"  {model} x {task_name}")
         return
 
-    if total == 0:
-        print("Nothing to run — all combinations already completed.")
-        print("Use --force to re-run, or add new models to models.json")
+    if not plan:
+        print("Nothing to run. Use --force to re-run.")
         return
 
-    # Build task instances for all needed tasks
-    task_instances = [tasks[name]() for name in sorted(plan_tasks)]
-    model_list = sorted(plan_models)
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"Running with --parallel {args.parallel}\n")
 
-    from datetime import datetime
-    run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_log_dir = Path(args.log_dir) / f"run_{run_id}"
-    run_log_dir.mkdir(parents=True, exist_ok=True)
+    succeeded = 0
+    failed = 0
+    total = len(plan)
 
-    print(f"Running {len(model_list)} models x {len(task_instances)} tests with --parallel {args.parallel}")
-    print(f"Logs: {run_log_dir}\n")
-
-    success, logs = eval_set(
-        tasks=task_instances,
-        model=model_list,
-        log_dir=str(run_log_dir),
-        max_tasks=args.parallel,
-    )
-
-    # Copy logs to parent dir so export_leaderboard can find them all
-    for log_file in run_log_dir.glob("*.eval"):
-        dest = Path(args.log_dir) / log_file.name
-        if not dest.exists():
-            import shutil
-            shutil.copy2(log_file, dest)
-
-    succeeded = sum(1 for l in logs if l.status == "success")
-    failed = sum(1 for l in logs if l.status != "success")
+    with ThreadPoolExecutor(max_workers=args.parallel) as executor:
+        futures = {
+            executor.submit(run_single, model, task_spec, str(LOGS_DIR)): (model, task_name)
+            for model, task_name, task_spec in plan
+        }
+        for future in as_completed(futures):
+            model, task_name, success, message = future.result()
+            if success:
+                succeeded += 1
+                print(f"  [{succeeded + failed}/{total}] OK   {model} x {task_name}")
+            else:
+                failed += 1
+                print(f"  [{succeeded + failed}/{total}] FAIL {model} x {task_name}: {message}")
 
     print(f"\nDone: {succeeded} succeeded, {failed} failed")
-    if not success:
-        print("Some evaluations failed.", file=sys.stderr)
-    print("Run `uv run python scripts/export_leaderboard.py` to update the leaderboard.")
 
 
 if __name__ == "__main__":
