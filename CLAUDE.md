@@ -4,85 +4,105 @@ Benchmarking coding agents on data-led research tasks drawn from real Autonomy D
 
 ## Architecture
 
-Built on [Inspect AI](https://inspect.aisi.org.uk/) (UK AISI's evaluation framework). We write custom tasks, scorers, and a leaderboard on top.
-
-- **Agent under test**: [pi-coding-agent](https://github.com/badlogic/pi-mono) — invoked inside Docker containers via `pi -p` (print mode)
-- **Each model/provider combination** (e.g. `anthropic/claude-sonnet-4-20250514`, `openai/gpt-4o`) is a separate leaderboard entrant
-- The `--model` flag passed to `inspect eval` determines which model pi-coding-agent uses
+Built on [Inspect AI](https://inspect.aisi.org.uk/). Agents are invoked via [pi-coding-agent](https://github.com/badlogic/pi-mono) inside Docker containers (`--mode json`). Each model/provider combination is a separate leaderboard entrant.
 
 ## Project layout
 
 ```
 src/adu_arena/
-  agents/pi_agent.py       # Inspect solver — execs pi inside Docker sandbox
-  scorers/deterministic.py  # CSV checks: schema, row count, numeric, content
-  scorers/excel.py          # Excel checks: sheet structure, numeric aggregation
-  scorers/judge.py          # LLM-judge rubric templates per archetype
-  tasks/*.py                # One @task function per test
+  agents/pi_agent.py        # Inspect solver — execs pi inside Docker sandbox
+  scorers/deterministic.py   # File, schema, row count, numeric, content checks
+  scorers/judge.py           # Multi-judge scorer (multiple models × N runs)
+  tasks/_common.py           # Shared dataset loader (maps workspace files via Sample.files)
+  tasks/*.py                 # One @task per test
 
 tests/<test-name>/
-  prompt.md                 # What the agent sees
-  dataset.json              # Inspect Sample metadata + scoring config
-  compose.yaml              # Docker Compose for this test's sandbox
-  workspace/                # Starting files — bind-mounted into container
-  fixtures/                 # Reference outputs for scoring (never shown to agent)
+  DESCRIPTION.md             # Shown in leaderboard UI (links to code files)
+  prompt.md                  # What the agent sees
+  dataset.json               # Scoring configuration
+  compose.yaml               # Docker sandbox (no bind mounts)
+  workspace/                 # Input files only — copied into container per run
 
+models.json                  # Configured models + judge config
 scripts/
-  run_all.py                # Run all tests, optionally across multiple models
-  export_leaderboard.py     # Inspect logs → web/static/leaderboard.json
+  run_all.py                 # Run tests with parallelism and auto-retry
+  export_leaderboard.py      # logs/ + sessions/ + summaries/ → leaderboard.json
+  generate_summaries.py      # Generate per-run narrative assessments
+  publish.sh                 # Export → summaries → build → deploy
+  results.py                 # CLI for viewing/managing results
 
-web/                        # SvelteKit static leaderboard app
-docker/Dockerfile           # Base image: Python + data-science libs + pi + Node
+web/                         # SvelteKit static leaderboard app
+docker/Dockerfile            # Base image: Python + data-science libs + pi + Node
 ```
+
+## Key design decisions
+
+- **Isolated workspaces**: each run gets its own copy of workspace files via `Sample.files` (no bind mounts). Input files cannot be corrupted by agents.
+- **Preserved workspaces**: after each run, the container's `/workspace` is archived to `workspaces/<timestamp>.tar.gz`.
+- **Multi-judge scoring**: configured in `models.json` under `judges`. Multiple judge models each run N times; scores are averaged across all evaluations.
+- **Flat logs**: all `.eval` files live in `logs/` (no subdirectories).
+- **Generated data not committed**: `leaderboard.json`, `summaries/` are gitignored. Regenerate with `publish.sh` or the individual scripts.
 
 ## Running tests
 
 ```bash
-# Single test, single model
-uv run inspect eval src/adu_arena/tasks/medrxiv_scraper.py@medrxiv_scraper \
-  --model anthropic/claude-sonnet-4-20250514 --log-dir logs
+# Run missing model+test combinations (reads models.json)
+uv run python scripts/run_all.py
 
-# All tests, single model
+# Run all tests again (accumulates results for averaging)
+uv run python scripts/run_all.py --rerun
+
+# Run specific model or test
 uv run python scripts/run_all.py --model anthropic/claude-sonnet-4-20250514
+uv run python scripts/run_all.py --test csv_deduplicator
 
-# All tests, multiple models
-uv run python scripts/run_all.py \
-  --model anthropic/claude-sonnet-4-20250514 openai/gpt-4o
+# Delete all results and start fresh
+uv run python scripts/run_all.py --clear
 
-# Re-export leaderboard after runs
-uv run python scripts/export_leaderboard.py
+# View results in terminal
+uv run python scripts/results.py stats
+uv run python scripts/results.py show --model qwen
 
-# Preview leaderboard
-cd web && npm run build && npm run preview
+# Delete specific results
+uv run python scripts/results.py delete --model foo --yes
+uv run python scripts/results.py delete --invalid --yes
 ```
 
-## Adding a new test
+## Publishing
 
-1. Create `tests/<test-name>/` with `prompt.md`, `dataset.json`, `compose.yaml`, `workspace/`, and optionally `fixtures/`
-2. Create `src/adu_arena/tasks/<test_name>.py` with a `@task` function
-3. Add the task to `ALL_TASKS` in `scripts/run_all.py`
-4. The `compose.yaml` must include `command: tail -f /dev/null` to keep the container alive
+```bash
+bash scripts/publish.sh
+```
 
-## Test archetypes
+This runs: export leaderboard → generate summaries → re-export with summaries → build SvelteKit app → deploy to AppGarden.
 
-- `scrape-and-structure` — parse HTML/API responses into structured data
-- `pipeline-stage` — transform frozen intermediate data
-- `notebook-analysis` — produce analysis from raw data files
-- `full-project-reproduction` — build a module from a spec
+`leaderboard.json` must exist before `npm run build` (the prerenderer needs it).
 
-## Scoring design
+## Adding a model
 
-Prefer deterministic checks. Avoid brittle checks that depend on:
-- Exact whitespace or string formatting from HTML parsing
-- Exact row/column counts when the merge strategy has legitimate variation (use tolerances)
-- Exact column ordering
+Add to `models.json`, then run `uv run python scripts/run_all.py` — it will only run the new model.
 
-Good deterministic checks: numeric aggregation sums, file existence, schema column names, row counts with tolerance, presence of key substrings (e.g. surnames not full names).
+## Adding a test
 
-Use LLM-judge scoring only for qualitative aspects (code clarity, methodology soundness).
+1. Create `tests/<test-name>/` with `DESCRIPTION.md`, `prompt.md`, `dataset.json`, `compose.yaml`, `workspace/`
+2. Create `src/adu_arena/tasks/<test_name>.py` with a `@task` function using `load_task_dataset()`
+3. Add to `ALL_TASKS` in `scripts/run_all.py`
+
+## Scoring
+
+**Deterministic**: file existence, CSV schema, row counts, numeric aggregations, content checks. Configured in `dataset.json`.
+
+**Judge**: multiple models × N runs (configured in `models.json`). Scores each dimension 1-10. Dimensions vary by archetype:
+- `pipeline-stage`: correctness, methodology, completeness, code_quality
+- `notebook-analysis`: correctness, methodology, completeness, code_quality
+- `scrape-and-structure`: correctness, robustness, structure, code_quality
+- `full-project-reproduction`: correctness, architecture, edge_cases, code_quality
+
+**Auto-retry**: runs where the agent produced no files AND finished quickly AND the session contains provider errors are automatically retried (up to 3 attempts).
 
 ## Dependencies
 
-- Python: `uv sync` (uses pyproject.toml)
+- Python: `uv sync`
 - Web: `cd web && npm install`
-- Runtime: Docker must be running for test execution
+- Runtime: Docker must be running
+- API keys: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `OPENROUTER_API_KEY` as needed
