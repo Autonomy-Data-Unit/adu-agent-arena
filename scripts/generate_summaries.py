@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Generate human-readable assessment summaries for each test run.
 
-Reads existing leaderboard.json, finds runs without summaries, and asks
-an LLM to write a 2-3 sentence assessment based on the scores and judge
-reasoning. Writes summaries back into leaderboard.json.
+Reads leaderboard.json to find runs without summaries, asks an LLM to
+write a 2-3 sentence assessment, and saves each summary as a text file
+in summaries/<run_id>.txt.
 """
 
 import json
@@ -11,6 +11,8 @@ import sys
 from pathlib import Path
 
 import anthropic
+
+SUMMARIES_DIR = Path("summaries")
 
 SUMMARY_PROMPT = """\
 You are reviewing the results of a coding agent benchmark run. Write a concise 2-3 sentence assessment of how the agent performed on this task. Be specific about what went well and what didn't. Do not repeat the scores — focus on the narrative.
@@ -43,18 +45,20 @@ def generate_summaries(
         print(f"Leaderboard not found: {leaderboard_path}", file=sys.stderr)
         sys.exit(1)
 
+    SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
+
     data = json.loads(path.read_text())
     client = anthropic.Anthropic()
 
     runs_needing_summary = [
         r for r in data["runs"]
         if r.get("status") == "success"
-        and not r.get("summary")
         and r.get("score_details")
+        and not (SUMMARIES_DIR / f"{r['id']}.txt").exists()
     ]
 
     if not runs_needing_summary:
-        print("All runs already have summaries (or no score details).")
+        print("All runs already have summaries.")
         return
 
     print(f"Generating summaries for {len(runs_needing_summary)} runs...")
@@ -98,13 +102,12 @@ def generate_summaries(
                 messages=[{"role": "user", "content": prompt}],
             )
             summary = response.content[0].text.strip()
-            run["summary"] = summary
+            (SUMMARIES_DIR / f"{run['id']}.txt").write_text(summary)
             print(f"  [{i}/{len(runs_needing_summary)}] {run['agent']} x {run['test']}: {summary[:80]}...")
         except Exception as e:
             print(f"  [{i}/{len(runs_needing_summary)}] ERROR for {run['agent']} x {run['test']}: {e}")
 
-    path.write_text(json.dumps(data, indent=2, default=str))
-    print(f"\nSummaries written to {leaderboard_path}")
+    print(f"\nSummaries saved to {SUMMARIES_DIR}/")
 
 
 if __name__ == "__main__":
