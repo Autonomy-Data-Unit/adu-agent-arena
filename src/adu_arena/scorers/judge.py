@@ -196,23 +196,28 @@ def judge_scorer(
             json_template=json_fields,
         )
 
-        # Run all judges × runs_per_judge
+        # Run all judges × runs_per_judge concurrently
+        async def _labeled_call(model_name: str, run_i: int):
+            label = model_name.split("/")[-1]
+            try:
+                scores_i, reasoning_i = await _single_judge_call(model_name, prompt)
+                return scores_i, f"**{label} (run {run_i + 1})**: {reasoning_i}"
+            except Exception as e:
+                return None, f"**{label} (run {run_i + 1})**: ERROR: {e}"
+
+        tasks = [
+            _labeled_call(model_name, run_i)
+            for model_name in judge_models
+            for run_i in range(runs_per_judge)
+        ]
+        results = await asyncio.gather(*tasks)
+
         all_scores: list[dict[str, float]] = []
         all_reasoning: list[str] = []
-
-        for judge_model_name in judge_models:
-            for run_i in range(runs_per_judge):
-                try:
-                    scores_i, reasoning_i = await _single_judge_call(
-                        judge_model_name, prompt
-                    )
-                    all_scores.append(scores_i)
-                    label = judge_model_name.split("/")[-1]
-                    all_reasoning.append(f"**{label} (run {run_i + 1})**: {reasoning_i}")
-                except Exception as e:
-                    all_reasoning.append(
-                        f"**{judge_model_name} (run {run_i + 1})**: ERROR: {e}"
-                    )
+        for scores_i, reasoning_i in results:
+            if scores_i is not None:
+                all_scores.append(scores_i)
+            all_reasoning.append(reasoning_i)
 
         if not all_scores:
             return Score(
