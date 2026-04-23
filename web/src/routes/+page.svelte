@@ -24,14 +24,20 @@
 
 	let aggLookup = $derived(data ? getAggregateLookup(data.aggregates) : new Map());
 
-	function getOverallScore(agentAggs: Map<string, Aggregate> | undefined): number | null {
-		if (!agentAggs) return null;
+	function getAgentTestScore(agent: string, test: string): number | null {
+		const runs = data.runs.filter(r => r.agent === agent && r.test === test);
+		const scores = runs.map(r => getRunOverallScore(r)).filter((s): s is number => s !== null);
+		return scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : null;
+	}
+
+	function getOverallScore(agent: string): number | null {
+		if (!data) return null;
 		let total = 0;
 		let count = 0;
-		for (const agg of agentAggs.values()) {
-			const overall = agg['score_overall_mean_mean'];
-			if (typeof overall === 'number') {
-				total += overall;
+		for (const test of data.tests) {
+			const score = getAgentTestScore(agent, test);
+			if (score !== null) {
+				total += score;
 				count++;
 			}
 		}
@@ -39,19 +45,18 @@
 	}
 
 	function getAgentSortValue(agent: string, column: string): number {
+		if (column === 'avg') return getOverallScore(agent) ?? -Infinity;
+		if (column === 'agent') return 0; // handled separately as string sort
+
 		const aggs = aggLookup.get(agent);
 		if (!aggs) return -Infinity;
 
-		if (column === 'avg') return getOverallScore(aggs) ?? -Infinity;
 		if (column === 'cost') return getAgentTotalCost(aggs) ?? -Infinity;
 		if (column === 'time') return getAgentTotalTime(aggs) ?? -Infinity;
 		if (column === 'runs') return getAgentRunCount(aggs);
-		if (column === 'agent') return 0; // handled separately as string sort
 
-		// Test column
-		const agg = aggs.get(column);
-		const val = agg?.['score_overall_mean_mean'];
-		return typeof val === 'number' ? val : -Infinity;
+		// Test column — compute from runs
+		return getAgentTestScore(agent, column) ?? -Infinity;
 	}
 
 	function toggleSort(column: string) {
@@ -280,14 +285,13 @@
 						>
 							<td class="agent-name">{agent}</td>
 							{#each data.tests as test}
-								{@const agg = agentAggs?.get(test)}
-								{@const testScore = agg?.['score_overall_mean_mean']}
-								<td class="score" style:color={typeof testScore === 'number' ? scoreColor(testScore) : undefined}>
+								{@const testScore = getAgentTestScore(agent, test)}
+								<td class="score" style:color={testScore !== null ? scoreColor(testScore) : undefined}>
 									{formatScore(testScore)}
 								</td>
 							{/each}
-							<td class="score avg" style:color={getOverallScore(agentAggs) !== null ? scoreColor(getOverallScore(agentAggs)!) : undefined}>
-								{formatScore(getOverallScore(agentAggs))}
+							<td class="score avg" style:color={getOverallScore(agent) !== null ? scoreColor(getOverallScore(agent)!) : undefined}>
+								{formatScore(getOverallScore(agent))}
 							</td>
 							<td class="cost">{formatCost(getAgentTotalCost(agentAggs))}</td>
 							<td class="time">{formatTime(getAgentTotalTime(agentAggs))}</td>
