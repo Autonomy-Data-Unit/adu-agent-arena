@@ -5,9 +5,10 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from inspect_ai import eval
-from inspect_ai.log import list_eval_logs, read_eval_log
+from inspect_ai.log import read_eval_log
 
 from adu_arena.tasks.staffing_analysis import staffing_analysis
 from adu_arena.tasks.culture_spending import culture_spending_analysis
@@ -22,6 +23,7 @@ ALL_TASKS = {
 }
 
 MODELS_FILE = Path("models.json")
+DEFAULT_PARALLEL = 5
 
 
 def load_models(path: Path) -> list[str]:
@@ -41,13 +43,29 @@ def get_completed_pairs(log_dir: str) -> set[tuple[str, str]]:
         try:
             log = read_eval_log(str(log_file), header_only=True)
             if log.status == "success":
-                # Task names in logs may be prefixed (e.g. "adu_arena/csv_deduplicator")
                 task_name = log.eval.task.split("/")[-1] if "/" in log.eval.task else log.eval.task
                 completed.add((log.eval.model, task_name))
         except Exception:
             continue
 
     return completed
+
+
+def run_single(model: str, task_name: str, task_fn, log_dir: str) -> tuple[str, str, bool, str]:
+    """Run a single model+test combination. Returns (model, task, success, message)."""
+    try:
+        logs = eval(
+            tasks=[task_fn()],
+            model=model,
+            log_dir=log_dir,
+        )
+        if logs and logs[0].status == "success":
+            return (model, task_name, True, "success")
+        else:
+            status = logs[0].status if logs else "no logs"
+            return (model, task_name, False, status)
+    except Exception as e:
+        return (model, task_name, False, str(e))
 
 
 def main() -> None:
@@ -68,6 +86,12 @@ def main() -> None:
         "--log-dir",
         default="logs",
         help="Directory for eval logs (default: logs)",
+    )
+    parser.add_argument(
+        "--parallel",
+        type=int,
+        default=DEFAULT_PARALLEL,
+        help=f"Max parallel runs (default: {DEFAULT_PARALLEL})",
     )
     parser.add_argument(
         "--force",
@@ -126,29 +150,29 @@ def main() -> None:
         print("Use --force to re-run, or add new models to models.json")
         return
 
-    # Run each combination
+    # Run with parallelism
     log_dir = Path(args.log_dir)
     log_dir.mkdir(parents=True, exist_ok=True)
     succeeded = 0
     failed = 0
+    total = len(plan)
 
-    for i, (model, task_name) in enumerate(plan, 1):
-        print(f"\n[{i}/{len(plan)}] {model} x {task_name}")
-        try:
-            task_fn = tasks[task_name]
-            logs = eval(
-                tasks=[task_fn()],
-                model=model,
-                log_dir=args.log_dir,
-            )
-            if logs and logs[0].status == "success":
+    print(f"Running with --parallel {args.parallel}\n")
+
+    with ThreadPoolExecutor(max_workers=args.parallel) as executor:
+        futures = {
+            executor.submit(run_single, model, task_name, tasks[task_name], args.log_dir): (model, task_name)
+            for model, task_name in plan
+        }
+
+        for future in as_completed(futures):
+            model, task_name, success, message = future.result()
+            if success:
                 succeeded += 1
+                print(f"  [{succeeded + failed}/{total}] OK  {model} x {task_name}")
             else:
                 failed += 1
-                print(f"  FAILED: {logs[0].status if logs else 'no logs'}")
-        except Exception as e:
-            failed += 1
-            print(f"  ERROR: {e}")
+                print(f"  [{succeeded + failed}/{total}] FAIL {model} x {task_name}: {message}")
 
     print(f"\nDone: {succeeded} succeeded, {failed} failed")
     print("Run `uv run python scripts/export_leaderboard.py` to update the leaderboard.")
