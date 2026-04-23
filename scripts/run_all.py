@@ -153,18 +153,21 @@ def _check_session_for_errors(model: str, task_name: str) -> str | None:
 
 def run_single(model: str, task_spec: str, log_dir: str) -> tuple[str, str, bool, str]:
     """Run one model+test via subprocess."""
-    result = subprocess.run(
-        ["uv", "run", "inspect", "eval", task_spec, "--model", model, "--log-dir", log_dir],
-        capture_output=True,
-        text=True,
-        timeout=900,
-    )
     task_name = task_spec.split("@")[-1]
-    if result.returncode == 0:
-        return (model, task_name, True, "success")
-    else:
-        err = result.stderr.strip().split("\n")[-1] if result.stderr else "unknown error"
-        return (model, task_name, False, err[:200])
+    try:
+        result = subprocess.run(
+            ["uv", "run", "inspect", "eval", task_spec, "--model", model, "--log-dir", log_dir],
+            capture_output=True,
+            text=True,
+            timeout=1800,  # 30 minutes
+        )
+        if result.returncode == 0:
+            return (model, task_name, True, "success")
+        else:
+            err = result.stderr.strip().split("\n")[-1] if result.stderr else "unknown error"
+            return (model, task_name, False, err[:200])
+    except subprocess.TimeoutExpired:
+        return (model, task_name, False, "timed out after 30 minutes")
 
 
 def main() -> None:
