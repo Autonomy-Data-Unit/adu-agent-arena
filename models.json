@@ -8,11 +8,16 @@
     {
       "id": "anthropic/claude-sonnet-4-20250514",
       "label": "Claude Sonnet 4",
-      "tier": "mid"
+      "tier": "flagship"
     },
     {
       "id": "openai/gpt-5.4",
       "label": "GPT-5.4",
+      "tier": "flagship"
+    },
+    {
+      "id": "openai/gpt-5.3-codex",
+      "label": "GPT-5.3 Codex",
       "tier": "flagship"
     },
     {
@@ -21,29 +26,54 @@
       "tier": "mid"
     },
     {
-      "id": "openai/gpt-5.3-codex",
-      "label": "GPT-5.3 Codex",
-      "tier": "mid"
-    },
-    {
       "id": "openrouter/deepseek/deepseek-v3.2",
       "label": "DeepSeek V3.2",
-      "tier": "open-source"
+      "tier": "mid"
     },
     {
       "id": "openrouter/qwen/qwen3-235b-a22b-2507",
       "label": "Qwen3 235B",
-      "tier": "open-source"
+      "tier": "mid"
     },
     {
       "id": "openrouter/mistralai/mistral-large-2512",
       "label": "Mistral Large 3",
-      "tier": "open-source"
+      "tier": "mid"
     },
     {
       "id": "openrouter/moonshotai/kimi-k2.6",
       "label": "Kimi K2.6",
-      "tier": "open-source"
+      "tier": "mid"
+    },
+    {
+      "id": "openrouter/google/gemma-4-31b-it",
+      "label": "Gemma 4 31B",
+      "tier": "mid"
+    },
+    {
+      "id": "openrouter/nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "label": "Nemotron Super 49B",
+      "tier": "mid"
+    },
+    {
+      "id": "openrouter/qwen/qwen3-14b",
+      "label": "Qwen3 14B",
+      "tier": "small"
+    },
+    {
+      "id": "openrouter/nvidia/nemotron-nano-9b-v2",
+      "label": "Nemotron Nano 9B",
+      "tier": "small"
+    },
+    {
+      "id": "openrouter/openai/gpt-oss-20b",
+      "label": "GPT-OSS 20B (3.6B active)",
+      "tier": "tiny"
+    },
+    {
+      "id": "openrouter/mistralai/ministral-3b-2512",
+      "label": "Ministral 3B",
+      "tier": "tiny"
     }
   ]
 }
