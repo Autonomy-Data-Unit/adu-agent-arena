@@ -175,7 +175,8 @@ def main() -> None:
     parser.add_argument("--model", nargs="+", default=None, help="Model(s) to run (default: all from models.json)")
     parser.add_argument("--test", nargs="+", default=None, help="Test(s) to run (default: all)")
     parser.add_argument("--parallel", type=int, default=DEFAULT_PARALLEL, help=f"Max parallel runs (default: {DEFAULT_PARALLEL})")
-    parser.add_argument("--force", action="store_true", help="Clear old results and re-run everything")
+    parser.add_argument("--rerun", action="store_true", help="Run all tests again (accumulates results for averaging)")
+    parser.add_argument("--clear", action="store_true", help="Delete all existing results before running")
     parser.add_argument("--list", action="store_true", help="Show what would run without running")
     args = parser.parse_args()
 
@@ -198,8 +199,8 @@ def main() -> None:
     else:
         tasks = ALL_TASKS
 
-    # Handle --force: clear logs
-    if args.force:
+    # Handle --clear: delete all existing results
+    if args.clear:
         LOGS_DIR.mkdir(parents=True, exist_ok=True)
         for f in LOGS_DIR.glob("*.eval"):
             f.unlink()
@@ -207,7 +208,11 @@ def main() -> None:
             if d.is_dir():
                 import shutil
                 shutil.rmtree(d)
-        print("Cleared old results")
+        print("Cleared all existing results")
+
+    # --rerun: skip completion check (run everything, results accumulate)
+    # default: only run missing combinations
+    if args.rerun or args.clear:
         completed: set[tuple[str, str]] = set()
     else:
         completed = get_completed_pairs(LOGS_DIR)
