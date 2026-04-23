@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-23T09:24:58.002735",
+  "generated_at": "2026-04-23T10:06:58.675965",
   "agents": [
     "anthropic/claude-opus-4-7",
     "anthropic/claude-sonnet-4-20250514",
@@ -8,6 +8,7 @@
     "openrouter/deepseek/deepseek-v3.2",
     "openrouter/meta-llama/llama-4-maverick",
     "openrouter/mistralai/mistral-large-2512",
+    "openrouter/moonshotai/kimi-k2.5",
     "openrouter/qwen/qwen3-coder"
   ],
   "tests": [
@@ -66,7 +67,7 @@
         }
       },
       "total_time": 84.0,
-      "summary": "The agent successfully implemented the core CSV deduplication functionality with perfect adherence to the technical requirements, correctly handling case-insensitive postcode matching and merge rules. However, the solution suffered from poor architectural decisions, creating two redundant modules that implement essentially the same functionality, which created confusion and code duplication. Additionally, the implementation lacked robustness in handling edge cases like empty data groups, missing values, or malformed input, and included an incomplete test file."
+      "summary": "The agent successfully implemented a functional CSV deduplication solution that meets all basic requirements, correctly handling case-insensitive postcode matching and merge rules as evidenced by perfect deterministic scores. However, the implementation suffers from poor architecture decisions, most notably creating two redundant modules that perform essentially the same functionality, which creates confusion and violates good software design principles. Additionally, the solution lacks robust edge case handling for scenarios like empty data groups, missing values, or malformed input, and includes incomplete test coverage."
     },
     {
       "id": "jwmzmEmnerxSMymhjDtZGY",
@@ -117,7 +118,61 @@
         }
       },
       "total_time": 64.0,
-      "summary": "The agent successfully implemented a functional government contracts scraper that meets all basic requirements, correctly extracting and formatting the required data fields. However, the implementation was marred by poor organization, producing multiple redundant script files with unclear purposes and varying quality levels, including one incomplete/broken version. While the primary scraper works correctly, the code lacks robustness features like error handling for missing data elements and contains some unnecessary redundancies in the HTML processing logic."
+      "summary": "The agent successfully completed the core scraping functionality, as evidenced by perfect scores on all deterministic checks for file output, schema compliance, and data accuracy. However, the implementation was poorly organized, producing multiple redundant scripts with unclear purposes and one incomplete file, which significantly impacted code quality and structure. While the main scraper works correctly with proper HTML entity handling, the agent showed limited robustness in error handling and made some precision-related implementation choices that may violate specifications."
+    },
+    {
+      "id": "LFBCLmVPEJRY3GXxWyRcb5",
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "staffing_analysis",
+      "timestamp": "2026-04-23 08:51:50+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.5,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.7,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_numeric_mean": 1.0,
+        "score_numeric_stderr": 0.0,
+        "score_overall_mean": 0.675,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "numeric": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.7,
+            "methodology": 0.7,
+            "completeness": 0.8,
+            "code_quality": 0.5,
+            "overall": 0.675
+          },
+          "explanation": "The primary script analyze_staffing.py appears correct and complete, following all specified steps. However, there is a second script staffing_analysis.py that does the rename backwards (renaming Folkestone and Hythe to Shepway in the population data rather than vice versa) \u2014 though it still achieves a matching merge, this diverges from the spec. The presence of two duplicate main scripts plus two broken/malformed verify scripts significantly hurts code quality and clarity. Also staffing_analysis.py is truncated at the end with a syntax error."
+        }
+      },
+      "total_time": 197.0,
+      "summary": "The agent successfully completed the core technical requirements of the staffing analysis task, producing a properly formatted CSV output with correct schema and data structure. However, the submission suffered from significant organizational issues, including duplicate main scripts with one implementing the data transformation incorrectly (renaming in the wrong direction) and containing syntax errors, plus additional broken verification scripts. While the primary script appears to follow specifications correctly, the presence of multiple conflicting implementations and malformed code substantially undermined the overall code quality and clarity of the solution."
     },
     {
       "id": "QjHr6yAZYvJXBUcr7NGFVS",
@@ -168,7 +223,7 @@
         }
       },
       "total_time": 65.0,
-      "summary": "The agent successfully completed the core requirements of the government contracts scraper task, producing functionally correct scripts that properly extract data fields and generate accurate summaries. However, the solution lacks cohesion and polish, delivering three separate scripts instead of one unified approach, with the third file being incomplete and truncated. While the basic functionality works well for the happy path, the agent struggled with implementation consistency (inconsistent data type handling for average values) and failed to include robust error handling or data validation features."
+      "summary": "The agent successfully met all the basic functional requirements, producing working scripts that correctly extracted contract data and generated the required CSV output with proper schema and content. However, the implementation was poorly organized, delivering three separate scripts instead of a single cohesive solution, with one file being incomplete and truncated. While the core scraping logic worked correctly, the code suffered from inconsistent data type handling, minimal error handling, and lacked the robustness and polish expected for a production-ready solution."
     },
     {
       "id": "3cjpiotdBVWjqiKZQBMsbe",
@@ -219,7 +274,7 @@
         }
       },
       "total_time": 497.0,
-      "summary": "The agent successfully completed all the core functional requirements, producing a CSV deduplicator that works correctly and handles the data as specified. However, the implementation suffered from poor file management and organization, with the main deliverable file being truncated and unusable, while leaving the workspace cluttered with multiple incomplete or corrupted versions alongside debug scripts. Despite having created a well-structured backup implementation with proper modularity and error handling, the agent failed to properly finalize and present a clean, professional solution."
+      "summary": "The agent successfully implemented the core CSV deduplication functionality, as evidenced by perfect deterministic scores for file output, schema compliance, and content accuracy. However, the implementation suffered from poor code organization and delivery issues, with the main deliverable file being truncated and non-functional while leaving the workspace cluttered with multiple incomplete versions and corrupted files. Despite having produced a clean, well-structured backup implementation with proper modularity and edge case handling, the agent failed to deliver it as the primary solution, significantly undermining the overall quality of the submission."
     },
     {
       "id": "iftnWa6RvSTin5mm9xvKsr",
@@ -270,7 +325,7 @@
         }
       },
       "total_time": 68.0,
-      "summary": "The agent successfully produced a functionally correct CSV deduplication solution that passes all deterministic requirements, with the primary file (company_deduplicator.py) demonstrating good modular design and proper edge case handling. However, the agent's workflow was disorganized, creating multiple files including corrupted and incomplete versions that significantly detracted from code quality and created confusion about the final deliverable. While the core functionality works well, the cluttered workspace and presence of broken auxiliary files suggest poor development practices and unclear execution strategy."
+      "summary": "The agent successfully completed the core CSV deduplication functionality with perfect deterministic scores, demonstrating that the primary solution file works correctly and handles the required data processing tasks. However, the workspace was cluttered with multiple broken, corrupted, and incomplete versions of the solution, including truncated code and debug artifacts that weren't cleaned up. While the final working implementation showed good architectural design and modularity, the poor workspace management and presence of non-functional duplicate files significantly undermined the overall code quality and deliverable clarity."
     },
     {
       "id": "BbmJbkR86LKP5wvrHidJ6d",
@@ -321,7 +376,7 @@
         }
       },
       "total_time": 284.0,
-      "summary": "The agent successfully completed the core technical requirements, producing functional code that correctly scraped, parsed, and formatted the government contracts data as evidenced by perfect deterministic scores. However, the implementation was poorly organized, delivering three overlapping scripts instead of a single cohesive solution, which created confusion about execution and introduced data type inconsistencies (truncating float values to integers in one version). While the fundamental scraping logic and HTML processing were sound, the lack of error handling, input validation, and the fragmented code structure significantly undermined the overall quality and robustness of the solution."
+      "summary": "The agent successfully completed the core scraping functionality, producing a properly formatted CSV file with correct schema, row count, and content as verified by all deterministic checks. However, the implementation was poorly organized, delivering three overlapping scripts instead of a single cohesive solution, which created confusion about execution and introduced data type inconsistencies (truncating float averages to integers). While the fundamental parsing and sorting logic worked correctly, the lack of error handling, input validation, and the fragmented code structure significantly undermined the overall quality and robustness of the solution."
     },
     {
       "id": "63ybTPBGm96zZJ3jFsLehM",
@@ -372,7 +427,7 @@
         }
       },
       "total_time": 26.0,
-      "summary": "The agent successfully generated the correct output file with perfect structure and content, demonstrating that its core deduplication logic was sound. However, the code deliverable was severely compromised, with the main entry point file being truncated mid-function and another implementation file being completely corrupted, making the solution non-executable despite having a well-written backup file. While the backup showed good architectural practices including proper typing and edge case handling, the presence of debug files and broken primary code indicates poor file management and quality control in the final deliverable."
+      "summary": "The agent successfully generated the correct output file with perfect schema, row count, and content, demonstrating that the core deduplication logic was implemented correctly. However, the codebase suffered from significant organizational issues, with the main entry point being truncated and non-functional, corrupted auxiliary files, and debug scripts left in the deliverable. While a backup file showed good coding practices with proper typing and edge case handling, the broken primary implementation resulted in a deliverable that wouldn't actually run despite producing the right results."
     },
     {
       "id": "cwRShT6msWUG3qyTZzm2tK",
@@ -426,7 +481,7 @@
         }
       },
       "total_time": 65.0,
-      "summary": "The agent successfully completed all functional requirements, producing correct output files with proper schema, data processing, and calculations as evidenced by perfect deterministic scores. However, the agent significantly undermined its performance by generating multiple redundant scripts and creating broken verification files, leading to poor code organization and quality issues. While the core analysis was methodologically sound and complete, the cluttered approach with duplicated and corrupted code prevented the agent from achieving a higher overall score."
+      "summary": "The agent successfully completed the core staffing analysis task, producing correctly formatted output files that met all technical requirements and data processing specifications. However, the agent's approach was significantly hampered by poor code organization, generating multiple redundant scripts and corrupted verification files that cluttered the workspace. While the functional implementation was sound and the data analysis methodology was appropriate, the lack of clean, focused code delivery resulted in a mixed performance outcome."
     },
     {
       "id": "br3e7XXU2ULfQxnCeTFFmi",
@@ -480,7 +535,7 @@
         }
       },
       "total_time": 13.0,
-      "summary": "The agent successfully executed all core requirements of the staffing analysis task, correctly implementing data filtering, transformations, calculations, and output generation with perfect technical execution. However, the agent's approach was significantly hampered by poor code organization, creating multiple redundant scripts and leaving incomplete or corrupted files in the workspace rather than producing a single, clean solution. While the underlying analysis logic was sound and produced the expected results, the cluttered and duplicated codebase demonstrates a lack of systematic development practices."
+      "summary": "The agent successfully completed the core staffing analysis task with perfect technical execution, correctly implementing all data processing steps including filtering, merging, metric calculations, and output formatting. However, the agent's workflow was significantly hampered by poor code organization, creating multiple redundant scripts and leaving incomplete or corrupted files in the workspace. While the functional requirements were met excellently, the cluttered and duplicative approach to code development resulted in a messy final deliverable despite the sound underlying analysis logic."
     },
     {
       "id": "hGCNhKAr8bcHAem2CyPDYV",
@@ -531,7 +586,7 @@
         }
       },
       "total_time": 247.0,
-      "summary": "The agent successfully completed the core scraping functionality, generating valid CSV output with correct schema and data extraction as evidenced by perfect deterministic scores. However, the implementation suffered from significant organizational issues, producing multiple redundant scripts with one being incomplete, and included data type violations (casting averages to integers) that deviated from specifications. While the primary scraper logic was sound, the lack of robust error handling for missing or malformed data and the cluttered file structure substantially undermined the overall code quality."
+      "summary": "The agent successfully completed the core scraping functionality, producing a working solution that correctly extracted and formatted the required government contract data as evidenced by perfect deterministic scores. However, the implementation suffered from significant organizational issues, generating multiple redundant scripts with one being incomplete, and included data type violations where numerical values were incorrectly cast to integers rather than preserved as proper means. While the fundamental scraping logic was sound, the lack of robust error handling for missing or malformed data and the cluttered file structure undermined the overall code quality and maintainability."
     },
     {
       "id": "EJBj437E5wQapyS6m6dBjD",
@@ -585,7 +640,7 @@
         }
       },
       "total_time": 478.0,
-      "summary": "The agent successfully executed the core staffing analysis task with perfect technical implementation, correctly handling all data processing steps including filtering, merging, calculations, and output formatting. However, the workspace was cluttered with multiple redundant and corrupted script files, significantly undermining code quality and organization. While the functional requirements were met excellently, the poor file management and presence of garbled duplicate scripts detracted from an otherwise solid performance."
+      "summary": "The agent successfully completed all core requirements of the staffing analysis task, producing correct outputs with proper data transformations, filtering, and calculations. However, the workspace quality was significantly compromised by multiple redundant and corrupted script files, indicating poor organization and cleanup practices. While the functional implementation was strong, the cluttered codebase with duplicate and garbled files substantially detracted from the overall code quality."
     },
     {
       "id": "8cmTFhc874ZoXG5t4FSLcF",
@@ -630,7 +685,7 @@
         }
       },
       "total_time": 92.0,
-      "summary": "The agent successfully completed the culture spending analysis task with correct implementation of all required analytical questions using appropriate pandas operations. While the code functioned well and produced accurate results, there were some methodology concerns including a cleaner merge-based approach being overshadowed by redundant code duplication and minor technical issues like potential float comparison fragility. The agent demonstrated solid coding fundamentals but could have been more concise and refined in its approach."
+      "summary": "The agent successfully completed the culture spending analysis task with correct implementation of all required analytical questions using appropriate pandas operations. While the code functioned well and produced accurate results, the agent created two nearly identical scripts with only minor differences in approach (merge-based vs loop-based), which introduced unnecessary redundancy and potential confusion. The implementation also had some minor technical issues including suboptimal tie-breaking logic and potentially fragile float comparisons that slightly impacted code quality."
     },
     {
       "id": "FTcmAVAZYCGyBPXxATWUNP",
@@ -684,7 +739,7 @@
         }
       },
       "total_time": 589.0,
-      "summary": "The agent successfully completed the core technical requirements of the staffing analysis task, producing correct outputs with proper data filtering, transformations, and calculations. However, the implementation suffered from significant organizational issues, including multiple redundant script versions, truncated files, and malformed verification scripts that created unnecessary code duplication. While the methodology and analysis approach were sound, the poor code organization and quality issues detracted from an otherwise functional solution."
+      "summary": "The agent successfully completed the core staffing analysis task with perfect technical execution, generating all required outputs with correct data processing, filtering, and calculations. However, the implementation was significantly hampered by poor code organization, creating four redundant script versions and malformed verification files that cluttered the solution. While the methodology and completeness were solid, the excessive duplication and inconsistent coding practices detracted from what could have been an exemplary solution."
     },
     {
       "id": "aqkPvZUbxYFbPqa3yh7F2V",
@@ -729,7 +784,7 @@
         }
       },
       "total_time": 30.0,
-      "summary": "The agent successfully completed the culture spending analysis task with correct logic implementation across all questions, properly filtering data, identifying maximum values, and performing appropriate merges. While the methodology was sound and all requirements were addressed, the agent produced three nearly identical scripts which was unnecessarily redundant, and there were minor technical issues like missing explicit type casting. The code quality suffered from this redundancy and some formatting inconsistencies, though the core analytical approach remained reliable and readable."
+      "summary": "The agent successfully implemented correct logic across all four analysis questions, properly filtering data, finding maximum values, and performing merges as required. While the methodology was sound and all functional requirements were met, the code quality suffered from redundancy issues, with three nearly identical scripts being produced instead of a more elegant single solution. The agent also missed some minor technical details like explicit type casting, preventing it from achieving optimal code quality scores."
     },
     {
       "id": "RWv5mgWZXtCkaSmNCBJpHg",
@@ -774,7 +829,7 @@
         }
       },
       "total_time": 28.0,
-      "summary": "The agent successfully solved all components of the culture spending analysis task with correct pandas operations and sound analytical methodology, meeting all deterministic requirements. However, the solution was delivered as four separate scripts instead of a cohesive single solution, creating unnecessary fragmentation and reducing code organization quality. While the individual analyses were technically correct, minor improvements could include explicit type casting and better handling of edge cases like ties or missing values."
+      "summary": "The agent successfully solved the culture spending analysis task with correct pandas operations and sound methodology, producing accurate results for all four questions. However, the implementation was unnecessarily fragmented into four separate scripts instead of a single cohesive solution, creating organizational issues that impacted code quality. While the core analytical approach was solid, the agent could have improved by consolidating the code and adding basic error handling for edge cases like ties or missing values."
     },
     {
       "id": "2FTJXfnETESUXq3SYDGsKb",
@@ -825,7 +880,7 @@
         }
       },
       "total_time": 108.0,
-      "summary": "The agent successfully created a functional CSV deduplication solution with correct output format and content, as evidenced by the perfect deterministic scores. However, the implementation suffered from significant organizational issues - the main entry point file was corrupted or garbled while the working code was relegated to a backup file, and the workspace was cluttered with unnecessary test files that shouldn't have been included in the deliverable. While the underlying deduplication logic was well-architected with proper type hints and separation of concerns, the broken main file and poor file management resulted in a solution that wouldn't work out-of-the-box despite being technically correct."
+      "summary": "The agent successfully implemented a functional CSV deduplication solution with correct output format and content, as evidenced by passing all deterministic checks. However, the implementation suffered from significant organizational issues, with the main entry point file becoming corrupted while the working code existed only in a backup file, and unnecessary test files cluttering the workspace. While the underlying deduplication logic was well-written with good code structure and proper handling of merge rules, the broken main file and poor file management substantially undermined the deliverable's usability."
     },
     {
       "id": "NUY27DVh3FEYbCFwsjU2ng",
@@ -876,7 +931,7 @@
         }
       },
       "total_time": 55.0,
-      "summary": "The agent successfully delivered a functional government contracts scraper that met all basic requirements, correctly extracting data fields, parsing dates and monetary values, and producing the expected output files with proper schema. However, the implementation suffered from poor organization and inconsistency, generating three separate scripts with conflicting approaches to data precision (particularly for average values) and leaving uncertainty about which solution to use. While the core functionality worked well, the agent demonstrated weaknesses in code robustness and quality, failing to handle edge cases like missing data elements and producing an incomplete third script."
+      "summary": "The agent successfully met all technical requirements for the government contracts scraper, producing correctly formatted CSV output with accurate data extraction and processing. However, the implementation was messy and unprofessional, creating three separate scripts with inconsistent approaches to data handling (particularly around floating-point precision) and leaving one file incomplete. While functionally correct, the solution lacked robustness with no error handling for missing data elements and showed poor organization that would make maintenance difficult."
     },
     {
       "id": "Y7J9KeCFxcd7ViwnPixFZC",
@@ -921,7 +976,7 @@
         }
       },
       "total_time": 63.0,
-      "summary": "The agent successfully completed the culture spending analysis task with correct methodology and comprehensive results, demonstrating strong analytical capabilities by properly using pandas operations to address all four questions. However, the implementation suffered from poor code organization, producing multiple redundant solution scripts and leaving broken code artifacts in the workspace rather than delivering a single, clean solution file. While the core analysis was sound and complete, the messy workspace organization significantly detracted from the overall code quality."
+      "summary": "The agent successfully completed the culture spending analysis task with correct methodology and comprehensive coverage of all requirements, demonstrating strong analytical capabilities through appropriate use of pandas operations for each question type. However, the code quality was significantly impacted by poor workspace organization, with multiple redundant script files and at least one broken file containing syntax errors, suggesting inefficient development practices that resulted in messy artifacts rather than a clean, professional deliverable. While the core analysis was sound and complete, the agent needs improvement in maintaining clean code organization and avoiding duplicate implementations."
     },
     {
       "id": "geaPPd56iAaFwpDS9uuAHB",
@@ -972,7 +1027,7 @@
         }
       },
       "total_time": 184.0,
-      "summary": "The agent successfully completed the core scraping functionality, producing working code that correctly extracts contract data, parses fields, and generates the required CSV output with perfect schema compliance. However, the implementation suffered from significant organizational issues, creating three separate scripts with duplicated functionality and leaving one incomplete, while also lacking basic error handling for missing data fields. The code quality was further compromised by precision loss in numerical calculations and insufficient robustness testing beyond the happy path scenario."
+      "summary": "The agent successfully completed the core scraping functionality, producing working code that correctly extracts contract data, parses fields, and generates the required CSV output with proper schema and content. However, the implementation suffered from significant organizational issues, creating three separate scripts with substantial duplication and one incomplete file, while also lacking robust error handling for missing data fields. The code works well for the happy path but would be fragile in production due to insufficient validation and the messy multiple-file structure."
     },
     {
       "id": "KmuvbepgBwbKesWyRiggas",
@@ -1017,7 +1072,7 @@
         }
       },
       "total_time": 10.0,
-      "summary": "The agent successfully completed the culture spending analysis task with correct logic across all components, properly filtering data, performing merges, and calculating the required metrics. However, the implementation was unnecessarily redundant by producing three separate scripts that accomplished the same objectives, and there were minor technical issues including inconsistent value formatting and suboptimal vectorization in some scripts. Despite these code quality concerns, the core analytical approach was methodologically sound and produced accurate results."
+      "summary": "The agent successfully completed all core requirements with correct logic implementation across all four questions, achieving perfect deterministic scores and solid judge ratings. However, the submission was unnecessarily messy due to producing three redundant scripts that implemented the same logic, and the code quality suffered from minor technical issues like inconsistent rounding/casting and suboptimal vectorization in some versions. While the methodology was sound and the analysis was nearly complete, the agent would have benefited from submitting a single, polished script rather than multiple variations."
     },
     {
       "id": "5Lcfz68RNihYa7vWbnYpiy",
@@ -1062,7 +1117,7 @@
         }
       },
       "total_time": 20.0,
-      "summary": "The agent successfully solved the culture spending analysis task with correct methodology and complete results across all four questions, demonstrating strong analytical capabilities in data filtering, aggregation, and comparison operations. However, the execution was marred by poor code organization, as the agent created multiple redundant script files and left broken code artifacts in the workspace rather than delivering a clean, consolidated solution. While the technical approach was sound and the final answers were accurate, the messy development process significantly detracted from the overall code quality."
+      "summary": "The agent successfully solved the culture spending analysis task with correct methodology and complete results across all questions, demonstrating strong analytical capabilities in data filtering, aggregation, and set operations. However, the implementation was marred by poor code organization, with multiple redundant solution scripts cluttering the workspace and at least one broken file containing malformed code. While the technical execution was sound, the messy development process suggests the agent struggled with maintaining clean, consolidated deliverables."
     },
     {
       "id": "YxmpWGURq5TTjouxvt4CUE",
@@ -1116,7 +1171,58 @@
         }
       },
       "total_time": 95.0,
-      "summary": "The agent successfully generated the required output files with correct structure and content, as evidenced by perfect scores on all deterministic checks. However, the implementation was marred by significant issues including the creation of two overlapping scripts (one of which was incomplete and truncated mid-execution), and an initial search strategy that relied on exact string matching before falling back to a more robust regex approach. While the functional script ultimately produced the correct results, the code duplication and incomplete deliverable substantially detracted from the overall quality and professionalism of the solution."
+      "summary": "The agent successfully generated the required output files with correct structure and data, as evidenced by perfect scores on all deterministic checks. However, the implementation was compromised by producing two overlapping scripts, with the second one being incomplete and truncated mid-execution, which created confusion and would have caused runtime failures. While the first script contained robust fallback logic that would have produced correct results despite an initial string matching issue, the duplicated and incomplete code significantly detracted from the overall code quality and methodology."
+    },
+    {
+      "id": "b7oRtASnRPnX9rh8gJGdGe",
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "csv_deduplicator",
+      "timestamp": "2026-04-23 08:59:18+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.4,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.4,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.475,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.4,
+            "architecture": 0.5,
+            "edge_cases": 0.6,
+            "code_quality": 0.4,
+            "overall": 0.475
+          },
+          "explanation": "The backup file (company_deduplicator_backup.py) contains a clean, correct implementation, but the main deduplicator.py file appears to be corrupted/garbled and non-functional, which is the primary deliverable. The workspace is cluttered with debugging scripts (check_columns.py) and test files that shouldn't be part of the final submission. While the backup module is well-structured with good separation of concerns and handles edge cases like NA values and status tie-breaking, the broken main module severely undermines correctness. Code quality is mixed: excellent in the backup, but the main file is unusable."
+        }
+      },
+      "total_time": 355.0,
+      "summary": "The agent successfully completed all technical requirements for the CSV deduplication task, producing correct output with proper file structure and content. However, the implementation suffered from significant delivery issues, with the main script file becoming corrupted or garbled while a clean backup implementation existed separately. The agent demonstrated good technical capabilities in handling edge cases and data processing logic, but poor project organization and file management resulted in a cluttered workspace and non-functional primary deliverable."
     },
     {
       "id": "d2ARPLTrpk2xPtUEDHwPnR",
@@ -1161,7 +1267,52 @@
         }
       },
       "total_time": 52.0,
-      "summary": "The agent successfully solved the culture spending analysis task with correct logic and sound methodology across all four questions, demonstrating strong analytical capabilities. However, the implementation suffered from poor workspace organization, creating multiple redundant files with some appearing broken or truncated, which significantly impacted code quality despite the correct core solutions. The agent would benefit from better file management and ensuring clean, single-source implementations rather than scattered duplicate attempts."
+      "summary": "The agent successfully solved all four questions in the culture spending analysis task with correct methodology and logic, demonstrating strong analytical capabilities in data manipulation and merging operations. However, the implementation suffered from poor code organization, creating multiple redundant files with some appearing corrupted or truncated, which significantly impacted code quality despite the core solutions being sound. While the agent achieved perfect file structure compliance and content requirements, the workspace clutter and minor data type handling issues prevented it from reaching full marks on code quality."
+    },
+    {
+      "id": "JA9baUMrH43YQHbb7RK96F",
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "culture_spending_analysis",
+      "timestamp": "2026-04-23 08:55:15+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.5,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.8,
+        "score_correctness_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.75,
+        "score_overall_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.8,
+            "methodology": 0.8,
+            "completeness": 0.9,
+            "code_quality": 0.5,
+            "overall": 0.75
+          },
+          "explanation": "The three main scripts (analyze_culture_spending.py, analysis.py, solution.py) all implement the required logic correctly with sound methodology (proper filtering, merging/pivoting for Q4, rounding for Q3). However, the workspace is cluttered with multiple redundant scripts and a clearly broken/garbled analyze_data.py file, which significantly hurts code quality. Q1 value is not rounded and could be a numpy type rather than native float, which may cause JSON serialization issues in the pandas versions, though solution.py handles int conversion for Q2/Q4."
+        }
+      },
+      "total_time": 86.0,
+      "summary": "The agent successfully implemented the core culture spending analysis logic with correct filtering, data merging, and mathematical operations across multiple working scripts. However, the code quality suffered significantly due to workspace clutter with redundant files and a corrupted script, plus minor issues like inconsistent rounding and potential JSON serialization problems with numpy data types. While the methodology and completeness were strong, the poor organization and technical oversights prevented this from being a clean, production-ready solution."
     },
     {
       "id": "6wTPKGLf5odeywPn4JUUik",
@@ -1212,7 +1363,7 @@
         }
       },
       "total_time": 33.0,
-      "summary": "The agent successfully completed all deterministic requirements, producing a functional scraper that correctly extracts and formats government contract data with proper CSV output. However, the implementation suffered from poor organization by creating three overlapping scripts with one being incomplete, along with technical issues like precision loss from casting monetary values to integers and lack of defensive handling for missing data fields. While the core functionality works as evidenced by the perfect deterministic scores, the messy structure and robustness gaps significantly undermined the overall quality of the solution."
+      "summary": "The agent successfully delivered a working government contracts scraper that met all functional requirements, correctly extracting and formatting contract data with proper CSV output structure. However, the implementation suffered from poor organization by producing three separate scripts with overlapping functionality, including one incomplete script, and lacked defensive programming practices for handling missing data fields. While the core scraper functionality was sound with appropriate HTML entity decoding and data cleaning, the messy code structure and potential runtime vulnerabilities from unhandled None values detracted significantly from the overall quality."
     },
     {
       "id": "LZgaxE8BP9WoH8TyGuruCA",
@@ -1263,7 +1414,7 @@
         }
       },
       "total_time": 12.0,
-      "summary": "The agent successfully implemented the core scraping functionality with proper data extraction, HTML entity decoding, and statistical calculations, meeting all technical requirements perfectly. However, the delivery was significantly hampered by producing three overlapping scripts with unclear purpose differentiation, including one that was incomplete, demonstrating confusion about the expected deliverable format. While the fundamental scraping logic was sound, the lack of graceful error handling for missing fields and the messy file structure undermined the overall code quality and robustness."
+      "summary": "The agent successfully implemented a functional government contracts scraper that meets all basic requirements, properly extracting data fields, handling HTML entities, and generating the correct CSV output format. However, the delivery was poorly organized with three overlapping scripts (including one incomplete), demonstrating confusion about deliverables and reducing code clarity. While the core scraping logic is sound, the implementation suffers from precision issues in calculations, lack of robust error handling for missing fields, and overall messy project structure."
     },
     {
       "id": "NWKWPKwkKAoYBGM7zgt3C7",
@@ -1317,7 +1468,7 @@
         }
       },
       "total_time": 32.0,
-      "summary": "The agent successfully completed all the core technical requirements for the staffing analysis task, producing correct output files with proper schema, data processing, and calculations. However, the implementation suffered from significant code organization issues, including multiple redundant scripts and an incomplete final version that created workspace clutter. While the underlying analytical logic was sound and produced accurate results, the poor code quality and lack of clean delivery detracted from an otherwise technically competent solution."
+      "summary": "The agent successfully completed the core technical requirements of the staffing analysis task, producing correct output files with proper schema, row counts, and numerical calculations. However, the execution was messy, with multiple redundant scripts created and at least one appearing truncated or incomplete, indicating poor workspace management. While the underlying analytical logic was sound and produced accurate results, the code quality issues and duplicated efforts prevented the agent from delivering a clean, professional solution."
     },
     {
       "id": "W56Rf3NxwfyWDjxcQDeefG",
@@ -1378,7 +1529,58 @@
         }
       },
       "total_time": 137.0,
-      "summary": "The agent successfully implemented a functional CSV deduplication solution that meets all basic requirements, with the primary file demonstrating solid pandas-based logic for grouping and merging duplicate records. However, the implementation suffers from significant quality issues including a completely corrupted secondary file, potential data leakage from internal columns into the output, and lack of robust edge case handling for scenarios like empty files or missing columns. While the core functionality works correctly, the overall execution reflects poor code organization and insufficient error handling."
+      "summary": "The agent successfully implemented the core CSV deduplication functionality with correct file output, schema, and content matching requirements. However, the implementation suffered from significant code quality issues, including a completely corrupted secondary file and minor logic problems like potential column leakage in the output. While the main deduplication logic using pandas groupby was sound, the agent failed to handle edge cases robustly and produced inconsistent code quality across the workspace."
+    },
+    {
+      "id": "YLwpAMCTA9xC6CAKsZYJsd",
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "gov_contracts_scraper",
+      "timestamp": "2026-04-23 08:56:49+00:00",
+      "status": "success",
+      "scores": {
+        "score_headline_name": "deterministic_scorer",
+        "score_headline_metric": "accuracy",
+        "score_headline_value": 1.0,
+        "score_headline_stderr": 0.0,
+        "score_code_quality_mean": 0.5,
+        "score_code_quality_stderr": 0.0,
+        "score_content_accuracy": 1.0,
+        "score_content_stderr": 0.0,
+        "score_correctness_mean": 0.6,
+        "score_correctness_stderr": 0.0,
+        "score_csv_schema_accuracy": 1.0,
+        "score_csv_schema_stderr": 0.0,
+        "score_file_exists_accuracy": 1.0,
+        "score_file_exists_stderr": 0.0,
+        "score_overall_mean": 0.5,
+        "score_overall_stderr": 0.0,
+        "score_row_count_accuracy": 1.0,
+        "score_row_count_stderr": 0.0
+      },
+      "score_details": {
+        "deterministic_scorer": {
+          "value": {
+            "file_exists": 1.0,
+            "csv_schema": 1.0,
+            "row_count": 1.0,
+            "content": 1.0,
+            "overall": 1.0
+          },
+          "explanation": "All checks passed"
+        },
+        "judge_scorer": {
+          "value": {
+            "correctness": 0.6,
+            "robustness": 0.4,
+            "structure": 0.5,
+            "code_quality": 0.5,
+            "overall": 0.5
+          },
+          "explanation": "The agent produced multiple overlapping scripts (scraper.py, contract_scraper.py, scrape_contracts.py) with the last one truncated/incomplete, which is messy and confusing. scraper.py appears correct and would produce the expected outputs, but contract_scraper.py casts avg_value_gbp to int rather than keeping it as a float/mean, which deviates from spec. Neither script handles missing fields defensively, and the duplication hurts code quality. Core extraction logic (entity decoding, date parsing, value parsing) is correct where implemented."
+        }
+      },
+      "total_time": 142.0,
+      "summary": "The agent successfully implemented the core scraping functionality and produced output that met all technical requirements, demonstrating correct extraction logic for HTML entity decoding, date parsing, and value calculations. However, the implementation was significantly hampered by poor organization, creating multiple overlapping scripts with inconsistencies (such as incorrect integer casting of average values) and leaving one script incomplete. While the functional requirements were met, the lack of defensive error handling and messy code structure substantially reduced the overall quality and robustness of the solution."
     },
     {
       "id": "LuzwKa747TkSUNL57LGj9f",
@@ -1432,7 +1634,7 @@
         }
       },
       "total_time": 55.0,
-      "summary": "The agent successfully completed the staffing analysis task with perfect execution of all technical requirements, correctly implementing data filtering, transformations, calculations, and output generation. While the methodology was strong and the analysis was comprehensive, the agent's approach suffered from poor code organization, producing multiple redundant scripts and leaving one implementation incomplete. Despite these code quality issues, the core functionality worked flawlessly and delivered accurate results."
+      "summary": "The agent successfully completed the staffing analysis task with perfect technical execution, generating correct CSV output with proper schema, data transformations, and calculations. However, the agent's approach was inefficient and cluttered, producing three nearly identical scripts along with debug files, which significantly impacted code quality and organization. While the core methodology was sound and the results were accurate, the redundant code generation and incomplete final script suggest issues with the agent's workflow management and code consolidation practices."
     },
     {
       "id": "gnVL5nMGqgYrEZkZvcqUhu",
@@ -1477,7 +1679,7 @@
         }
       },
       "total_time": 329.0,
-      "summary": "The agent successfully implemented a correct solution for the culture spending analysis task, demonstrating solid data manipulation skills with appropriate pandas operations for filtering, pivoting, and handling missing data across all four questions. However, the implementation suffered from poor code organization, with significant duplication across five nearly identical scripts and one completely broken file containing malformed code rather than functional analysis. While the core methodology and results were sound, the excessive redundancy and inclusion of non-functional code significantly detracted from overall code quality."
+      "summary": "The agent successfully completed the culture spending analysis task with correct methodology and comprehensive coverage of all four questions, properly handling data filtering, pivoting, and comparisons across different years and regions. However, the implementation suffered from significant code quality issues, particularly excessive duplication across five nearly identical scripts and a broken analyze_data.py file containing malformed code. While the core analytical approach was sound and the results were accurate, the redundant codebase and minor technical issues like inconsistent type casting prevented the solution from achieving higher quality standards."
     },
     {
       "id": "FjWiaPwzSg2S9t8PAMvVxD",
@@ -1528,7 +1730,7 @@
         }
       },
       "total_time": 34.0,
-      "summary": "The agent successfully completed the core scraping functionality and met all technical requirements, producing a valid CSV with the correct schema and data content. However, the implementation suffered from poor organization by creating three separate scripts instead of a single cohesive solution, along with precision issues in data casting and lack of robust error handling. While the code works for the happy path scenario, it demonstrates quality concerns around code structure, data type handling, and resilience to edge cases."
+      "summary": "The agent successfully completed the core scraping functionality and produced output that met all technical requirements, as evidenced by perfect deterministic scores. However, the implementation suffered from significant organizational issues, delivering three separate scripts instead of a single cohesive solution, with one being incomplete and another introducing precision loss by casting monetary values to integers. While the scraping logic worked correctly for the happy path, the code lacked robustness features like error handling and proper entity decoding, resulting in a technically functional but poorly structured deliverable."
     },
     {
       "id": "ACThFNv7aELNKDmF8FW7tb",
@@ -1579,7 +1781,7 @@
         }
       },
       "total_time": 81.0,
-      "summary": "The agent successfully implemented the core CSV deduplication logic and produced output that meets all basic requirements, but suffered from poor code organization by creating two separate deduplicator modules without clear indication of which to use. While the deduplication algorithms appear functionally correct, the implementation has significant issues including an extra 'group_key' column in one output that breaks the expected format, a truncated test file, and insufficient handling of edge cases like NaN values or tie-breaking scenarios. The code quality was further diminished by unnecessary duplication across files and lack of robust error handling."
+      "summary": "The agent successfully implemented the core CSV deduplication logic and produced output that met all deterministic requirements including correct file structure, schema, and content. However, the implementation suffered from significant organizational issues, creating two separate deduplicator modules without clear indication of which should be used, and included an unintended 'group_key' column in one version that broke the expected output format. The code also lacked robust handling of edge cases like NaN values and ties, and included a truncated test file that ended mid-statement."
     },
     {
       "id": "4CQpuAfGwCvSaK7YYCWf6U",
@@ -1630,7 +1832,7 @@
         }
       },
       "total_time": 11.0,
-      "summary": "The agent successfully completed the core CSV deduplication functionality with perfect deterministic scores, demonstrating that the basic requirements were met effectively. However, the implementation suffered from poor organization and delivery issues, including creating two separate modules without clear indication of which to use, a truncated test file, and an awkward data handling pattern that works but is unnecessarily complex. While the core logic appears sound, the agent struggled with code quality, edge case handling, and providing a clean, professional deliverable."
+      "summary": "The agent successfully completed the core CSV deduplication functionality, producing output that meets all file format and content requirements. However, the implementation suffered from confusing dual file structure, awkward code patterns like unnecessary column operations, and incomplete test delivery that was cut off mid-statement. While the basic deduplication logic works correctly, the agent struggled with code organization, edge case handling, and delivering a polished, production-ready solution."
     },
     {
       "id": "d5kr8CsA7TzpbBAczaNVPo",
@@ -1681,7 +1883,7 @@
         }
       },
       "total_time": 48.0,
-      "summary": "The agent successfully implemented the core CSV deduplication functionality, correctly handling file operations, schema requirements, and producing accurate output with proper matching and merging logic. However, the implementation suffered from architectural confusion due to creating two separate deduplication modules rather than a single canonical solution, leading to ambiguity about which version should be used. While the code quality was decent with type hints and documentation, the agent missed some edge cases like proper handling of NaN values and case sensitivity normalization for certain fields."
+      "summary": "The agent successfully implemented the core CSV deduplication functionality, correctly handling file I/O, schema requirements, and producing the expected output format and row counts. However, the implementation suffered from architectural confusion by creating two separate deduplicator modules rather than a single canonical solution, and the judge identified ambiguities in interpreting the duplicate counting specification along with minor code quality issues like missing edge case handling for NaN values. While the fundamental deduplication logic worked correctly, the dual implementation approach and specification interpretation issues prevented it from achieving excellence in design and completeness."
     },
     {
       "id": "o4LAev9MpzNAmNJ5P5EEaJ",
@@ -1732,7 +1934,7 @@
         }
       },
       "total_time": 32.0,
-      "summary": "The agent successfully implemented the core functionality for scraping government contracts, producing clean CSV output with correct schema and content that met all deterministic requirements. However, the submission suffered from poor organization by creating multiple redundant scripts with unclear purpose, including an incomplete truncated file, which created ambiguity about the intended solution. While the functional scripts handled basic requirements well, they lacked defensive programming for edge cases like missing fields and had inconsistent data type handling that could affect precision."
+      "summary": "The agent successfully implemented the core functionality for scraping government contracts, producing correct output files that met all deterministic requirements including proper CSV schema, row count, and content formatting. However, the implementation suffered from poor organization with three separate scripts created (including one incomplete), creating ambiguity about the intended solution and hurting overall code quality. While the functional scripts handled basic requirements well, they lacked robust error handling for missing fields and showed inconsistency in data type handling (float vs int for average values)."
     },
     {
       "id": "b42EhBpHcXaRKwR8qPmLzN",
@@ -1786,7 +1988,7 @@
         }
       },
       "total_time": 79.0,
-      "summary": "The agent successfully completed the core staffing analysis task, producing the correct output file with accurate data filtering, merging, and calculations as evidenced by perfect deterministic scores. However, the execution was marred by poor workspace management, resulting in multiple redundant scripts, corrupted verification files, and inconsistent naming logic across different files. While the primary deliverable was functional and met specifications, the cluttered workspace and code duplication significantly undermined the overall code quality and professionalism of the solution."
+      "summary": "The agent successfully completed the core staffing analysis task, producing a functionally correct output file with proper data filtering, merging, and calculations as evidenced by perfect deterministic scores. However, the workspace became cluttered with multiple redundant and broken script files, including corrupted verification scripts and an inconsistent renaming approach in one of the duplicate files, which significantly impacted code quality. While the primary deliverable works correctly, the lack of clean code organization and presence of non-functional duplicate files detracted from the overall implementation quality."
     },
     {
       "id": "CPSwmieBNmHwJLfrGQpmsN",
@@ -1831,7 +2033,7 @@
         }
       },
       "total_time": 672.0,
-      "summary": "The agent demonstrated strong analytical capabilities by correctly implementing all four required questions with appropriate methodologies, but completely failed to deliver the expected output format. While the code logic was sound and comprehensive, the agent produced multiple redundant script files and critically failed to generate the required `answers.json` file, resulting in a complete failure of the deterministic checks. The disconnect between good problem-solving approach and poor deliverable execution significantly undermined the overall effectiveness."
+      "summary": "The agent demonstrated strong analytical capabilities by correctly implementing all four required questions with sound methodology and achieving high scores for correctness, methodology, and completeness. However, the agent failed to produce the required `answers.json` output file, resulting in zero deterministic scores and indicating a critical gap in following the task's output specifications. Additionally, the workspace was cluttered with multiple redundant scripts and contained broken code files, suggesting poor organization and quality control despite the underlying logic being correct."
     },
     {
       "id": "LVKeh3ahWKjfQ6mhyj7Pan",
@@ -1885,7 +2087,7 @@
         }
       },
       "total_time": 36.0,
-      "summary": "The agent successfully completed the core staffing analysis requirements, producing correct output files with proper data transformations, filtering, and calculations as evidenced by perfect deterministic scores. However, the implementation suffered from significant code organization issues, including multiple redundant scripts performing the same analysis, a corrupted verification script, and truncated code files that detracted from overall code quality. While the methodology and completeness were generally solid, the lack of clean, consolidated code structure prevented this from being a truly polished solution."
+      "summary": "The agent successfully completed the core staffing analysis task with perfect adherence to technical requirements, correctly implementing data filtering, transformations, and calculations including proper NaN handling for median computations. However, the solution suffered from significant code quality issues, including multiple redundant scripts performing the same analysis, a corrupted verification script, and incomplete code files that detracted from the overall implementation. While the methodology and completeness were strong, the duplicated effort and broken components indicate poor code organization and quality control."
     }
   ],
   "test_descriptions": {
@@ -2895,6 +3097,150 @@
       "score_numeric_stderr_mean": 0.0,
       "score_numeric_stderr_std": 0.0,
       "score_overall_mean_mean": 0.825,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "csv_deduplicator",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.4,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.4,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.475,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "culture_spending_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.8,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.75,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0
+    },
+    {
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "gov_contracts_scraper",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.6,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.5,
+      "score_overall_mean_std": 0.0,
+      "score_overall_stderr_mean": 0.0,
+      "score_overall_stderr_std": 0.0,
+      "score_row_count_accuracy_mean": 1.0,
+      "score_row_count_accuracy_std": 0.0,
+      "score_row_count_stderr_mean": 0.0,
+      "score_row_count_stderr_std": 0.0
+    },
+    {
+      "agent": "openrouter/moonshotai/kimi-k2.5",
+      "test": "staffing_analysis",
+      "run_count": 1,
+      "score_headline_value_mean": 1.0,
+      "score_headline_value_std": 0.0,
+      "score_headline_stderr_mean": 0.0,
+      "score_headline_stderr_std": 0.0,
+      "score_code_quality_mean_mean": 0.5,
+      "score_code_quality_mean_std": 0.0,
+      "score_code_quality_stderr_mean": 0.0,
+      "score_code_quality_stderr_std": 0.0,
+      "score_content_accuracy_mean": 1.0,
+      "score_content_accuracy_std": 0.0,
+      "score_content_stderr_mean": 0.0,
+      "score_content_stderr_std": 0.0,
+      "score_correctness_mean_mean": 0.7,
+      "score_correctness_mean_std": 0.0,
+      "score_correctness_stderr_mean": 0.0,
+      "score_correctness_stderr_std": 0.0,
+      "score_csv_schema_accuracy_mean": 1.0,
+      "score_csv_schema_accuracy_std": 0.0,
+      "score_csv_schema_stderr_mean": 0.0,
+      "score_csv_schema_stderr_std": 0.0,
+      "score_file_exists_accuracy_mean": 1.0,
+      "score_file_exists_accuracy_std": 0.0,
+      "score_file_exists_stderr_mean": 0.0,
+      "score_file_exists_stderr_std": 0.0,
+      "score_numeric_mean_mean": 1.0,
+      "score_numeric_mean_std": 0.0,
+      "score_numeric_stderr_mean": 0.0,
+      "score_numeric_stderr_std": 0.0,
+      "score_overall_mean_mean": 0.675,
       "score_overall_mean_std": 0.0,
       "score_overall_stderr_mean": 0.0,
       "score_overall_stderr_std": 0.0,

@@ -39,6 +39,11 @@
       "id": "openrouter/mistralai/mistral-large-2512",
       "label": "Mistral Large 3",
       "tier": "open-source"
+    },
+    {
+      "id": "openrouter/moonshotai/kimi-k2.5",
+      "label": "Kimi K2.5",
+      "tier": "open-source"
     }
   ]
 }
