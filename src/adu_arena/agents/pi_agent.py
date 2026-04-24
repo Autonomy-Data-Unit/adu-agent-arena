@@ -108,16 +108,33 @@ def pi_coding_agent(
         elif not result.success:
             assistant_text = f"ERROR (exit {result.returncode}): {result.stderr}"
 
-        # Save full session to disk with unique timestamp
-        SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+        # Save full session and preserve workspace
         task_name = state.metadata.get("archetype", "unknown")
         safe_model = model.replace("/", "_")
         from datetime import datetime
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Save session JSONL
+        SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
         session_file = SESSIONS_DIR / f"{provider}_{safe_model}_{task_name}_{ts}.jsonl"
         with open(session_file, "w") as f:
             for event in session_events:
                 f.write(json.dumps(event) + "\n")
+
+        # Preserve workspace: tar it up from the container and save locally
+        WORKSPACES_DIR = Path("workspaces")
+        WORKSPACES_DIR.mkdir(parents=True, exist_ok=True)
+        workspace_archive = WORKSPACES_DIR / f"{provider}_{safe_model}_{task_name}_{ts}.tar.gz"
+        tar_result = await sandbox().exec(
+            ["tar", "czf", "/tmp/workspace.tar.gz", "-C", "/", "workspace"],
+            timeout=30,
+        )
+        if tar_result.success:
+            try:
+                tar_bytes = await sandbox().read_file("/tmp/workspace.tar.gz", text=False)
+                workspace_archive.write_bytes(tar_bytes)
+            except Exception:
+                pass
 
         state.messages.append(ChatMessageAssistant(content=assistant_text))
         state.output = ModelOutput.from_content(
