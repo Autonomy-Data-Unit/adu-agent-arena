@@ -1,0 +1,7 @@
+services:
+  default:
+    build:
+      context: ../../docker
+      dockerfile: Dockerfile
+    command: tail -f /dev/null
+    working_dir: /workspace

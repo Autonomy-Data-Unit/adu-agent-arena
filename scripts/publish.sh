@@ -21,4 +21,4 @@ echo "=== Deploying to AppGarden ==="
 appgarden deploy production
 
 echo "=== Done ==="
-appgarden apps status adu-agent-arena
+appgarden apps status adu-agent-arena --server adu-apps

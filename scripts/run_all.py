@@ -23,6 +23,8 @@ ALL_TASKS = {
     "culture_spending_analysis": "src/adu_arena/tasks/culture_spending.py@culture_spending_analysis",
     "gov_contracts_scraper": "src/adu_arena/tasks/gov_contracts.py@gov_contracts_scraper",
     "csv_deduplicator": "src/adu_arena/tasks/csv_deduplicator.py@csv_deduplicator",
+    "boundary_crosswalk_funding": "src/adu_arena/tasks/boundary_crosswalk.py@boundary_crosswalk_funding",
+    "climate_price_impact": "src/adu_arena/tasks/climate_price.py@climate_price_impact",
 }
 
 MODELS_FILE = Path("models.json")
@@ -32,25 +34,30 @@ LOGS_DIR = Path("logs")
 SESSIONS_DIR = Path("sessions")
 
 
+def load_models_config(path: Path) -> dict:
+    return json.loads(path.read_text())
+
+
 def load_models(path: Path) -> list[str]:
-    data = json.loads(path.read_text())
+    data = load_models_config(path)
     return [m["id"] for m in data["models"]]
 
 
-def get_completed_pairs(log_dir: Path) -> set[tuple[str, str]]:
-    """Return (model, task_name) pairs with valid successful runs."""
-    completed = set()
+def get_completed_counts(log_dir: Path) -> dict[tuple[str, str], int]:
+    """Return run counts per (model, task_name) pair."""
+    counts: dict[tuple[str, str], int] = {}
     if not log_dir.exists():
-        return completed
+        return counts
     for log_file in log_dir.glob("*.eval"):
         try:
             log = read_eval_log(str(log_file), header_only=True)
             if log.status == "success":
                 task_name = log.eval.task.split("/")[-1] if "/" in log.eval.task else log.eval.task
-                completed.add((log.eval.model, task_name))
+                key = (log.eval.model, task_name)
+                counts[key] = counts.get(key, 0) + 1
         except Exception:
             continue
-    return completed
+    return counts
 
 
 def validate_run(log_dir: Path, model: str, task_name: str) -> str | None:
@@ -175,20 +182,24 @@ def main() -> None:
     parser.add_argument("--model", nargs="+", default=None, help="Model(s) to run (default: all from models.json)")
     parser.add_argument("--test", nargs="+", default=None, help="Test(s) to run (default: all)")
     parser.add_argument("--parallel", type=int, default=DEFAULT_PARALLEL, help=f"Max parallel runs (default: {DEFAULT_PARALLEL})")
+    parser.add_argument("--min-runs", type=int, default=None, help="Minimum runs per model+test pair (overrides models.json)")
     parser.add_argument("--rerun", action="store_true", help="Run all tests again (accumulates results for averaging)")
     parser.add_argument("--clear", action="store_true", help="Delete all existing results before running")
     parser.add_argument("--list", action="store_true", help="Show what would run without running")
     args = parser.parse_args()
 
-    # Resolve models
+    # Resolve models and min_runs
+    models_config = load_models_config(MODELS_FILE) if MODELS_FILE.exists() else None
     if args.model:
         models = args.model
-    elif MODELS_FILE.exists():
-        models = load_models(MODELS_FILE)
+    elif models_config:
+        models = [m["id"] for m in models_config["models"]]
         print(f"Loaded {len(models)} models from {MODELS_FILE}")
     else:
         print(f"No --model specified and {MODELS_FILE} not found", file=sys.stderr)
         sys.exit(1)
+
+    min_runs = args.min_runs or (models_config or {}).get("min_runs", 1)
 
     # Resolve tests
     if args.test:
@@ -210,24 +221,27 @@ def main() -> None:
                 shutil.rmtree(d)
         print("Cleared all existing results")
 
-    # --rerun: skip completion check (run everything, results accumulate)
-    # default: only run missing combinations
+    # --rerun: run everything once more (results accumulate)
+    # default: top up each pair to min_runs
     if args.rerun or args.clear:
-        completed: set[tuple[str, str]] = set()
+        counts: dict[tuple[str, str], int] = {}
     else:
-        completed = get_completed_pairs(LOGS_DIR)
+        counts = get_completed_counts(LOGS_DIR)
 
     # Build run plan
     plan: list[tuple[str, str, str]] = []
     skipped = 0
     for model in models:
         for task_name, task_spec in tasks.items():
-            if (model, task_name) in completed:
+            existing = counts.get((model, task_name), 0)
+            needed = max(0, min_runs - existing) if not args.rerun else 1
+            if needed == 0:
                 skipped += 1
             else:
-                plan.append((model, task_name, task_spec))
+                for _ in range(needed):
+                    plan.append((model, task_name, task_spec))
 
-    print(f"\n{len(plan)} runs to do, {skipped} already completed")
+    print(f"\n{len(plan)} runs to do, {skipped} pairs already at {min_runs}+ runs")
 
     if args.list:
         for model, task_name, _ in plan:
@@ -235,7 +249,7 @@ def main() -> None:
         return
 
     if not plan:
-        print("Nothing to run. Use --force to re-run.")
+        print("Nothing to run. Use --rerun to add more, or increase --min-runs.")
         return
 
     LOGS_DIR.mkdir(parents=True, exist_ok=True)

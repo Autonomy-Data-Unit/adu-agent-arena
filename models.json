@@ -1,4 +1,5 @@
 {
+  "min_runs": 3,
   "judges": {
     "models": [
       "anthropic/claude-opus-4-7",
@@ -81,6 +82,11 @@
       "id": "openrouter/mistralai/ministral-3b-2512",
       "label": "Ministral 3B",
       "tier": "tiny"
+    },
+    {
+      "id": "openrouter/x-ai/grok-4-fast",
+      "label": "Grok 4 Fast",
+      "tier": "flagship"
     }
   ]
 }

@@ -1,0 +1,21 @@
+item,coicop,uk_prod_share,import_country_1,import_share_1,import_country_2,import_share_2,import_country_3,import_share_3
+Apples,01.1.6,0.4,Netherlands,0.3761,Colombia,0.2272,Kenya,0.3967
+Pears,01.1.6,0.25,Netherlands,0.4327,Belgium,0.3425,Colombia,0.2248
+Strawberries,01.1.6,0.65,Poland,0.4007,Turkey,0.3581,Colombia,0.2412
+Raspberries,01.1.6,0.55,Germany,0.4421,France,0.2295,Chile,0.3284
+Grapes,01.1.6,0.02,Chile,0.2327,Italy,0.4994,Kenya,0.2679
+Bananas,01.1.6,0.0,Spain,0.3235,Egypt,0.3396,Chile,0.3369
+Oranges,01.1.6,0.0,Netherlands,0.3072,Egypt,0.2955,Morocco,0.3973
+Blueberries,01.1.6,0.3,Kenya,0.2824,Turkey,0.3991,Spain,0.3185
+Plums,01.1.6,0.2,Peru,0.2884,Germany,0.3846,Morocco,0.327
+Cherries,01.1.6,0.1,France,0.2874,Peru,0.3149,Turkey,0.3977
+Carrots,01.1.7,0.95,France,0.413,Chile,0.3218,South Africa,0.2652
+Onions,01.1.7,0.75,France,0.3675,Israel,0.3942,Spain,0.2383
+Potatoes,01.1.7,0.85,Kenya,0.2585,Netherlands,0.3265,Turkey,0.415
+Cabbage,01.1.7,0.8,Costa Rica,0.2545,Peru,0.4035,France,0.342
+Broccoli,01.1.7,0.5,Chile,0.3045,Netherlands,0.3326,Spain,0.3629
+Tomatoes,01.1.7,0.15,Israel,0.4121,Colombia,0.1818,South Africa,0.4061
+Peppers,01.1.7,0.05,Kenya,0.29,Israel,0.4596,Peru,0.2504
+Cucumbers,01.1.7,0.2,Belgium,0.3332,France,0.2523,Colombia,0.4145
+Lettuce,01.1.7,0.7,Colombia,0.4263,Peru,0.2845,Spain,0.2892
+Mushrooms,01.1.7,0.9,Morocco,0.3725,Germany,0.3607,Netherlands,0.2668

@@ -1,0 +1,28 @@
+[
+  {
+    "input": "file://prompt.md",
+    "target": "CSV of 20 items with per-channel price impacts and total delta_price_pct for 2C and 4C scenarios, plus summary.json",
+    "metadata": {
+      "archetype": "notebook-analysis",
+      "checks": {
+        "expected_files": ["/workspace/price_impact.csv", "/workspace/summary.json"],
+        "csv_schema": {
+          "file": "/workspace/price_impact.csv",
+          "columns": ["item", "coicop", "beta", "uk_prod_share", "domestic_impact_2C", "domestic_impact_4C", "import_impact_2C", "import_impact_4C", "energy_impact_2C", "energy_impact_4C", "delta_price_2C_pct", "delta_price_4C_pct"]
+        },
+        "row_count": {
+          "file": "/workspace/price_impact.csv",
+          "expected": 20
+        },
+        "numeric_checks": [
+          {"file": "/workspace/price_impact.csv", "column": "delta_price_2C_pct", "aggregation": "median", "expected": 0.6182, "tolerance": 0.05},
+          {"file": "/workspace/price_impact.csv", "column": "delta_price_4C_pct", "aggregation": "mean", "expected": 1.9026, "tolerance": 0.05}
+        ],
+        "content_present": {
+          "file": "/workspace/summary.json",
+          "strings": ["n_items", "median_delta_price_2C_pct", "most_affected_item", "20"]
+        }
+      }
+    }
+  }
+]

@@ -46,8 +46,11 @@ docker/Dockerfile            # Base image: Python + data-science libs + pi + Nod
 ## Running tests
 
 ```bash
-# Run missing model+test combinations (reads models.json)
+# Run missing model+test combinations, topping up to min_runs (from models.json)
 uv run python scripts/run_all.py
+
+# Override min_runs from CLI
+uv run python scripts/run_all.py --min-runs 3
 
 # Run all tests again (accumulates results for averaging)
 uv run python scripts/run_all.py --rerun

@@ -10,6 +10,8 @@
 	let selectedTestDesc: string | null = $state(null);
 	let sortColumn: string = $state('avg');
 	let sortDirection: 'asc' | 'desc' = $state('desc');
+	let visibleTests: Set<string> = $state(new Set());
+	let showTestPicker = $state(false);
 
 	let hasData = $derived(data.runs.length > 0);
 
@@ -232,6 +234,16 @@
 		selectedDetail = null;
 	}
 
+	function toggleTestColumn(test: string) {
+		const next = new Set(visibleTests);
+		if (next.has(test)) {
+			next.delete(test);
+		} else {
+			next.add(test);
+		}
+		visibleTests = next;
+	}
+
 	function formatDetailValue(val: string | number | Record<string, number>): string {
 		if (typeof val === 'object') {
 			return Object.entries(val).map(([k, v]) => `${k}: ${typeof v === 'number' ? (v * 100).toFixed(1) + '%' : v}`).join(', ');
@@ -259,18 +271,41 @@
 			Updated {new Date(data.generated_at).toLocaleDateString()}
 		</p>
 
+		<div class="test-picker-wrap">
+			<button class="test-picker-btn" onclick={() => showTestPicker = !showTestPicker}>
+				Tests {visibleTests.size > 0 ? `(${visibleTests.size})` : ''} &#9662;
+			</button>
+			{#if showTestPicker}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div class="test-picker-backdrop" onclick={() => showTestPicker = false}></div>
+				<div class="test-picker-dropdown">
+					{#each data.tests as test}
+						<label class="test-picker-item">
+							<input type="checkbox" checked={visibleTests.has(test)} onchange={() => toggleTestColumn(test)} />
+							<span>{test}</span>
+							{#if data.test_descriptions?.[test]}
+								<button class="info-btn" onclick={(e) => { e.stopPropagation(); selectedTestDesc = selectedTestDesc === test ? null : test; }} title="View test description">?</button>
+							{/if}
+						</label>
+					{/each}
+				</div>
+			{/if}
+		</div>
+
 		<div class="table-wrap">
 			<table>
 				<thead>
 					<tr>
 						<th class="sortable" onclick={() => toggleSort('agent')}>Agent{sortIndicator('agent')}</th>
 						{#each data.tests as test}
-							<th class="sortable">
-								<span onclick={() => toggleSort(test)}>{test}{sortIndicator(test)}</span>
-								{#if data.test_descriptions?.[test]}
-									<button class="info-btn" onclick={(e) => { e.stopPropagation(); selectedTestDesc = selectedTestDesc === test ? null : test; }} title="View test description">?</button>
-								{/if}
-							</th>
+							{#if visibleTests.has(test)}
+								<th class="sortable">
+									<span onclick={() => toggleSort(test)}>{test}{sortIndicator(test)}</span>
+									{#if data.test_descriptions?.[test]}
+										<button class="info-btn" onclick={(e) => { e.stopPropagation(); selectedTestDesc = selectedTestDesc === test ? null : test; }} title="View test description">?</button>
+									{/if}
+								</th>
+							{/if}
 						{/each}
 						<th class="sortable" onclick={() => toggleSort('avg')}>Avg{sortIndicator('avg')}</th>
 						<th class="sortable" onclick={() => toggleSort('cost')}>Cost{sortIndicator('cost')}</th>
@@ -287,10 +322,12 @@
 						>
 							<td class="agent-name">{agent}</td>
 							{#each data.tests as test}
-								{@const testScore = getAgentTestScore(agent, test)}
-								<td class="score" style:color={testScore !== null ? scoreColor(testScore) : undefined}>
-									{formatScore(testScore)}
-								</td>
+								{#if visibleTests.has(test)}
+									{@const testScore = getAgentTestScore(agent, test)}
+									<td class="score" style:color={testScore !== null ? scoreColor(testScore) : undefined}>
+										{formatScore(testScore)}
+									</td>
+								{/if}
 							{/each}
 							<td class="score avg" style:color={getOverallScore(agent) !== null ? scoreColor(getOverallScore(agent)!) : undefined}>
 								{formatScore(getOverallScore(agent))}
@@ -327,7 +364,12 @@
 								class:expanded={expandedTest === summary.test}
 								onclick={() => expandedTest = expandedTest === summary.test ? null : summary.test}
 							>
-								<td class="agent-name">{summary.test}</td>
+								<td class="agent-name">
+								{summary.test}
+								{#if data.test_descriptions?.[summary.test]}
+									<button class="info-btn" onclick={(e) => { e.stopPropagation(); selectedTestDesc = selectedTestDesc === summary.test ? null : summary.test; }} title="View test description">?</button>
+								{/if}
+							</td>
 								<td class="score avg" style:color={summary.avgScore !== null ? scoreColor(summary.avgScore) : undefined}>
 									{summary.avgScore !== null ? formatScore(summary.avgScore) : '-'}
 								</td>
@@ -509,6 +551,76 @@
 
 	th.sortable span {
 		cursor: pointer;
+	}
+
+	.test-picker-wrap {
+		position: relative;
+		margin-bottom: 0.75rem;
+	}
+
+	.test-picker-btn {
+		background: #21262d;
+		border: 1px solid #30363d;
+		color: #c9d1d9;
+		font-size: 0.8125rem;
+		padding: 0.375rem 0.75rem;
+		border-radius: 6px;
+		cursor: pointer;
+	}
+
+	.test-picker-btn:hover {
+		background: #30363d;
+		color: #e6edf3;
+	}
+
+	.test-picker-backdrop {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 9;
+	}
+
+	.test-picker-dropdown {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		margin-top: 0.25rem;
+		background: #161b22;
+		border: 1px solid #30363d;
+		border-radius: 6px;
+		padding: 0.5rem;
+		z-index: 10;
+		min-width: 240px;
+		max-height: 320px;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+	}
+
+	.test-picker-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.375rem 0.5rem;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.8125rem;
+		color: #c9d1d9;
+	}
+
+	.test-picker-item:hover {
+		background: #21262d;
+	}
+
+	.test-picker-item input[type="checkbox"] {
+		accent-color: #58a6ff;
+	}
+
+	.test-picker-item .info-btn {
+		margin-left: auto;
 	}
 
 	.info-btn {

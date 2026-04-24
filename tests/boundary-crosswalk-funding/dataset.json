@@ -1,0 +1,28 @@
+[
+  {
+    "input": "file://prompt.md",
+    "target": "CSV of 50 PCON24 constituencies with nominal and inflation-adjusted funding columns, plus validation.json",
+    "metadata": {
+      "archetype": "pipeline-stage",
+      "checks": {
+        "expected_files": ["/workspace/output.csv", "/workspace/validation.json"],
+        "csv_schema": {
+          "file": "/workspace/output.csv",
+          "columns": ["pcon24", "country", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2016_infadj", "2017_infadj", "2018_infadj", "2019_infadj", "2020_infadj", "2021_infadj", "2022_infadj", "2023_infadj"]
+        },
+        "row_count": {
+          "file": "/workspace/output.csv",
+          "expected": 50
+        },
+        "numeric_checks": [
+          {"file": "/workspace/output.csv", "column": "2022", "aggregation": "median", "expected": 141711.44, "tolerance": 500},
+          {"file": "/workspace/output.csv", "column": "2020_infadj", "aggregation": "median", "expected": 208203.75, "tolerance": 500}
+        ],
+        "content_present": {
+          "file": "/workspace/validation.json",
+          "strings": ["total_constituencies", "conservation_check", "50"]
+        }
+      }
+    }
+  }
+]
